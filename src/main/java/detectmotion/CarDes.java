@@ -51,13 +51,13 @@ public class CarDes implements  Cloneable, Serializable {
     }
 
 
-    boolean markedDelete = true;
-    public void setMarkedDelete(boolean markedDelete) {
-        this.markedDelete = markedDelete;
+    int markedLost = 0;
+    public void setMarkedDelete() {
+        this.markedLost ++;
     }
 
-    public boolean isMarkedDelete() {
-        return markedDelete;
+    public int isMarkedDelete() {
+        return markedLost;
     }
 
     public Scalar getColor() {
@@ -119,5 +119,14 @@ public class CarDes implements  Cloneable, Serializable {
     }
     public double  getCarLength(){
         return pos.height * getRatio();
+    }
+
+    @Override
+    public String toString() {
+        return "CarDes{" +
+                "pos=" + pos +
+                ", count=" + count +
+                ", speed=" + speed +
+                '}';
     }
 }

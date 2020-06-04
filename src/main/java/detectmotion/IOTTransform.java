@@ -9,6 +9,7 @@ import org.opencv.utils.Converters;
 
 import java.io.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,23 +26,30 @@ import static org.opencv.core.CvType.*;
  */
 public class IOTTransform {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
-    Mat transformMap;//透视转换矩阵
-    Mat inverseMap;//反向转换矩阵
-    Mat picRect;  //感兴趣区域,四个点的坐标 单通道Mat
-    Mat realRect;              //转换后的目标区域 单通道
-    Size picSize;            //原图宽高
-    Size realSize;            //     截图区域现实对应的宽高,用实际的m表示
-
+    private Mat transformMap;//透视转换矩阵
+    private Mat inverseMap;//反向转换矩阵
+    private ArrayList<Point> picRect;  //感兴趣区域,四个点的坐标 单通道Mat
+    private ArrayList<Point> realRect;              //转换后的目标区域 单通道
+    private Size picSize;            //原图宽高
+    private Size realSize;            //     截图区域现实对应的宽高,用实际的m表示
     public IOTTransform(String jsoname){
         loadFromFile(jsoname);//从文件中加载所有的参数
     }
-    Mat transformPoint(Mat src){
-
-        src = MatWrapper.SingleTo2Channels(src);
+    List<Point> transformPoint(List<List<Double>> dst){
+        Mat  src = MatWrapper.doubleArrayToMat(dst,CV_64F);
+        src = MatWrapper.SingleTo2Channels(src);//必须转换成双通道
        // logger.debug(MatWrapper.MatToString(src));
-        Mat three_channel = Mat.zeros(src.rows(),src.cols(),CV_32FC2);
-        Core.perspectiveTransform(src,three_channel,transformMap);
-        return three_channel;
+        Mat res = new Mat(src.rows(),src.cols(),CV_32FC2);
+        Core.perspectiveTransform(src,res,transformMap);
+      //  logger.debug(res.type() == CV_32FC2);
+
+        Mat tr = res.reshape(2,src.rows() * src.cols());
+       // System.out.println(MatWrapper.MatToString(tr));
+
+        ArrayList<Point>  arr = new ArrayList<>();
+        Converters.Mat_to_vector_Point2d(tr,arr);
+
+        return  arr.subList(0,dst.size());
     }
     void loadFromFile(String  jsonname){
 
@@ -54,14 +62,13 @@ public class IOTTransform {
         ArrayList<List<Double>> imtxlist = m.get("imtx");
         inverseMap = MatWrapper.doubleArrayToMat(imtxlist,CV_64F);
 
-        ArrayList<List<Float>> picpoints = m.get("picRect");
-        picRect = MatWrapper.doubleArrayToMat(picpoints,CV_32F);
-
-        ArrayList<List<Float>> realpoints = m.get("realRect");
-        realRect = MatWrapper.doubleArrayToMat(realpoints,CV_32F);
-
+        ArrayList<ArrayList<Double>> picRect1 = m.get("picRect");
+        this.picRect = doubleIntArray_to_PointArray(picRect1);
+        logger.debug("感兴趣的区域"+ this.picRect);
+        ArrayList<ArrayList<Double>> realRect1 = m.get("realRect");
+        this.realRect = doubleIntArray_to_PointArray(realRect1);
+        logger.debug("转换后的区域"+ this.realRect);
         ArrayList<Double> imageSize = m.get("imagSize");
-        System.out.println();
         picSize = new Size(imageSize.get(0),imageSize.get(1));
         ArrayList<Double> real = m.get("realSize");
         realSize = new Size(real.get(0),real.get(1));
@@ -70,20 +77,18 @@ public class IOTTransform {
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("calibrate_camera.json" ).getPath();//获IOTTransform its  =  new IOTTransform(xmlPath);
-//      List<Integer> src = Arrays.asList(800,500);
-//      List<Integer> src1 = Arrays.asList(800,600);
-//      List<List<Integer>> dst = Arrays.asList(src,src1);
-//      Mat  mmm = MatWrapper.doubleArrayToMat(dst);
-//      Mat s = its.transformPoint(mmm);
-//        IOTTransform iot = new IOTTransform(xmlPath);
-//        List<Float> p2 = new ArrayList<>();
-//        Mat m = iot.getIntrestAreaInPic();
-//        System.out.println(m.type());
-//        MatOfPoint2f area = new MatOfPoint2f(m);
-//        Point p = new Point (200,300);
-//        double res = Imgproc.pointPolygonTest(area,p,false);
-//        System.out.println(res);
-
+            //测试转换
+//          List<Double> src =  Arrays.asList(800.0,500.0);
+//          List<Double> src1 = Arrays.asList(800.0,600.0);
+//          IOTTransform its = new IOTTransform(xmlPath);
+//          List<List<Double>> dst = Arrays.asList(src,src1);
+//          List<Point> result = its.transformPoint(dst);
+//          System.out.println(result);
+        //测试 是否在范围内部
+        IOTTransform iot = new IOTTransform(xmlPath);
+        Point p = new Point (1061,681);
+        boolean a = iot.isInsidePicArea(p);
+        System.out.println(a);
 
     }
 
@@ -111,12 +116,21 @@ public class IOTTransform {
         return jsonStr;
     }
 
-    public Mat getIntrestAreaInPic() {
-        return picRect;
+    public boolean isInsidePicArea(Point p) {
+
+        Point[] mpa = new Point[this.picRect.size()];
+        Point[] ps = this.picRect.toArray(mpa);
+        MatOfPoint2f area = new MatOfPoint2f(ps);
+        double res = Imgproc.pointPolygonTest(area,p,false);
+        if(res < 0) {
+            return false;
+        }else {
+            return true;
+        }
     }
 
-    public Mat getIntrestAreaInReal() {
-        return realRect;
+    public ArrayList<Point> getIntrestAreaInReal(Point p) {
+        return  this.realRect;
     }
 
     public Size getPicSize() {
@@ -126,4 +140,16 @@ public class IOTTransform {
     public Size getRealSize() {
         return realSize;
     }
+
+    private ArrayList<Point> doubleIntArray_to_PointArray(List<? extends List<Double> > arrs){
+        ArrayList<Point> ps = new ArrayList<>();
+        for (int i = 0; i < arrs.size(); i++) {
+            List<Double> j = arrs.get(i);
+            assert (j.size() == 2);
+            ps.add(new Point(j.get(0),j.get(1)));
+        }
+        return ps;
+    }
+
 }
+

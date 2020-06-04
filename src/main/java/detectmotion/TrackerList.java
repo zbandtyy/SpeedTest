@@ -62,8 +62,6 @@ public class TrackerList  {
         ArrayList<CarDes> needModify = new ArrayList<>();
         logger.debug("tracker size ===" + trackers.size());
         cars.forEach((index,pos)->{
-
-
             CarDes car= trackers.get(index);
             logger.debug("原来预测到的位置" + car.pos);
             logger.debug("现在检测到的位置" + pos);
@@ -80,7 +78,7 @@ public class TrackerList  {
     public void updateTrackPos (Mat frame,  List<CarDes> cars ){
         for(CarDes car: cars){
             Tracker t = createTrackerByName(selectedType);
-            logger.debug("count = " + car.count);
+            logger.debug("更新重合 count = 的位置" + car);
             t.init(frame,car.pos);
             car.setTracker(t);
             car.setPreviousPos(car.getNetxPos());
@@ -110,29 +108,35 @@ public class TrackerList  {
             Tracker  t = trackers.get(i).getTracker();
             boolean res = t.update(frame,newPos) ;
             if(res != true ){
-               deleted.add(trackers.get(i));
+                trackers.get(i).setMarkedDelete();
+                logger.debug("丢失目标 count " + trackers.get(i));
+              //  deleted.add(trackers.get(i));
            }else {
                trackers.get(i).pos = newPos;
            }
         }
-        trackers.removeAll(deleted);
+      //  trackers.removeAll(deleted);
         deleted.clear();
+        return  ;
+
+    }
+    public  void cleanLostedTrackers(int losttime){
+
+       trackers.removeIf((carDes -> carDes.markedLost > losttime));
+
+    }
+
+    public  void deletedNotInArea( IOTTransform iot){
+        List<CarDes> deleted = new LinkedList<>();
         //删除所有超过范围的追踪器
         if(this.iot != null){
-            MatOfPoint2f area = new MatOfPoint2f(iot.getIntrestAreaInPic());
             for (int i = 0; i < trackers.size(); i++) {
-                Rect2d pos = trackers.get(i).pos;
-                Point p = new Point (pos.x + 0.5 * (pos.width),pos.y + 0.5 * (pos.height));
-                double res = Imgproc.pointPolygonTest(area,p,false);
-                if(res < 0){
+                if(!iot.isInsidePicArea(trackers.get(i).pos.br()) && !iot.isInsidePicArea(trackers.get(i).pos.tl()) ){
                     deleted.add(trackers.get(i));
                 }
-
             }
-
         }
         trackers.removeAll(deleted);
-        return  ;
 
     }
 

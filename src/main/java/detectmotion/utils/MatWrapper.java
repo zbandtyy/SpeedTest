@@ -4,6 +4,7 @@ import com.sun.org.apache.bcel.internal.generic.ARETURN;
 import org.apache.log4j.Logger;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.utils.Converters;
 import sun.awt.SunHints;
 
 import java.awt.*;
@@ -25,7 +26,6 @@ import static org.opencv.core.CvType.*;
 public class MatWrapper {
     private static final Logger logger = Logger.getLogger(MatWrapper.class);
     public  static  Mat doubleArrayToMat(List<? extends List<?>> mtxlist,int type){
-        logger.debug("doubleArray tranform to  Float Channel = 1 MAT CV_32F");
         int getRows = mtxlist.size();
         if(getRows <= 0)
             return  null;
@@ -34,24 +34,28 @@ public class MatWrapper {
         Mat mat ;
         if( type == CV_64F) {
             mat = new Mat(getRows, cols, CvType.CV_64F);
+            logger.debug("doubleArray tranform to  Double Channel = 1 MAT CV_32F");
+
         }else if(type == CV_32S){
             mat = new Mat(getRows, cols, CV_32S);
+            logger.debug("doubleArray tranform to  Integer Channel = 1 MAT CV_32F");
+
         }else{
+            logger.debug("doubleArray tranform to  Float Channel = 1 MAT CV_32F");
+
             mat = new Mat(getRows, cols, CV_32F);
         }
 
         for(int i = 0; i < mtxlist.size() ; i++){
             List<?> row = mtxlist.get(i);
             for (int j = 0; j < row.size(); j++) {
-
-                if( type == CV_64F) {
-                    Double o = (Double) row.get(j);
-                    mat.put(i, j, o);
-                }else if(type == CV_32S){
+                if(type == CV_32F){
+                    mat.put(i, j, (Double) (row.get(j)));
+                } else if(type == CV_32S){
                     Integer o = (Integer) row.get(j);
                     mat.put(i, j, o);
-                }else if(type == CV_32F){
-                    Float o =  (Float)row.get(j);
+                }else if( type == CV_64F) {
+                    Double o = (Double) row.get(j);
                     mat.put(i, j, o);
                 }
             }

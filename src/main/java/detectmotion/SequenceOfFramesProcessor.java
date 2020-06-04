@@ -23,7 +23,7 @@ public class SequenceOfFramesProcessor {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
-    Integer detectedFrameGap = 10;//设置检测的帧数间隔进行部分的识别，即识别的帧数
+    int detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
     int frameCount = 0;//处理的是序列中的第几帧
     private static final int VIDEO_FPS = 1/25;
     private long batchstarttime = 0;
@@ -47,17 +47,19 @@ public class SequenceOfFramesProcessor {
         while (videoCapture.read(frame) ) {
 
             //1.实际检测的位置
-            if (frameCount % detectedFrameGap == 0) {
+            if (frameCount % detectedFrameGap  == 0) {
                 FPS = updateFPS();
                 mtracker.detectAndCorrectObjofFrame(frame);
                 mtracker.drawTrackerBox(frame,10);
  //               mtracker.drawBoundigBox(frame);
-//                imshow("pppp",frame);
-//                int key = waitKey(1000000);
-//                if(key == 16) {
-//                    frameCount++;
-//                    continue;
-//                }
+
+//                    imshow("pppp", frame);
+//                    int key = waitKey(1000000);
+//                    if (key == 16) {
+//                        frameCount++;
+//                        continue;
+//
+//                    }
 
             } else {
                 mtracker.trackObjectsofFrame(frame);

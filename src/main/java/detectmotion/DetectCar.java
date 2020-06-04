@@ -94,7 +94,7 @@ public class DetectCar {
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture();
-        String path = Thread.currentThread().getContextClassLoader().getResource("tese.mp4").getPath();//获取资源路径
+        String path = Thread.currentThread().getContextClassLoader().getResource("test1.mp4").getPath();//获取资源路径
         System.out.println(path);
         DetectCar dc = new DetectCar();
         Mat image = new Mat();

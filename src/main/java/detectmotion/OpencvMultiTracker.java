@@ -3,9 +3,9 @@ import detectmotion.tuple.Tuple;
 import detectmotion.tuple.Tuple3;
 import detectmotion.utils.RectCompute;
 import org.apache.log4j.Logger;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+
 import java.text.DecimalFormat;
 import java.util.*;
 import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
@@ -26,9 +26,9 @@ public class OpencvMultiTracker {
     DetectCar detector = null;
     public OpencvMultiTracker(String jsonName){
         detector = new DetectCar();
-      //  iot = new IOTTransform(jsonName);
-        trackers= new TrackerList();
-                  //.setIOT(iot);
+        iot = new IOTTransform(jsonName);
+        trackers= new TrackerList()
+                  .setIOT(iot);
     }
     @Deprecated
     private  List<CarDes>  findSameObjectByCenter(List<CarDes> predictedObjtects, List<Rect2d> dectedObjects){
@@ -101,7 +101,7 @@ public class OpencvMultiTracker {
             for (int i = 0; i < predictedObjtects.size(); i++) {
                 double area = RectCompute.getOverlappedArea(pRect,predictedObjtects.get(i));
                 //策略1  找重合面积最大的
-                if(  area > 30 && maxArea < area  ){//预测位置与现有的位置重合位置  最大
+                if( area > 10 && maxArea < area  ){//预测位置与现有的位置重合位置  最大
                     maxArea = area;
                     maxIndex = i;
                 }
@@ -114,10 +114,7 @@ public class OpencvMultiTracker {
                 unew.add(pRect);
                 MatchedPreictObjects.put(maxIndex,pRect);
             }
-
         }
-
-
         logger.debug("重合的对象" + unew.size());
         dectedObjects.removeAll(unew);
         logger.debug("剩余的预测对象" + predictedObjtects.size());
@@ -130,28 +127,44 @@ public class OpencvMultiTracker {
          * @param dectedObjects  实际检测的目标位置
          */
     public void correctBounding(Mat frame, List<Rect2d> dectedObjects){
-        trackers.update(frame);
         ArrayList<Rect2d> trackedcarposes = trackers.getTrackedCarsPos();
         if( dectedObjects == null )
             return;
         else  if(trackedcarposes == null || trackedcarposes.size() == 0){
-            trackers.createNewTrackersByArea(frame,dectedObjects);
+            createTrackerInList(frame,dectedObjects);
             return;
         }else if(dectedObjects.size() <= 0  ){//检测不出来对象 就使用预测对象替代
             return;
         }
-
         //1.根据重合范围进行第一次更新
         Map<Integer, Rect2d> needAlterTrackerPos = findSameObjectByArea(trackedcarposes, dectedObjects, null);
         trackers.updateTrackPos(frame,needAlterTrackerPos);//对原来的进行位置跟踪更新，重新创建跟踪器进行跟踪【会删除之前维护的所有对象，重新创建】
-        trackers.createNewTrackersByArea(frame,dectedObjects);//表示为新检测到的新物体,创建新的tracker
-
+        createTrackerInList(frame,dectedObjects);//表示为新检测到的新物体,创建新的tracker
+        cleanLost(30);//消失的帧数  时间 进行清理
+    }
+    public  void cleanLost(int losttime){
+        trackers.cleanLostedTrackers(30);
+    }
+    public void createTrackerInList(Mat frame,List<Rect2d> willAddCar){
+        if(iot != null) {
+            ArrayList<Rect2d> deletedRect = new ArrayList<>();
+            for (int i = 0; i < willAddCar.size(); i++) {
+                Rect2d r = willAddCar.get(i);
+                if (!iot.isInsidePicArea(r.tl()) && !iot.isInsidePicArea(r.br())){
+                    deletedRect.add(r);
+                }
+            }
+            willAddCar.removeAll(deletedRect);
+        }
+        trackers.createNewTrackersByArea(frame,willAddCar);
     }
 
     public void trackObjectsofFrame(Mat frame){
         //1.预测位置
-      trackers.update(frame);
-
+      trackers.update(frame);//更新位置
+      if(iot != null) {
+          trackers.deletedNotInArea(iot);//删除不在指定范围内的车辆tracker
+      }
     }
     public void detectAndCorrectObjofFrame(Mat frame){
 
@@ -208,15 +221,13 @@ public class OpencvMultiTracker {
 
 
 
-    double batchFPS = 10;
-
-
     public  void  drawStatistic(Mat frame,double batchFPS) {
         Imgproc.putText(frame, "FPS:" + String.format("%.2f", batchFPS),
                 new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
         Imgproc.putText(frame,"count:" + trackers.getCurTrackersCount(),
                 new Point(10,110), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255,0,0), 2);
     }
+    //for test
     public  void  drawBoundigBox(Mat frame ) {
         List<Rect2d> objects = detector.detectObject(frame);
         for (int i = 0; i < objects.size(); i++) {
