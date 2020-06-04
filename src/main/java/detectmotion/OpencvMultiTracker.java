@@ -1,5 +1,6 @@
 package detectmotion;
 import detectmotion.tuple.Tuple;
+import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
 import detectmotion.utils.RectCompute;
 import org.apache.log4j.Logger;
@@ -172,13 +173,9 @@ public class OpencvMultiTracker {
         correctBounding(frame, dectedObjects);
         return  ;
     }
-    public  void  drawTrackerBox(Mat frame,double time) {
-        double V= 0;
-        double S  = 0;
-        double L = 0;
-        int size = 0;
-        // pos  count  speed
-        ArrayList<Tuple3<Rect2d,Long,Double>> manyCarsInfo = trackers.getTrackedCarsInfos();
+    public void drawCarsBoundingBoxAndCount(Mat frame){
+
+        ArrayList<Tuple2<Rect2d,Long>> manyCarsInfo = trackers.getPosAndCount();
         for (Tuple carInfos : manyCarsInfo) {
             Optional<Rect2d> carpos = carInfos._1();
             Rect2d pos = carpos.get();
@@ -188,35 +185,18 @@ public class OpencvMultiTracker {
                     new Point(carpos.get().tl().x + carpos.get().width / 2, carpos.get().y + 5)
                     , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,255,0), 2);//显示标识
             Optional<Double> speedoptional = carInfos._3();
-            double s = speedoptional.get();
-//            if(frameCount % detectedFrameGap == 0 && frameCount != 0){
-//                s = d.calculateSpeed(detectedFrameGap * VIDEOFPS); //1/frame
-////            }
-            if(s >  0 ) {
-                DecimalFormat format = new DecimalFormat("#.0");
-                String str= format.format(s);
-                Imgproc.putText(frame, str +"km/h",
-                        new Point(pos.tl().x + pos.width / 2, pos.y - 10 )
-                        , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,255,0), 2);//显示距离
-//                V = V + s;
-//                L = L + d.getMeter();
-//                S = S + d.getPos().height * 1/d.getCarLength();
-//                size ++;
-            }
-
         }
-//        if( L != 0 && S != 0 && V != 0) {
-//            L = L / size;
-//            S = S / size;
-//            V = V / size;
-//            double flow = (t * V) / (L + S);
-//            DecimalFormat format = new DecimalFormat("#.0");
-//            String str= format.format(flow);
-//            Imgproc.putText(frame, "flow:" + str ,
-//                    new Point(10, 80)
-//                    , FONT_HERSHEY_SIMPLEX, 1,new Scalar(0,255,0), 2);//显示距离
-//        }
 
+
+    }
+
+    public void drawCarsSpeed(double time){
+
+
+    }
+
+    public  void  drawTrackerBox(Mat frame,double time) {
+        drawCarsBoundingBoxAndCount( frame);
     }
 
 
