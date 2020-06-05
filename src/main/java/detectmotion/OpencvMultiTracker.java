@@ -31,50 +31,8 @@ public class OpencvMultiTracker {
         trackers= new TrackerList()
                   .setIOT(iot);
     }
-    @Deprecated
-    private  List<CarDes>  findSameObjectByCenter(List<CarDes> predictedObjtects, List<Rect2d> dectedObjects){
-        ArrayList<CarDes> oldcar = new ArrayList<>();//已经存在
-        ArrayList<Rect2d> unew = new ArrayList<>();
-        for (Rect2d pRect:dectedObjects) {//以检测的结果为准
-            CarDes  sameobject = null;
-            double minDistance = Integer.MAX_VALUE;//最大的距离 ！！！
-            for(CarDes car:predictedObjtects){
-                RectCompute c1  = new RectCompute(pRect,car.pos);
-                double curdis = c1.centerDistance();
-                //策略1  找重合面积最大的
-                double dx =  car.pos.x - car.getNetxPos().x;
-                double dy =  car.pos.y - car.getNetxPos().y;//预测 - 原始 方向
-
-                double d2x = pRect.x - car.getNetxPos().x;
-                double d2y = pRect.y - car.getNetxPos().y;// 检测 - 原始
 
 
-                double theta =Math.sin( Math.atan(dy/dx));
-                double theta2 =Math.sin( Math.atan(d2y/d2x));
-
-                if ( Math.abs(theta - theta2) < 0.2  &&  curdis < minDistance) {
-                    minDistance = c1.centerDistance();
-                    sameobject = car;
-                }
-            }
-            //确定是与上一帧目标相同的patch ,
-            if (sameobject != null) {
-       //         System.out.println("curdis:=====" + minDistance);
-                sameobject.pos = pRect;//更显预测的位置为实际所在的位置
-                oldcar.add(sameobject);  //需要重新更新位置的结点
-                unew.add(pRect); // 该对象不需要重新添加
-            }
-        }
-//        System.out.println("一开始检测到的对象" + dectedObjects.size());
-//        System.out.println("预测的对象" + predictedObjtects.size());
-//        System.out.println("重合的对象" + unew.size());
-        dectedObjects.removeAll(unew);
-        predictedObjtects.removeAll(oldcar);
-//        System.out.println("剩余的检测对象" + dectedObjects.size());
-//        System.out.println("剩余的预测对象" + dectedObjects.size());
-//        System.out.println("===========================");
-        return oldcar;
-    }
 
     /***
      *
@@ -132,7 +90,7 @@ public class OpencvMultiTracker {
         if( dectedObjects == null )
             return;
         else  if(trackedcarposes == null || trackedcarposes.size() == 0){
-            createTrackerInList(frame,dectedObjects);
+             createTrackerInList(frame,dectedObjects);
             return;
         }else if(dectedObjects.size() <= 0  ){//检测不出来对象 就使用预测对象替代
             return;
@@ -141,9 +99,13 @@ public class OpencvMultiTracker {
         Map<Integer, Rect2d> needAlterTrackerPos = findSameObjectByArea(trackedcarposes, dectedObjects, null);
         trackers.updateTrackPos(frame,needAlterTrackerPos);//对原来的进行位置跟踪更新，重新创建跟踪器进行跟踪【会删除之前维护的所有对象，重新创建】
         createTrackerInList(frame,dectedObjects);//表示为新检测到的新物体,创建新的tracker
-        cleanLost(30);//消失的帧数  时间 进行清理
+
+    }
+    public  void saveDetectorStat(){
+        trackers.updatePhaseAndnexPoses();
     }
     public  void cleanLost(int losttime){
+
         trackers.cleanLostedTrackers(30);
     }
     public void createTrackerInList(Mat frame,List<Rect2d> willAddCar){
@@ -171,6 +133,8 @@ public class OpencvMultiTracker {
 
         List<Rect2d> dectedObjects = detector.detectObject(frame);
         correctBounding(frame, dectedObjects);
+        cleanLost(30);//清理丢失的目标，消失的帧数  时间 进行清理
+        saveDetectorStat();//更新状态为 detector阶段
         return  ;
     }
     public void drawCarsBoundingBoxAndCount(Mat frame){
@@ -179,24 +143,35 @@ public class OpencvMultiTracker {
         for (Tuple carInfos : manyCarsInfo) {
             Optional<Rect2d> carpos = carInfos._1();
             Rect2d pos = carpos.get();
-            Imgproc.rectangle(frame, carpos.get().tl(), carpos.get().br(), new Scalar(0,255,0),2);
+            Imgproc.rectangle(frame, pos.tl(), pos.br(), new Scalar(0,255,0),2);
             Optional<Long> count = carInfos._2();
             Imgproc.putText(frame, "" +count.get(),
-                    new Point(carpos.get().tl().x + carpos.get().width / 2, carpos.get().y + 5)
+                    new Point(pos.tl().x + pos.width / 2, pos.y + 10)
                     , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,255,0), 2);//显示标识
-            Optional<Double> speedoptional = carInfos._3();
         }
 
 
     }
 
-    public void drawCarsSpeed(double time){
-
+    public void drawCarsSpeed(double time,Mat frame){
+        ArrayList<Tuple2<Rect2d, Double>> speedandpos = trackers.getSpeed(time, iot);
+        DecimalFormat df = new DecimalFormat("#.00");
+        for (int i = 0; i < speedandpos.size(); i++) {
+            Optional<Rect2d> carpos = speedandpos.get(i)._1();
+            Rect2d pos = carpos.get();
+          //  Imgproc.rectangle(frame, pos.tl(), pos.br(), new Scalar(0,0,255),2);
+            Optional<Double> count = speedandpos.get(i)._2();//m/s
+            String str = df.format(count.get()*3.6);
+            Imgproc.putText(frame, str +"km/h",
+                    new Point(pos.tl().x + pos.width / 2, pos.y + 10)
+                    , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,0,255), 2);//显示标识
+        }
 
     }
 
     public  void  drawTrackerBox(Mat frame,double time) {
         drawCarsBoundingBoxAndCount( frame);
+        drawCarsSpeed(time,frame);
     }
 
 

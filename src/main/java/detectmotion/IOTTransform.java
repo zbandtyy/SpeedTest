@@ -30,6 +30,7 @@ public class IOTTransform {
     private Mat inverseMap;//反向转换矩阵
     private ArrayList<Point> picRect;  //感兴趣区域,四个点的坐标 单通道Mat
     private ArrayList<Point> realRect;              //转换后的目标区域 单通道
+    private  Rect transformAfter;
     private Size picSize;            //原图宽高
     private Size realSize;            //     截图区域现实对应的宽高,用实际的m表示
     public IOTTransform(String jsoname){
@@ -51,6 +52,22 @@ public class IOTTransform {
 
         return  arr.subList(0,dst.size());
     }
+
+    List<Point> transformPointList(List<Point> dst){
+
+        Mat src = Converters.vector_Point_to_Mat(dst,CV_32F);
+
+        logger.debug(src.type() + " " +src.channels()+" rows: " + src.rows() + " cols: " + src.cols());
+
+        Mat res = new Mat(src.rows(),src.cols(),CV_32FC2);
+        Core.perspectiveTransform(src,res,transformMap);
+        Mat tr = res.reshape(2,src.rows() * src.cols());
+
+        ArrayList<Point>  arr = new ArrayList<>();
+        Converters.Mat_to_vector_Point2d(tr,arr);
+
+        return  arr.subList(0,dst.size());
+    }
     void loadFromFile(String  jsonname){
 
         //2.转换成固定格式
@@ -65,13 +82,18 @@ public class IOTTransform {
         ArrayList<ArrayList<Double>> picRect1 = m.get("picRect");
         this.picRect = doubleIntArray_to_PointArray(picRect1);
         logger.debug("感兴趣的区域"+ this.picRect);
+
         ArrayList<ArrayList<Double>> realRect1 = m.get("realRect");
         this.realRect = doubleIntArray_to_PointArray(realRect1);
-        logger.debug("转换后的区域"+ this.realRect);
+        this.transformAfter = this.pointListToRect(this.realRect);
+
+        logger.debug("转换后的区域"+ this.transformAfter);
+
+
         ArrayList<Double> imageSize = m.get("imagSize");
-        picSize = new Size(imageSize.get(0),imageSize.get(1));
+        this.picSize = new Size(imageSize.get(0),imageSize.get(1));
         ArrayList<Double> real = m.get("realSize");
-        realSize = new Size(real.get(0),real.get(1));
+        this.realSize = new Size(real.get(0),real.get(1));
     }
 
     public static void main(String[] args) {
@@ -82,13 +104,18 @@ public class IOTTransform {
 //          List<Double> src1 = Arrays.asList(800.0,600.0);
 //          IOTTransform its = new IOTTransform(xmlPath);
 //          List<List<Double>> dst = Arrays.asList(src,src1);
-//          List<Point> result = its.transformPoint(dst);
-//          System.out.println(result);
-        //测试 是否在范围内部
-        IOTTransform iot = new IOTTransform(xmlPath);
-        Point p = new Point (1061,681);
-        boolean a = iot.isInsidePicArea(p);
-        System.out.println(a);
+//          List<Point> result = its.transformPoint(dst);//{847.0089111328125, 875.4133911132812},
+//          System.out.println(result);// {834.0802001953125, 1170.2252197265625}
+            List<Point> list = Arrays.asList(new Point(328,582),new Point(541,357));
+            IOTTransform its = new IOTTransform(xmlPath);
+            List<Point> result = its.transformPointList(list);
+            double dis = its.getDistance(result.get(0),result.get(1),its.getXRatio(),its.getYRatio());
+            System.out.println(dis);
+//        //测试 是否在范围内部
+//        IOTTransform iot = new IOTTransform(xmlPath);
+//        Point p = new Point (1061,681);
+//        boolean a = iot.isInsidePicArea(p);
+//        System.out.println(a);
 
     }
 
@@ -129,17 +156,6 @@ public class IOTTransform {
         }
     }
 
-    public ArrayList<Point> getIntrestAreaInReal(Point p) {
-        return  this.realRect;
-    }
-
-    public Size getPicSize() {
-        return picSize;
-    }
-
-    public Size getRealSize() {
-        return realSize;
-    }
 
     private ArrayList<Point> doubleIntArray_to_PointArray(List<? extends List<Double> > arrs){
         ArrayList<Point> ps = new ArrayList<>();
@@ -150,6 +166,53 @@ public class IOTTransform {
         }
         return ps;
     }
+    private Rect pointListToRect(List<Point>  list){
+        if(list == null || list.size() <= 0){
+            return  null;
+        }
+        double minx = list.get(0).x;
+        double miny = list.get(0).y;
 
+        double maxX = 0;
+        double maxY = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Point p = list.get(i);
+            minx = Math.min(minx,p.x);
+            miny = Math.min(minx,p.y);
+
+            maxX = Math.max(maxX,p.x);
+            maxY = Math.max(maxY,p.y);
+        }
+        return  new Rect(new Point(minx,miny),new Point(maxX,maxY));
+    }
+
+    public double getXRatio(){
+                // 实际大小             转换后的区域宽
+
+        return   realSize.width *1.0 /  transformAfter.width ;
+    }
+    public double getYRatio(){
+        return   realSize.height *1.0/  transformAfter.height;
+    }
+
+
+    private   double getDistance(Point previousPos, Point netxPos, double xratio, double yratio){
+
+        if(previousPos != null && netxPos != null){
+            double pcx = previousPos.x ;
+            double pcy = previousPos.y ;
+            double ccx = netxPos.x;
+            double ccy = netxPos.y ;
+            if(pcx < 0 || pcy < 0 || ccx < 0 || ccy <0){
+                System.out.println("previouspos = ===============================================" + previousPos);
+                System.out.println("nextpos" + netxPos);
+            }
+
+
+            return  Math.sqrt( ((pcx - ccx) *(pcx -ccx)*xratio*xratio)  +
+                    ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );
+        }
+        return -1;
+    }
 }
 

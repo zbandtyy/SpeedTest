@@ -25,7 +25,7 @@ public class SequenceOfFramesProcessor {
     }
     int detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
     int frameCount = 0;//处理的是序列中的第几帧
-    private static final int VIDEO_FPS = 1/25;
+    private static final double VIDEO_FPS = 1.0/25;
     private long batchstarttime = 0;
     private long batchendtime = 0;
 
@@ -51,8 +51,8 @@ public class SequenceOfFramesProcessor {
                 FPS = updateFPS();
                 mtracker.detectAndCorrectObjofFrame(frame);
                 mtracker.drawTrackerBox(frame,10);
- //               mtracker.drawBoundigBox(frame);
-
+//                mtracker.drawBoundigBox(frame);
+//
 //                    imshow("pppp", frame);
 //                    int key = waitKey(1000000);
 //                    if (key == 16) {
@@ -65,7 +65,7 @@ public class SequenceOfFramesProcessor {
                 mtracker.trackObjectsofFrame(frame);
             }
             mtracker.drawStatistic(frame,FPS);
-            mtracker.drawTrackerBox(frame,10);
+            mtracker.drawTrackerBox(frame,detectedFrameGap * VIDEO_FPS);//speed count
             frameCount++;
             imshow("processed",frame);
             waitKey(10);
