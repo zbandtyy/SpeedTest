@@ -22,7 +22,18 @@ public class CarDes implements  Cloneable, Serializable {
     long count ;//对当前经过车辆的标记数
     double speed = 0;
     Scalar color  = new Scalar(0,0,255);
+    private Double carLength ;
     private Tracker tracker;
+
+    public Double getCarLength() {
+        return carLength;
+    }
+
+    public void setCarLength(Double carLength) {
+        this.carLength = carLength;
+    }
+
+
     int phase = 0;// 0 tracker阶段, 1 检测阶段
 
     public void setPhase(int phase) {

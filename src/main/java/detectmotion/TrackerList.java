@@ -4,6 +4,7 @@ import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
 import detectmotion.utils.PHASE;
 import org.apache.log4j.Logger;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.tracking.*;
@@ -18,7 +19,6 @@ import  java.util.*;
 public class TrackerList  {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
     private String[] trackerTypes = {"BOOSTING", "MIL", "KCF", "TLD", "MEDIANFLOW", "GOTURN", "MOSSE", "CSRT"};
-    IOTTransform iot ;
     Tracker createTrackerByName(String trackerType) {
         Tracker tracker = null;
         if (trackerType == trackerTypes[0])
@@ -137,12 +137,11 @@ public class TrackerList  {
     public  void deletedNotInArea( IOTTransform iot){
         List<CarDes> deleted = new LinkedList<>();
         //删除所有超过范围的追踪器
-        if(this.iot != null){
+        if(iot != null){
             for (int i = 0; i < trackers.size(); i++) {
                 Rect2d pos = trackers.get(i).getPos();
                 if(!iot.isInsidePicArea(pos.br()) && !iot.isInsidePicArea(pos.tl()) ){
                     logger.warn("remove count = " + trackers.get(i).count +"because   it goes beyond the interested  zone");
-
                     deleted.add(trackers.get(i));
                 }
             }
@@ -155,10 +154,7 @@ public class TrackerList  {
         this.selectedType = selectedType;
         return  this;
     }
-    public TrackerList setIOT(IOTTransform ioa){
-        this.iot  = ioa;
-        return  this;
-    }
+
     public  TrackerList(){
 
     }
@@ -183,8 +179,8 @@ public class TrackerList  {
     }
 
 
-    public  ArrayList<Tuple2<Rect2d,Double>> getSpeed(double time,IOTTransform iot){
-        ArrayList<Tuple2<Rect2d,Double>> arr = new ArrayList<>(trackers.size());
+    public  ArrayList<Tuple3<Rect2d,Double,Double>> getSpeed(double time,IOTTransform iot){
+        ArrayList<Tuple3<Rect2d,Double,Double>> arr = new ArrayList<>(trackers.size());
 
         for (int i = 0; i < trackers.size(); i++) {
             CarDes car = trackers.get(i);
@@ -193,7 +189,7 @@ public class TrackerList  {
             if(pre == null || p == null)
                     continue;
             if(car.getPhase() == PHASE.TRACKER && car.speed != 0){//速度为0 不显示
-                arr.add(new Tuple2<>(car.getPos(),car.speed));
+                arr.add(new Tuple3<>(car.getPos(),car.speed,car.getCarLength()));
                 continue;
             }
 
@@ -201,15 +197,18 @@ public class TrackerList  {
                 //计算速度/////
                 if (( car.speed != 0) &&
                         (!iot.isInsidePicArea(getRectCenter(pre)) || !iot.isInsidePicArea(getRectCenter(p)))) {
-                    arr.add(new Tuple2<>(car.getPos(), car.speed));
+                    arr.add(new Tuple3<>(car.getPos(), car.speed,car.getCarLength()));
                 } else if (iot.isInsidePicArea(getRectCenter(pre)) && iot.isInsidePicArea(getRectCenter(p))){
-                    double s = calculateSpeed(p,pre,time);
+                    double s = calculateSpeed(p,pre,time,iot);
+                    double carLength =  calculateCarLength(p.tl(),p.br(),iot);
+                    System.out.println(carLength);
+                    car.setCarLength(carLength);
                     if (car.speed == 0) {
                         car.speed = s;
                     } else {
                         car.speed = (car.speed +  s) / 2;
                     }
-                    arr.add(new Tuple2<>(car.getPos(), car.speed));
+                    arr.add(new Tuple3<>(car.getPos(), car.speed,car.getCarLength()));
                 }
             }
         }
@@ -219,8 +218,17 @@ public class TrackerList  {
     private  Point getRectCenter(Rect2d r){
         return  new Point(r.x + r.width/2,r.y + r.height /2);
     }
-
-    private  double calculateSpeed(Rect2d pre,Rect2d p,double time){
+    private double calculateCarLength(Point tl,Point br,IOTTransform iot){
+        double yratio = iot.getYRatio();
+        List<Point> list = Arrays.asList(tl, br);
+        List<Point> res = iot.transformPointList(list);
+        System.out.println(res.get(0));
+        System.out.println(res.get(1));
+        double carLength = Math.sqrt(((res.get(0).y - res.get(1).y) * (res.get(0).y - res.get(1).y))*yratio*yratio);
+        System.out.println(res.get(0).y - res.get(1).y);
+        return  carLength;
+    }
+    private  double calculateSpeed(Rect2d pre,Rect2d p,double time,IOTTransform iot){
         double xratio = iot.getXRatio();
         double yratio = iot.getYRatio();
         Point precenter = getRectCenter(pre);
@@ -238,6 +246,12 @@ public class TrackerList  {
             double pcy = previousPos.y ;
             double ccx = netxPos.x;
             double ccy = netxPos.y ;
+
+            if(pcx < 0 || pcy <0 || ccx < 0 || ccy < 0){
+                System.out.println(previousPos);
+                System.out.println(netxPos);
+                System.out.println("=========================================================");
+            }
             return  Math.sqrt( ((pcx - ccx) *(pcx -ccx)*xratio*xratio)  +
                     ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );
         }

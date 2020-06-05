@@ -28,8 +28,8 @@ public class OpencvMultiTracker {
     public OpencvMultiTracker(String jsonName){
         detector = new DetectCar();
         iot = new IOTTransform(jsonName);
-        trackers= new TrackerList()
-                  .setIOT(iot);
+        trackers= new TrackerList();
+
     }
 
 
@@ -146,7 +146,7 @@ public class OpencvMultiTracker {
             Imgproc.rectangle(frame, pos.tl(), pos.br(), new Scalar(0,255,0),2);
             Optional<Long> count = carInfos._2();
             Imgproc.putText(frame, "" +count.get(),
-                    new Point(pos.tl().x + pos.width / 2, pos.y + 10)
+                    new Point(pos.tl().x + pos.width / 2, pos.y - 5)
                     , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,255,0), 2);//显示标识
         }
 
@@ -154,17 +154,38 @@ public class OpencvMultiTracker {
     }
 
     public void drawCarsSpeed(double time,Mat frame){
-        ArrayList<Tuple2<Rect2d, Double>> speedandpos = trackers.getSpeed(time, iot);
+        ArrayList<Tuple3<Rect2d, Double,Double>> speedandpos = trackers.getSpeed(time, iot);
         DecimalFormat df = new DecimalFormat("#.00");
+        DecimalFormat dflength = new DecimalFormat("#");
+        double V = 0;
+        double S = 0;
+        double L =0;
+
         for (int i = 0; i < speedandpos.size(); i++) {
             Optional<Rect2d> carpos = speedandpos.get(i)._1();
             Rect2d pos = carpos.get();
-          //  Imgproc.rectangle(frame, pos.tl(), pos.br(), new Scalar(0,0,255),2);
             Optional<Double> count = speedandpos.get(i)._2();//m/s
             String str = df.format(count.get()*3.6);
             Imgproc.putText(frame, str +"km/h",
-                    new Point(pos.tl().x + pos.width / 2, pos.y + 10)
+                    new Point(pos.tl().x + pos.width / 2, pos.y - 20)
                     , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,0,255), 2);//显示标识
+            Optional<Double> carlength = speedandpos.get(i)._3();
+//            String str = dflength.format(carlength.get());
+//            Imgproc.putText(frame, str,
+//                    new Point(pos.tl().x + pos.width / 2, pos.y + 10)
+//                    , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,0,255), 2);//显示标识
+            L = L + carlength.get();
+            V = V + count.get();
+            S = S +  V*time;
+        }
+        if(speedandpos.size() > 0) {
+            V = V / speedandpos.size();
+            S = S / speedandpos.size();
+            L = L / speedandpos.size();
+            String str= df.format((V * time) / (L + S) );
+            Imgproc.putText(frame, "flow" + str,
+                    new Point(10, 75 )
+                    , FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);//显示标识
         }
 
     }
