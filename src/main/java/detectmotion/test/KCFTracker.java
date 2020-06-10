@@ -1,5 +1,6 @@
 package detectmotion.test;
-import detectmotion.DetectCar;
+import detectmotion.detector.CascadeDetectCar;
+import detectmotion.detector.DetectCar;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
@@ -27,7 +28,7 @@ public class KCFTracker {
     DetectCar detector = null;
     private  static MultiTracker tracker = MultiTracker.create();
     public KCFTracker(){
-        detector = new DetectCar();
+        detector = new CascadeDetectCar();
     }
 
     public void processVideo(String videoName){

@@ -82,7 +82,7 @@ public class SequenceOfFramesProcessor {
 
     public static void main(String[] args) {
         String path = Thread.currentThread().getContextClassLoader().getResource("test1.mp4").getPath();//获取资源路径
-        String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("calibrate_camera.json" ).getPath();//获
+        String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("multitracker/calibrate_camera.json" ).getPath();//获
         SequenceOfFramesProcessor opencv = new SequenceOfFramesProcessor(10,xmlPath);
         opencv.processVideo(path);
     }

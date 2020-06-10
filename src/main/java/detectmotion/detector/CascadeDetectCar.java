@@ -1,22 +1,18 @@
-package detectmotion;
+package detectmotion.detector;
 import detectmotion.utils.RectCompute;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
-import org.opencv.tracking.Tracking;
 import org.opencv.videoio.VideoCapture;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 
 import static org.opencv.highgui.HighGui.imshow;
 import static org.opencv.imgproc.Imgproc.*;
 import static org.opencv.imgproc.Imgproc.ellipse;
-import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
 
 
 /**
@@ -27,7 +23,7 @@ import static org.opencv.objdetect.Objdetect.CASCADE_SCALE_IMAGE;
  * @version: $
  */
 
-public class DetectCar {
+public class CascadeDetectCar implements DetectCar {
     CascadeClassifier cascade;
 
     String xmlList[] = {
@@ -40,9 +36,9 @@ public class DetectCar {
             "fullbody.xml"
     };
 
-    int WIDTH = 720;
-    int HEIGHT = 560;
-    public  DetectCar(){
+    List<Rect2d> detectedObjects;
+    public CascadeDetectCar(){
+
         cascade = new CascadeClassifier();//用的是Haar或者LBP提取特征:滑动窗口机制+级联分类器的方式
         String xmlPath =  Thread.currentThread().getContextClassLoader().getResource(xmlList[3] ).getPath();//获取资源路径
         if(System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1) {
@@ -52,8 +48,7 @@ public class DetectCar {
         cascade.load(xmlPath);
     }
 
-    public List<Rect2d> detectObject(Mat frame)
-    {
+    public List<Rect2d> detectObject(Mat frame) {
         Mat cur = new Mat();
         Mat frame_gray = new Mat();
         cvtColor(frame, frame_gray,COLOR_RGB2GRAY);
@@ -82,21 +77,21 @@ public class DetectCar {
             }
             resultRects.removeAll(deleted);
         }
-
+        detectedObjects = resultRects;
         return resultRects ;
     }
-    public  void  showBoundigBox(Mat frame, List<Rect2d> objects) {
-        for (int i = 0; i < objects.size(); i++) {
-            Imgproc.rectangle(frame,objects.get(i).tl(), objects.get(i).br(), new Scalar(0, 255, 0));
+    public  void  showBoundigBox(Mat frame) {
+        for (int i = 0; i < detectedObjects.size(); i++) {
+            Imgproc.rectangle(frame,detectedObjects.get(i).tl(), detectedObjects.get(i).br(), new Scalar(0, 255, 0));
 
         }
     }
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture();
-        String path = Thread.currentThread().getContextClassLoader().getResource("test1.mp4").getPath();//获取资源路径
+        String path = Thread.currentThread().getContextClassLoader().getResource("tese.mp4").getPath();//获取资源路径
         System.out.println(path);
-        DetectCar dc = new DetectCar();
+        DetectCar dc = new CascadeDetectCar();
         Mat image = new Mat();
         int frameCount = -1;
         videoCapture.open(path);
@@ -108,7 +103,7 @@ public class DetectCar {
             long  start= new Date().getTime();
             List<Rect2d> l = dc.detectObject(image);
             long end = new Date().getTime();
-            dc.showBoundigBox(image,l);
+            dc.showBoundigBox(image);
             imshow("process Image",image);
             double fps = 1000.0/(end - start);
             System.out.println(end - start);

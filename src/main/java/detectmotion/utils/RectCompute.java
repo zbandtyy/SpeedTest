@@ -57,7 +57,7 @@ public class RectCompute  {
         return Len * Wid;
 
     }
-    public boolean isFullContain(){
+    public static boolean isFullContain(Rect2d rect1,Rect2d rect2){
         if (rect1 == null || rect2 == null) {
             return  false;
         }
