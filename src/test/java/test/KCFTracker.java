@@ -1,4 +1,4 @@
-package detectmotion.test;
+package test;
 import detectmotion.detector.CascadeDetectCar;
 import detectmotion.detector.DetectCar;
 import org.opencv.core.*;

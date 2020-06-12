@@ -1,7 +1,6 @@
-package detectmotion.test;
+package test;
 
 import org.opencv.core.*;
-import org.opencv.tracking.MultiTracker;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.videoio.VideoCapture;
 import java.util.ArrayList;

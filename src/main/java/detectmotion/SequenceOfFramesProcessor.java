@@ -50,7 +50,7 @@ public class SequenceOfFramesProcessor {
             if (frameCount % detectedFrameGap  == 0) {
                 FPS = updateFPS();
                 mtracker.detectAndCorrectObjofFrame(frame);
-                mtracker.drawTrackerBox(frame,10);
+ //               mtracker.drawTrackerBox(frame,10);
 //                mtracker.drawBoundigBox(frame);
 //
 //                    imshow("pppp", frame);

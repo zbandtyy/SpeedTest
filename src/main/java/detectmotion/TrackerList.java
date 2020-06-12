@@ -201,7 +201,7 @@ public class TrackerList  {
                 } else if (iot.isInsidePicArea(getRectCenter(pre)) && iot.isInsidePicArea(getRectCenter(p))){
                     double s = calculateSpeed(p,pre,time,iot);
                     double carLength =  calculateCarLength(p.tl(),p.br(),iot);
-                    System.out.println(carLength);
+                   // System.out.println(carLength);
                     car.setCarLength(carLength);
                     if (car.speed == 0) {
                         car.speed = s;
@@ -222,10 +222,10 @@ public class TrackerList  {
         double yratio = iot.getYRatio();
         List<Point> list = Arrays.asList(tl, br);
         List<Point> res = iot.transformPointList(list);
-        System.out.println(res.get(0));
-        System.out.println(res.get(1));
+//        System.out.println(res.get(0));
+//        System.out.println(res.get(1));
         double carLength = Math.sqrt(((res.get(0).y - res.get(1).y) * (res.get(0).y - res.get(1).y))*yratio*yratio);
-        System.out.println(res.get(0).y - res.get(1).y);
+ //       System.out.println(res.get(0).y - res.get(1).y);
         return  carLength;
     }
     private  double calculateSpeed(Rect2d pre,Rect2d p,double time,IOTTransform iot){
@@ -248,9 +248,10 @@ public class TrackerList  {
             double ccy = netxPos.y ;
 
             if(pcx < 0 || pcy <0 || ccx < 0 || ccy < 0){
-                System.out.println(previousPos);
-                System.out.println(netxPos);
-                System.out.println("=========================================================");
+//                System.out.println(previousPos);
+//                System.out.println(netxPos);
+//                System.out.println("=========================================================");
+                logger.warn("has position out of size");
             }
             return  Math.sqrt( ((pcx - ccx) *(pcx -ccx)*xratio*xratio)  +
                     ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );

@@ -1,4 +1,4 @@
-package detectmotion.test;
+package test;
 
 import java.awt.BorderLayout;
 import java.awt.Container;

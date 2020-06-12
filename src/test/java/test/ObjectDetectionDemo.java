@@ -1,4 +1,4 @@
-package detectmotion.test;
+package test;
 
 import java.util.List;
 

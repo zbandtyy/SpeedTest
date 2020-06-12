@@ -3,6 +3,8 @@ package detectmotion.detector;
 import detectmotion.utils.RectCompute;
 import detectmotion.yolo.ObjectDetector;
 import detectmotion.yolo.classifier.YOLOClassifier;
+import detectmotion.yolo.model.BoxPosition;
+import detectmotion.yolo.model.Recognition;
 import detectmotion.yolo.result.Box;
 import detectmotion.yolo.result.BoxesAndAcc;
 import org.opencv.core.*;
@@ -38,13 +40,11 @@ public class YoloDetectCar implements DetectCar {
         Imgcodecs.imencode(".jpg", frame, bytemat);
 
         byte[] bytes = bytemat.toArray();
-        ArrayList<BoxesAndAcc> res = obj.yolov2Detector(bytes);
+        List<Recognition> res = obj.yolov2Detector(bytes);
         ArrayList<Rect2d> last= new ArrayList<>(res.size());
-        for (BoxesAndAcc ba : res) {
-            if(ba.names.equals("car")){
-                Box bb = ba.boxes;
-                last.add(new Rect2d(bb.x,bb.y,bb.w,bb.h));
-            }
+        for (Recognition ba : res) {
+            BoxPosition bb = ba.getLocation();
+            last.add(new Rect2d(bb.getLeft(),bb.getTop(),bb.getWidth(),bb.getHeight()));
         }
         detectedObjects = last;
         removeOverlapped();
@@ -55,15 +55,15 @@ public class YoloDetectCar implements DetectCar {
             return;
        ArrayList<Rect2d> deleted = new ArrayList<>();
        for (int i = 0; i < detectedObjects.size(); i++) {
-           for (int i1 = 0; i1 < detectedObjects.size()  - 1; i1++) {
-               boolean rc =  RectCompute.isFullContain(detectedObjects.get(i1),detectedObjects.get(i));//i 在 i1的里面
-               if(rc) {
-                   deleted.add(detectedObjects.get(i));
+           for (int i1 = 0; i1 < detectedObjects.size() ; i1++) {
+               boolean rc =  RectCompute.isFullContain(detectedObjects.get(i),detectedObjects.get(i1));//i1 在 i的里面,那么删除小的
+               if(rc == true) {
+                   deleted.add(detectedObjects.get(i1));
                }
            }
+
        }
        detectedObjects.removeAll(deleted);
-
    }
 
     @Override
@@ -74,12 +74,10 @@ public class YoloDetectCar implements DetectCar {
     }
 
 
-
-
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture();
-        String path = Thread.currentThread().getContextClassLoader().getResource("tese.mp4").getPath();//获取资源路径
+        String path = Thread.currentThread().getContextClassLoader().getResource("test1.mp4").getPath();//获取资源路径
         System.out.println(path);
         DetectCar dc = new YoloDetectCar();
         Mat image = new Mat();
@@ -87,23 +85,30 @@ public class YoloDetectCar implements DetectCar {
         videoCapture.open(path);
         List<Rect2d> listAll = new ArrayList<>();
         while (true) {
+
             if (!videoCapture.read(image)) {
                 break;
             }
-            long  start= new Date().getTime();
-            List<Rect2d> l = dc.detectObject(image);
-            long end = new Date().getTime();
-            dc.showBoundigBox(image);
-            imshow("process Image",image);
-            double fps = 1000.0/(end - start);
-            System.out.println(end - start);
-            Imgproc.putText(image,"FPS:" + Double.toString(fps),new Point(20,20),Core.FONT_HERSHEY_SIMPLEX,0.75,new Scalar(255,11,0),2);
-            int keyboard = HighGui.waitKey(30);
-            if (keyboard == 'q' || keyboard == 27) {
-                break;
+            if(frameCount % 20 == 0) {
+                long start = new Date().getTime();
+                List<Rect2d> l = dc.detectObject(image);
+                long end = new Date().getTime();
+                dc.showBoundigBox(image);
+                imshow("process Image", image);
+                double fps = 1000.0 / (end - start);
+                System.out.println(end - start);
+                Imgproc.putText(image, "FPS:" + Double.toString(fps), new Point(20, 20), Core.FONT_HERSHEY_SIMPLEX, 0.75, new Scalar(255, 11, 0), 2);
+                int keyboard = HighGui.waitKey(30);
+                if (keyboard == 'q' || keyboard == 27) {
+                    break;
+                }
+                System.out.println("have process" + frameCount);
+                System.out.println("================================");
+
             }
             frameCount++;
-            System.out.println("have process" + frameCount);
+
+
         }
         System.exit(0);
 

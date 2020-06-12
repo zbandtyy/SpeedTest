@@ -90,7 +90,7 @@ public class IOTTransform {
         logger.debug("转换后的区域"+ this.transformAfter);
 
 
-        ArrayList<Double> imageSize = m.get("imagSize");
+        ArrayList<Double> imageSize = m.get("imagsize");
         this.picSize = new Size(imageSize.get(0),imageSize.get(1));
         ArrayList<Double> real = m.get("realSize");
         this.realSize = new Size(real.get(0),real.get(1));

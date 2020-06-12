@@ -1,4 +1,4 @@
-package detectmotion.test;
+package test;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

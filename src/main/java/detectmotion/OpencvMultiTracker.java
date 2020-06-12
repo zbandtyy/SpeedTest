@@ -1,6 +1,7 @@
 package detectmotion;
 import detectmotion.detector.CascadeDetectCar;
 import detectmotion.detector.DetectCar;
+import detectmotion.detector.YoloDetectCar;
 import detectmotion.tuple.Tuple;
 import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
@@ -28,14 +29,10 @@ public class OpencvMultiTracker {
     private   TrackerList trackers; ;
     DetectCar detector = null;
     public OpencvMultiTracker(String jsonName){
-        detector = new CascadeDetectCar();
+        detector = new YoloDetectCar();
         iot = new IOTTransform(jsonName);
         trackers= new TrackerList();
-
     }
-
-
-
     /***
      *
      * @param predictedObjtects  预测的目标

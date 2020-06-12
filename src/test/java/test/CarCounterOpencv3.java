@@ -1,4 +1,4 @@
-package detectmotion.test;
+package test;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -13,7 +13,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -27,7 +26,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
-import org.opencv.core.MatOfPoint;
+
 import static org.opencv.imgproc.Imgproc.INTER_CUBIC;
 import static org.opencv.imgproc.Imgproc.resize;
 
