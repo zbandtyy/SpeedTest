@@ -10,6 +10,8 @@ import org.opencv.utils.Converters;
 import java.io.*;
 
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +26,7 @@ import static org.opencv.core.CvType.*;
  * @modified By：
  * @version: $
  */
-public class IOTTransform {
+public class IOTTransform implements Serializable {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
     private Mat transformMap;//透视转换矩阵
     private Mat inverseMap;//反向转换矩阵
@@ -78,10 +80,15 @@ public class IOTTransform {
         transformMap = MatWrapper.doubleArrayToMat(mtxlist,CV_64F);
         ArrayList<List<Double>> imtxlist = m.get("imtx");
         inverseMap = MatWrapper.doubleArrayToMat(imtxlist,CV_64F);
+        //原图片大小
+        ArrayList<Double> imageSize = m.get("imagsize");
+        this.picSize = new Size(imageSize.get(0),imageSize.get(1));
 
-        ArrayList<ArrayList<Double>> picRect1 = m.get("picRect");
+        ArrayList<ArrayList<Double>> picRect = m.get("picRect");
+        ArrayList<List<Double>> picRect1 = transformScale(picRect);
         this.picRect = doubleIntArray_to_PointArray(picRect1);
         logger.debug("感兴趣的区域"+ this.picRect);
+
 
         ArrayList<ArrayList<Double>> realRect1 = m.get("realRect");
         this.realRect = doubleIntArray_to_PointArray(realRect1);
@@ -90,15 +97,14 @@ public class IOTTransform {
         logger.debug("转换后的区域"+ this.transformAfter);
 
 
-        ArrayList<Double> imageSize = m.get("imagsize");
-        this.picSize = new Size(imageSize.get(0),imageSize.get(1));
+
         ArrayList<Double> real = m.get("realSize");
         this.realSize = new Size(real.get(0),real.get(1));
     }
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("calibrate_camera.json" ).getPath();//获IOTTransform its  =  new IOTTransform(xmlPath);
+        String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("multitracker/calibrate_camera_scale.json" ).getPath();//获IOTTransform its  =  new IOTTransform(xmlPath);
             //测试转换
 //          List<Double> src =  Arrays.asList(800.0,500.0);
 //          List<Double> src1 = Arrays.asList(800.0,600.0);
@@ -142,7 +148,20 @@ public class IOTTransform {
         }
         return jsonStr;
     }
+    private ArrayList<List<Double>> transformScale ( List<ArrayList<Double>> list){
+        ArrayList<List<Double>> newlist = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Double x= list.get(i).get(0) * picSize.width;
+            x = (double) Math.round(x * 100) / 100;
 
+            Double y = list.get(i).get(1) * picSize.height;
+            y = (double) Math.round(y * 100) / 100;
+
+
+            newlist.add(Arrays.asList(x, y));
+        }
+        return newlist;
+    }
     public boolean isInsidePicArea(Point p) {
 
         Point[] mpa = new Point[this.picRect.size()];

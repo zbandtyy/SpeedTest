@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.*;
 import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
@@ -21,7 +22,7 @@ import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
  * @modified By：
  * @version: $
  */
-public class OpencvMultiTracker {
+public class OpencvMultiTracker implements Serializable {
     IOTTransform iot ;
 
     private static final Logger logger = Logger.getLogger(OpencvMultiTracker.class);
@@ -189,8 +190,16 @@ public class OpencvMultiTracker {
 
     }
 
+    /***
+     *
+     * @param frame  需要处理的帧，进行绘制
+     * @param time   detectedFramegap每次进行detect的时间gap
+     */
     public  void  drawTrackerBox(Mat frame,double time) {
+
         drawCarsBoundingBoxAndCount( frame);
+        if(time == 0)
+            return;
         drawCarsSpeed(time,frame);
     }
 

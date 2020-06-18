@@ -8,6 +8,8 @@ import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.tracking.*;
+
+import java.io.Serializable;
 import  java.util.*;
 /**
  * @author ：tyy
@@ -16,7 +18,7 @@ import  java.util.*;
  * @modified By：
  * @version: $
  */
-public class TrackerList  {
+public class TrackerList implements Serializable {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
     private String[] trackerTypes = {"BOOSTING", "MIL", "KCF", "TLD", "MEDIANFLOW", "GOTURN", "MOSSE", "CSRT"};
     Tracker createTrackerByName(String trackerType) {

@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.tyy</groupId>
     <artifactId>speed-test</artifactId>
     <version>1.0</version>
@@ -17,8 +16,175 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <!--3.  编译器配置-->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+                <version>3.8.0</version>
+            </plugin>
+            <!-- 4.       打包配置-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+
+                        </goals>
+                        <configuration>
+                            <!--                <minimizeJar>true</minimizeJar>-->
+                            <outputDirectory>
+                                ${project.build.directory}\jar\
+                            </outputDirectory>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>reference.conf</resource>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>ReadPhoto</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 5拷贝生成包到目的目录 see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-target</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <!--打成jar包后复制到的路径-->
+                            <outputDirectory>
+                                F:\shared\spark-example\
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <!--项目中的路径-->
+                                    <directory> ${project.build.directory}\jar</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!--可配置多个提取复制路径只需要 “<id>”名字不一样即可-->
+                </executions>
+                <version>3.0.2</version>
+            </plugin>
+
+            <!--2. clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+            <!--3.  编译器配置-->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+                <version>3.8.0</version>
+            </plugin>
+            <!-- 4.       打包配置-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+
+                        </goals>
+                        <configuration>
+                            <!--                <minimizeJar>true</minimizeJar>-->
+                            <outputDirectory>
+                                ${project.build.directory}\jar\
+                            </outputDirectory>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>reference.conf</resource>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>ReadPhoto</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+                <!-- 5拷贝生成包到目的目录 see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-target</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <!--打成jar包后复制到的路径-->
+                            <outputDirectory>
+                                F:\shared\spark-example\speedtest
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <!--项目中的路径-->
+                                    <directory> ${project.build.directory}\jar</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <!--可配置多个提取复制路径只需要 “<id>”名字不一样即可-->
+                </executions>
+                <version>3.0.2</version>
+            </plugin>
         </plugins>
     </build>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
@@ -63,9 +229,17 @@
             <artifactId>commons-math3</artifactId>
             <version>3.4.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <!--            11是scala的版本-->
+            <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.11</artifactId>
+            <version>2.3.0</version>
+        </dependency>
     </dependencies>
-
-
 
 </project>
