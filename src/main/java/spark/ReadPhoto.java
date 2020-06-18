@@ -1,10 +1,15 @@
 package spark;
 
+import detectmotion.SequenceOfFramesProcessor;
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.FlatMapGroupsFunction;
+import org.apache.spark.api.java.function.FlatMapGroupsWithStateFunction;
 import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.*;
+import org.apache.spark.sql.streaming.GroupState;
+import org.apache.spark.sql.streaming.GroupStateTimeout;
+import org.apache.spark.sql.streaming.OutputMode;
 import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
@@ -77,15 +82,22 @@ public class ReadPhoto {
         }, Encoders.STRING());
 
        /////////////////// //1. YOLO识别测试///////////////////////////////////////////
+        //对每组数据应用给定的函数，同时维护用户定义的每组状态。结果数据集将表示函数返回的对象。
+        // 对于静态批处理数据集,每个组调用该函数一次。
+        Dataset<VideoEventData> dfTrack = kvDataset.flatMapGroupsWithState((FlatMapGroupsWithStateFunction<String, VideoEventData, SequenceOfFramesProcessor,VideoEventData >) (key, values, state) -> {
+            ArrayList<VideoEventData> processed = ImageProcessor2.process(key, values);
+            return processed.iterator();
+        }, OutputMode.Update(),  Encoders.bean(SequenceOfFramesProcessor.class),Encoders.bean(VideoEventData.class) ,GroupStateTimeout.NoTimeout());// OutputMode.Update(),Encoders.bean(String.class),, GroupStateTimeout.NoTimeout());
 
-        Dataset<VideoEventData> dfTrack = kvDataset.flatMapGroups(new FlatMapGroupsFunction<String, VideoEventData, VideoEventData>() {
-            @Override
-            public Iterator<VideoEventData> call(String key, Iterator<VideoEventData> values) throws Exception {
-                // classify image  key 是cameraid    values是数据集
-                ArrayList<VideoEventData> processed = ImageProcessor2.process(key, values);
-                return processed.iterator();
-            }
-        },Encoders.bean(VideoEventData.class));
+//        //对每组数据应用给定的函数。
+//        Dataset<VideoEventData> dfTrack = kvDataset.flatMapGroups(new FlatMapGroupsFunction<String, VideoEventData, VideoEventData>() {
+//            @Override
+//            public Iterator<VideoEventData> call(String key, Iterator<VideoEventData> values) throws Exception {
+//                // classify image  key 是cameraid    values是数据集
+//                ArrayList<VideoEventData> processed = ImageProcessor2.process(key, values);
+//                return processed.iterator();
+//            }
+//        },Encoders.bean(VideoEventData.class));
 
 
         Dataset<Row> djson = dfTrack.flatMap(new FlatMapFunction<VideoEventData, Tuple2<String, String>>() {
@@ -97,6 +109,8 @@ public class ReadPhoto {
             }
 
         }, Encoders.tuple(Encoders.STRING(), Encoders.STRING())).toDF("key", "value");
+
+
 
         StreamingQuery query = djson
                 .selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)") //如果Kafka数据记录中的字符存的是UTF8字符串，我们可以用cast将二进制转换成正确类型
