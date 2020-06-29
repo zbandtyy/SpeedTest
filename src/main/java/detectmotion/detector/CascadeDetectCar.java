@@ -6,6 +6,7 @@ import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
+import spark.config.AppConfig;
 
 import java.util.*;
 import java.util.List;
@@ -40,14 +41,14 @@ public class CascadeDetectCar implements DetectCar {
     public CascadeDetectCar(){
 
         cascade = new CascadeClassifier();//用的是Haar或者LBP提取特征:滑动窗口机制+级联分类器的方式
-        String xmlPath =  Thread.currentThread().getContextClassLoader().getResource(xmlList[3] ).getPath();//获取资源路径
-        if(System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1) {
-            xmlPath=xmlPath.substring(1);
-        }
-        System.out.println("load xml" + xmlPath);
-        cascade.load(xmlPath);
+//        String xmlPath =  Thread.currentThread().getContextClassLoader().getResource(xmlList[3] ).getPath();//获取资源路径
+//        if(System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1) {
+//            xmlPath=xmlPath.substring(1);
+//        }
+//        System.out.println("load xml" + xmlPath);
+        cascade.load(AppConfig.CASCADE_DETECTCAR_FILE);
     }
-
+    @Override
     public List<Rect2d> detectObject(Mat frame) {
         Mat cur = new Mat();
         Mat frame_gray = new Mat();

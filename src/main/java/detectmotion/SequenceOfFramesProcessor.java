@@ -1,15 +1,16 @@
 package detectmotion;
 
-import org.opencv.core.Core;
+import org.opencv.imgcodecs.Imgcodecs;
+import spark.config.SpeedState;
+import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
-import org.opencv.core.Rect2d;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
+import spark.config.AppConfig;
 import spark.type.VideoEventData;
 
 import java.io.Serializable;
-import java.sql.Time;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -24,19 +25,103 @@ import static org.opencv.highgui.HighGui.waitKey;
  * @version: $
  */
 public class SequenceOfFramesProcessor implements Serializable {
+    private static final Logger logger = Logger.getLogger(SequenceOfFramesProcessor.class);
+
     static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.out.println("loal opencv");
+        System.load(AppConfig.OPENCV_LIB_FILE);
+        System.out.println("loal opencv success");
     }
     int detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
     int frameCount = 0;//处理的是序列中的第几帧
-    private static final double VIDEO_FPS = 1.0/25;
+    private  final double VIDEO_FPS = 1.0/25;
     private long batchstarttime = new Date().getTime(); //处理开始时间
     private long batchendtime = 0;
     private double FPS = 20;
-    OpencvMultiTracker mtracker ;
+    public  static OpencvMultiTracker mtracker ;//所有的sequenceOfFrameProcessor都只拥有一个MultiTracker对象
     long firstframetime = 0;//第一帧实际时间
     long lastframetime = 0;//detectedFrameGap 的实际时间
     //一个cameraID中机器中应该只有一个这种对象
+    public  SequenceOfFramesProcessor(){
+
+    }
+
+    public SequenceOfFramesProcessor(SpeedState state) {
+        this.detectedFrameGap = state.getDetectedFrameGap();
+        this.frameCount = state.getFrameCount();
+       // this.mtracker = state.getMtracker();
+    }
+
+
+
+    public int getDetectedFrameGap() {
+        return detectedFrameGap;
+    }
+
+    public void setDetectedFrameGap(int detectedFrameGap) {
+        this.detectedFrameGap = detectedFrameGap;
+    }
+
+    public int getFrameCount() {
+        return frameCount;
+    }
+
+    public void setFrameCount(int frameCount) {
+        this.frameCount = frameCount;
+    }
+
+    public double getVIDEO_FPS() {
+        return VIDEO_FPS;
+    }
+
+    public long getBatchstarttime() {
+        return batchstarttime;
+    }
+
+    public void setBatchstarttime(long batchstarttime) {
+        this.batchstarttime = batchstarttime;
+    }
+
+    public long getBatchendtime() {
+        return batchendtime;
+    }
+
+    public void setBatchendtime(long batchendtime) {
+        this.batchendtime = batchendtime;
+    }
+
+    public double getFPS() {
+        return FPS;
+    }
+
+    public void setFPS(double FPS) {
+        this.FPS = FPS;
+    }
+
+    public OpencvMultiTracker getMtracker() {
+        return mtracker;
+    }
+
+    public void setMtracker(OpencvMultiTracker mtracker) {
+        this.mtracker = mtracker;
+    }
+
+    public long getFirstframetime() {
+        return firstframetime;
+    }
+
+    public void setFirstframetime(long firstframetime) {
+        this.firstframetime = firstframetime;
+    }
+
+    public long getLastframetime() {
+        return lastframetime;
+    }
+
+    public void setLastframetime(long lastframetime) {
+        this.lastframetime = lastframetime;
+    }
+
     public SequenceOfFramesProcessor (Integer detectedFrameGap, String iotTransformFileName) {
         this.detectedFrameGap = detectedFrameGap;
         mtracker = new OpencvMultiTracker(iotTransformFileName);
@@ -47,17 +132,23 @@ public class SequenceOfFramesProcessor implements Serializable {
      *
      * @param eventDatas :接受到的一组数据
      */
-    public  void  processFrames(List<VideoEventData> eventDatas){
-        MatOfByte mob = null;
-
+    public  SequenceOfFramesProcessor  processFrames(List<VideoEventData> eventDatas){
+        MatOfByte mob = new MatOfByte();
         for (VideoEventData ev : eventDatas) {
             Mat frame = ev.getMat();
+            Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+".jpg",frame);
+            if(frame == null){
+                logger.info("frame is null,what happen?");
+                continue;
+            }else {
+                logger.info("this is "+ frameCount +  " \n\n"  );
+            }
             if (frameCount % detectedFrameGap  == 0) {
                 if(frameCount == 0) {
-                    firstframetime =  lastframetime = ev.getTimestamp();
+                    firstframetime =  lastframetime = ev.getTime();
                 } else{
                     firstframetime = lastframetime;
-                    lastframetime = ev.getTimestamp();
+                    lastframetime = ev.getTime();
                 }
                 FPS = updateFPS();
                 mtracker.detectAndCorrectObjofFrame(frame);
@@ -68,13 +159,18 @@ public class SequenceOfFramesProcessor implements Serializable {
             mtracker.drawStatistic(frame,FPS);
             mtracker.drawTrackerBox(frame,gaptime );//speed count
             frameCount++;
-            Imgcodecs.imencode(".jpg", frame, mob);
+
+           // Imgcodecs.imencode(".jpg", frame, mob);
+            Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+"-result.jpg",frame);
             // convert the "matrix of bytes" into a byte array
-            byte[] byteArray = mob.toArray();
-            ev.setFrame(byteArray);
+
+            byte[] data = new byte[(int) (frame.total() * frame.channels())];
+            frame.get(0, 0, data);
+            ev.setData( Base64.getEncoder().encodeToString(data));
 //            imshow("processed",frame);
 //            waitKey(10);
         }
+        return  this;
     }
 
     public void processVideo(String videoName){
@@ -118,6 +214,20 @@ public class SequenceOfFramesProcessor implements Serializable {
         batchendtime = new Date().getTime();
         double bacthFPS =  detectedFrameGap*1.0 / (batchendtime  - batchstarttime)*1000 ;
         return bacthFPS;
+    }
+
+    @Override
+    public String toString() {
+        return "SequenceOfFramesProcessor{" +
+                "detectedFrameGap=" + detectedFrameGap +
+                ", frameCount=" + frameCount +
+                ", batchstarttime=" + batchstarttime +
+                ", batchendtime=" + batchendtime +
+                ", FPS=" + FPS +
+                ", mtracker=" + mtracker +
+                ", firstframetime=" + firstframetime +
+                ", lastframetime=" + lastframetime +
+                '}';
     }
 
     public static void main(String[] args) {

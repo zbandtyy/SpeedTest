@@ -13,7 +13,7 @@ import java.util.Base64;
  * @author abaghel
  *
  */
-public class VideoEventData implements Serializable {
+public class VideoEventData implements Serializable{
 
 	private String cameraId;
 
@@ -42,7 +42,10 @@ public class VideoEventData implements Serializable {
 	public void setCameraId(String cameraId) {
 		this.cameraId = cameraId;
 	}	
-	public long getTimestamp() {
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+	public  long getTime(){
 		return timestamp.getTime();
 	}
 	public void setTimestamp(Timestamp timestamp) {
@@ -66,12 +69,16 @@ public class VideoEventData implements Serializable {
 	public void setType(int type) {
 		this.type = type;
 	}
-	private String getData() {
+	public String getData() {
 		return data;
+	}
+	public void setData(String d) {
+		this.data = d;
 	}
 	public void setFrame(byte[]  frameBytes) {
 		this.data = Base64.getEncoder().encodeToString(frameBytes);
 	}
+
 	public String toJson(){
 
 		Gson gson = new Gson();
@@ -111,7 +118,7 @@ public class VideoEventData implements Serializable {
 				", rows=" + rows +
 				", cols=" + cols +
 				", type=" + type +
-				", data='" + data + '\'' +
+				", data== null" + Boolean.toString(data == null )+ '\'' +
 				'}';
 	}
 }

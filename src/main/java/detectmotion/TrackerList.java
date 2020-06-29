@@ -99,7 +99,6 @@ public class TrackerList implements Serializable {
     public void update(Mat frame){
         int length = trackers.size();
         for(int i = 0 ; i < length; i ++ ){
-
             trackers.get(i).setPhase(PHASE.TRACKER);
             //保存更新结果
             Rect2d newPos = new Rect2d();

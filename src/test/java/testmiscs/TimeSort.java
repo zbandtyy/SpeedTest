@@ -28,7 +28,7 @@ public class TimeSort {
 
 
 
-        sortedList.sort((d1,d2)-> (int) (d1.getTimestamp() - d2.getTimestamp()));
+        sortedList.sort((d1,d2)-> (int) (d1.getTime() - d2.getTime()));
         System.out.println(sortedList);
     }
 }

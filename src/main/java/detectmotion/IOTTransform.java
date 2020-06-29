@@ -74,8 +74,13 @@ public class IOTTransform implements Serializable {
 
         //2.转换成固定格式
         String jsonStr = readJsonFile(jsonname);
+        logger.info("the json file content is" + jsonStr);
         Gson s = new Gson();
         Map<String,  ArrayList> m = s.fromJson(jsonStr,Map.class);
+        if(m == null){
+            logger.error("the json file is null,cannot running");
+            return;
+        }
         ArrayList<List<Double>> mtxlist = m.get("mtx");
         transformMap = MatWrapper.doubleArrayToMat(mtxlist,CV_64F);
         ArrayList<List<Double>> imtxlist = m.get("imtx");
@@ -127,6 +132,7 @@ public class IOTTransform implements Serializable {
 
     private  String readJsonFile(String jsonFileName){
         //读取json文件
+        logger.info("read json file " + jsonFileName);
         String jsonStr = "";
         try {
             //1.读取文件内容
@@ -141,7 +147,7 @@ public class IOTTransform implements Serializable {
             fileReader.close();
             reader.close();
             jsonStr = sb.toString();
-            System.out.println(jsonStr);
+            logger.info("The file name is" + jsonStr);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -30,9 +30,12 @@ public class OpencvMultiTracker implements Serializable {
     private   TrackerList trackers; ;
     DetectCar detector = null;
     public OpencvMultiTracker(String jsonName){
-        detector = new YoloDetectCar();
+        detector = new CascadeDetectCar();
         iot = new IOTTransform(jsonName);
         trackers= new TrackerList();
+    }
+    public OpencvMultiTracker(){
+        logger.warn("new OpencvMultiTracker()");
     }
     /***
      *
@@ -130,7 +133,9 @@ public class OpencvMultiTracker implements Serializable {
       }
     }
     public void detectAndCorrectObjofFrame(Mat frame){
-
+        if(detector == null){
+            return;
+        }
         List<Rect2d> dectedObjects = detector.detectObject(frame);
         correctBounding(frame, dectedObjects);
         cleanLost(30);//清理丢失的目标，消失的帧数  时间 进行清理
@@ -206,8 +211,13 @@ public class OpencvMultiTracker implements Serializable {
 
 
     public  void  drawStatistic(Mat frame,double batchFPS) {
+        if(trackers == null || frame == null){
+            return;
+        }
         Imgproc.putText(frame, "FPS:" + String.format("%.2f", batchFPS),
                 new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+
+
         Imgproc.putText(frame,"count:" + trackers.getCurTrackersCount(),
                 new Point(10,110), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255,0,0), 2);
     }
