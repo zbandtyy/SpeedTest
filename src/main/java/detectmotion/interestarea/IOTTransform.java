@@ -1,17 +1,15 @@
-package detectmotion;
+package detectmotion.interestarea;
 import detectmotion.utils.MatWrapper;
 import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import com.google.gson.Gson;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.utils.Converters;
 
 
 import java.io.*;
 
-import java.lang.reflect.Array;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,11 +20,11 @@ import static org.opencv.core.CvType.*;
 /**
  * @author ：tyy
  * @date ：Created in 2020/5/30 15:46
- * @description：对感兴趣的区域进行提取和透视变换，以获得鸟瞰坐标
+ * @description：对感兴趣的区域进行提取和透视变换，以获得鸟瞰坐标,针对有json文件进行处理
  * @modified By：
  * @version: $
  */
-public class IOTTransform implements Serializable {
+public class IOTTransform implements Serializable,PerspectiveConversion {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
     private Mat transformMap;//透视转换矩阵
     private Mat inverseMap;//反向转换矩阵
@@ -38,7 +36,7 @@ public class IOTTransform implements Serializable {
     public IOTTransform(String jsoname){
         loadFromFile(jsoname);//从文件中加载所有的参数
     }
-    List<Point> transformPoint(List<List<Double>> dst){
+    public List<Point> transformPoint(List<List<Double>> dst){
         Mat  src = MatWrapper.doubleArrayToMat(dst,CV_64F);
         src = MatWrapper.SingleTo2Channels(src);//必须转换成双通道
        // logger.debug(MatWrapper.MatToString(src));
@@ -54,8 +52,7 @@ public class IOTTransform implements Serializable {
 
         return  arr.subList(0,dst.size());
     }
-
-    List<Point> transformPointList(List<Point> dst){
+    public List<Point> transformPointList(List<Point> dst){
 
         Mat src = Converters.vector_Point_to_Mat(dst,CV_32F);
 
@@ -69,6 +66,12 @@ public class IOTTransform implements Serializable {
         Converters.Mat_to_vector_Point2d(tr,arr);
 
         return  arr.subList(0,dst.size());
+    }
+    private Mat transformMatFrame(Mat src){
+        Mat res = new Mat(src.rows(),src.cols(),src.type());
+        Imgproc.warpPerspective(src,res,transformMap,src.size());
+        return  res;
+
     }
     void loadFromFile(String  jsonname){
 
@@ -97,6 +100,7 @@ public class IOTTransform implements Serializable {
 
         ArrayList<ArrayList<Double>> realRect1 = m.get("realRect");
         this.realRect = doubleIntArray_to_PointArray(realRect1);
+
         this.transformAfter = this.pointListToRect(this.realRect);
 
         logger.debug("转换后的区域"+ this.transformAfter);
@@ -105,6 +109,9 @@ public class IOTTransform implements Serializable {
 
         ArrayList<Double> real = m.get("realSize");
         this.realSize = new Size(real.get(0),real.get(1));
+    }
+    public Size getPicSize() {
+        return picSize;
     }
 
     public static void main(String[] args) {
@@ -117,16 +124,23 @@ public class IOTTransform implements Serializable {
 //          List<List<Double>> dst = Arrays.asList(src,src1);
 //          List<Point> result = its.transformPoint(dst);//{847.0089111328125, 875.4133911132812},
 //          System.out.println(result);// {834.0802001953125, 1170.2252197265625}
-            List<Point> list = Arrays.asList(new Point(328,582),new Point(541,357));
-            IOTTransform its = new IOTTransform(xmlPath);
-            List<Point> result = its.transformPointList(list);
-            double dis = its.getDistance(result.get(0),result.get(1),its.getXRatio(),its.getYRatio());
-            System.out.println(dis);
+        //测试距离获取
+//            List<Point> list = Arrays.asList(new Point(328,582),new Point(541,357));
+//            IOTTransform its = new IOTTransform(xmlPath);
+//            List<Point> result = its.transformPointList(list);
+//            double dis = its.getDistance(result.get(0),result.get(1),its.getXRatio(),its.getYRatio());
+//            System.out.println(dis);
 //        //测试 是否在范围内部
 //        IOTTransform iot = new IOTTransform(xmlPath);
 //        Point p = new Point (1061,681);
 //        boolean a = iot.isInsidePicArea(p);
 //        System.out.println(a);
+
+
+        IOTTransform its = new IOTTransform(xmlPath);
+        Mat frame = Imgcodecs.imread("F:\\shared\\spark-example\\speedtest\\0.jpg");
+        Mat result = its.transformMatFrame(frame);
+        Imgcodecs.imwrite("F:\\shared\\spark-example\\speedtest\\0-te.jpg",result);
 
     }
 

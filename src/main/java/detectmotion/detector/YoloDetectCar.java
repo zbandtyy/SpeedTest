@@ -1,17 +1,19 @@
 package detectmotion.detector;
 
+import detection.Box;
+import detection.BoxesAndAcc;
+import detection.Detector;
 import detectmotion.utils.RectCompute;
 import detectmotion.yolo.ObjectDetector;
 import detectmotion.yolo.classifier.YOLOClassifier;
 import detectmotion.yolo.model.BoxPosition;
 import detectmotion.yolo.model.Recognition;
-import detectmotion.yolo.result.Box;
-import detectmotion.yolo.result.BoxesAndAcc;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import spark.config.AppConfig;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,10 +29,10 @@ import static org.opencv.highgui.HighGui.imshow;
  * @version: $
  */
 public class YoloDetectCar implements DetectCar {
-    ObjectDetector obj;
+    Detector obj;
     List<Rect2d> detectedObjects;
     public YoloDetectCar(){
-       obj  = new ObjectDetector();
+        obj = Detector.getYoloDetector(AppConfig.YOLO_RESOURCE_PATH);
     }
     @Override
     public List<Rect2d> detectObject(Mat frame) {
@@ -40,14 +42,14 @@ public class YoloDetectCar implements DetectCar {
         Imgcodecs.imencode(".jpg", frame, bytemat);
 
         byte[] bytes = bytemat.toArray();
-        List<Recognition> res = obj.yolov2Detector(bytes);
-        ArrayList<Rect2d> last= new ArrayList<>(res.size());
-        for (Recognition ba : res) {
-            BoxPosition bb = ba.getLocation();
-            last.add(new Rect2d(bb.getLeft(),bb.getTop(),bb.getWidth(),bb.getHeight()));
+        BoxesAndAcc[] res = obj.startYolo(bytes, frame.width(), frame.height(), frame.channels());
+        ArrayList<Rect2d> last= new ArrayList<>(res.length);
+        for (BoxesAndAcc re : res) {
+            if(re.isVaild() == true && re.getNames().equals("car")) {
+                Box bb = re.getBoxes();
+                last.add(new Rect2d(bb.getX(), bb.getY(), bb.getW(), bb.getH()));
+            }
         }
-        detectedObjects = last;
-        removeOverlapped();
         return  last;
    }
    public void removeOverlapped(){

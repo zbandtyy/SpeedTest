@@ -1,7 +1,8 @@
 package detectmotion;
 import detectmotion.detector.CascadeDetectCar;
 import detectmotion.detector.DetectCar;
-import detectmotion.detector.YoloDetectCar;
+import detectmotion.interestarea.IOTTransform;
+import detectmotion.interestarea.PerspectiveConversion;
 import detectmotion.tuple.Tuple;
 import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
@@ -23,9 +24,22 @@ import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
  * @version: $
  */
 public class OpencvMultiTracker implements Serializable {
-    IOTTransform iot ;
+    PerspectiveConversion iot ;
 
     private static final Logger logger = Logger.getLogger(OpencvMultiTracker.class);
+
+    public PerspectiveConversion getIot() {
+        return iot;
+    }
+
+
+    public TrackerList getTrackers() {
+        return trackers;
+    }
+
+    public DetectCar getDetector() {
+        return detector;
+    }
 
     private   TrackerList trackers; ;
     DetectCar detector = null;

@@ -28,6 +28,7 @@ public class AppConfig implements Serializable {
 
     //YOLO的各种物体的名称文件(按行分割)  eg Car,Track
     public  static    String YOLO_LABEL_FILE="/mnt/hgfs/shared/yoloTest/data/coco.names";
+    public  static    String YOLO_LIB_FILE="/home/user/Apache/yolo/DetectionAndLicenseRecongnition/Detection/libjdetection.so";
     public static     String EASYPR_LABLE_PATH="/home/user/Apache/EasyPR-install/libeasyprjni.so";
     public static     String MYSQL_CONNECT_URL="jdbc:mysql://192.168.0.100:3306/track?user=root&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8";
     public static     String MYSQL_USER_NAME="root";
@@ -39,7 +40,7 @@ public class AppConfig implements Serializable {
 
     static{
         try {
-            //init();
+            init();
         } catch (Exception e) {
             e.printStackTrace();
         }

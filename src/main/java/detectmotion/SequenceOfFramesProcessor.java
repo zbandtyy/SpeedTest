@@ -1,6 +1,9 @@
 package detectmotion;
 
+import org.opencv.core.Core;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import spark.config.SpeedState;
 import org.apache.log4j.Logger;
 import org.opencv.core.Mat;
@@ -29,7 +32,8 @@ public class SequenceOfFramesProcessor implements Serializable {
 
     static {
         System.out.println("loal opencv");
-        System.load(AppConfig.OPENCV_LIB_FILE);
+     //   System.load(AppConfig.OPENCV_LIB_FILE);
+      System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         System.out.println("loal opencv success");
     }
     int detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
@@ -135,8 +139,13 @@ public class SequenceOfFramesProcessor implements Serializable {
     public  SequenceOfFramesProcessor  processFrames(List<VideoEventData> eventDatas){
         MatOfByte mob = new MatOfByte();
         for (VideoEventData ev : eventDatas) {
-            Mat frame = ev.getMat();
-            Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+".jpg",frame);
+            Mat frame1 = ev.getMat();
+            Size size = mtracker.iot.getPicSize();
+            Mat frame = new Mat(frame1.rows(),frame1.cols(),frame1.type());
+            if(size.height != frame1.rows() || size.width != frame1.cols()){
+                Imgproc.resize(frame1,frame,size);
+            }
+            //Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+".jpg",frame);
             if(frame == null){
                 logger.info("frame is null,what happen?");
                 continue;
@@ -161,11 +170,12 @@ public class SequenceOfFramesProcessor implements Serializable {
             frameCount++;
 
            // Imgcodecs.imencode(".jpg", frame, mob);
-            Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+"-result.jpg",frame);
+           // Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+"-result.jpg",frame);
             // convert the "matrix of bytes" into a byte array
 
             byte[] data = new byte[(int) (frame.total() * frame.channels())];
             frame.get(0, 0, data);
+            Imgproc.resize(frame,frame,new Size(ev.getCols(),ev.getRows()));
             ev.setData( Base64.getEncoder().encodeToString(data));
 //            imshow("processed",frame);
 //            waitKey(10);

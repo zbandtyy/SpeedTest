@@ -1,12 +1,11 @@
 package detectmotion;
-import detectmotion.tuple.Tuple;
+import detectmotion.interestarea.IOTTransform;
+import detectmotion.interestarea.PerspectiveConversion;
 import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
 import detectmotion.utils.PHASE;
 import org.apache.log4j.Logger;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.opencv.core.*;
-import org.opencv.imgproc.Imgproc;
 import org.opencv.tracking.*;
 
 import java.io.Serializable;
@@ -135,7 +134,7 @@ public class TrackerList implements Serializable {
         }
     }
 
-    public  void deletedNotInArea( IOTTransform iot){
+    public  void deletedNotInArea( PerspectiveConversion iot){
         List<CarDes> deleted = new LinkedList<>();
         //删除所有超过范围的追踪器
         if(iot != null){
@@ -180,7 +179,7 @@ public class TrackerList implements Serializable {
     }
 
 
-    public  ArrayList<Tuple3<Rect2d,Double,Double>> getSpeed(double time,IOTTransform iot){
+    public  ArrayList<Tuple3<Rect2d,Double,Double>> getSpeed(double time,PerspectiveConversion iot){
         ArrayList<Tuple3<Rect2d,Double,Double>> arr = new ArrayList<>(trackers.size());
 
         for (int i = 0; i < trackers.size(); i++) {
@@ -219,7 +218,7 @@ public class TrackerList implements Serializable {
     private  Point getRectCenter(Rect2d r){
         return  new Point(r.x + r.width/2,r.y + r.height /2);
     }
-    private double calculateCarLength(Point tl,Point br,IOTTransform iot){
+    private double calculateCarLength(Point tl,Point br,PerspectiveConversion iot){
         double yratio = iot.getYRatio();
         List<Point> list = Arrays.asList(tl, br);
         List<Point> res = iot.transformPointList(list);
@@ -229,7 +228,7 @@ public class TrackerList implements Serializable {
  //       System.out.println(res.get(0).y - res.get(1).y);
         return  carLength;
     }
-    private  double calculateSpeed(Rect2d pre,Rect2d p,double time,IOTTransform iot){
+    private  double calculateSpeed(Rect2d pre,Rect2d p,double time,PerspectiveConversion iot){
         double xratio = iot.getXRatio();
         double yratio = iot.getYRatio();
         Point precenter = getRectCenter(pre);
