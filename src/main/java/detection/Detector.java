@@ -1,16 +1,20 @@
 
 package detection;
 
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import spark.config.AppConfig;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
-public class Detector {
+public class Detector implements Serializable {
 
     private long peer;
 
@@ -89,15 +93,15 @@ public class Detector {
         return uniqueDetector;
     }
     public  BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
-        BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes ,"predictions",(float)0.5, (float)0.5, 1, w,h,c);// from jpgbytes
-        System.out.println("recognize sucess");
+        BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes ,"prediction",(float)0.5, (float)0.5, 1, w,h,c);// from jpgbytes
+        System.out.println("recognize sucess,the length is" + boxesAndAccs.length);
         if(boxesAndAccs==null){
             System.out.println("No Boxes");
         }
         ArrayList<BoxesAndAcc> blist = new ArrayList<>();
         for(BoxesAndAcc boxesAndAcc : boxesAndAccs){
 
-            if(boxesAndAcc.isVaild==true && (boxesAndAcc.names.equals( "car") ||boxesAndAcc.names.equals( "person")) ){
+            if(boxesAndAcc.isVaild==true && ((boxesAndAcc.names.equals( "car") ||boxesAndAcc.names.equals( "person"))) ){
                 blist.add(boxesAndAcc);//这个内存交接后是不是会被释放？
             }
         }// or
@@ -107,6 +111,7 @@ public class Detector {
         blist.toArray(bArray);
         return bArray;
     }
+
     public static void main(String[] args) throws Exception {
         int w=640;
         int h=480;

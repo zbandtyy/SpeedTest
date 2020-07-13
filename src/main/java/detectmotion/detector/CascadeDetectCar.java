@@ -8,6 +8,7 @@ import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.videoio.VideoCapture;
 import spark.config.AppConfig;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import static org.opencv.imgproc.Imgproc.ellipse;
  * @version: $
  */
 
-public class CascadeDetectCar implements DetectCar {
+public class CascadeDetectCar implements DetectCar, Serializable {
     CascadeClassifier cascade;
 
     String xmlList[] = {
@@ -46,7 +47,8 @@ public class CascadeDetectCar implements DetectCar {
 //            xmlPath=xmlPath.substring(1);
 //        }
 //        System.out.println("load xml" + xmlPath);
-        cascade.load(AppConfig.CASCADE_DETECTCAR_FILE);
+        boolean a = cascade.load(AppConfig.CASCADE_DETECTCAR_FILE);
+        System.out.println("load cascade file:  " + AppConfig.CASCADE_DETECTCAR_FILE +"  " +a);
     }
     @Override
     public List<Rect2d> detectObject(Mat frame) {

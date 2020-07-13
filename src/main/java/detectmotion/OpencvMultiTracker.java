@@ -1,7 +1,9 @@
 package detectmotion;
 import detectmotion.detector.CascadeDetectCar;
 import detectmotion.detector.DetectCar;
+import detectmotion.detector.YoloDetectCar;
 import detectmotion.interestarea.IOTTransform;
+import detectmotion.interestarea.NULLTransform;
 import detectmotion.interestarea.PerspectiveConversion;
 import detectmotion.tuple.Tuple;
 import detectmotion.tuple.Tuple2;
@@ -11,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -44,8 +47,12 @@ public class OpencvMultiTracker implements Serializable {
     private   TrackerList trackers; ;
     DetectCar detector = null;
     public OpencvMultiTracker(String jsonName){
-        detector = new CascadeDetectCar();
-        iot = new IOTTransform(jsonName);
+        detector = new YoloDetectCar();
+        try {
+            iot = new IOTTransform(jsonName);
+        } catch (IOException e) {
+            iot = new NULLTransform();
+        }
         trackers= new TrackerList();
     }
     public OpencvMultiTracker(){
@@ -131,10 +138,12 @@ public class OpencvMultiTracker implements Serializable {
             for (int i = 0; i < willAddCar.size(); i++) {
                 Rect2d r = willAddCar.get(i);
                 if (!iot.isInsidePicArea(r.tl()) && !iot.isInsidePicArea(r.br())){
+                    logger.info("removed: br" + r.br() +"  tl" +  r.tl());
                     deletedRect.add(r);
                 }
             }
             willAddCar.removeAll(deletedRect);
+            logger.info("remove above all rect  size = " + deletedRect.size() +"because not in interested area");
         }
         trackers.createNewTrackersByArea(frame,willAddCar);
     }
@@ -236,7 +245,7 @@ public class OpencvMultiTracker implements Serializable {
                 new Point(10,110), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255,0,0), 2);
     }
     //for test
-    public  void  drawBoundigBox(Mat frame ) {
+    public  void  drawdetectedBoundingBox(Mat frame ) {
         List<Rect2d> objects = detector.detectObject(frame);
         for (int i = 0; i < objects.size(); i++) {
             Imgproc.rectangle(frame,objects.get(i).tl() , objects.get(i).br(), new Scalar(255, 255, 0),2);

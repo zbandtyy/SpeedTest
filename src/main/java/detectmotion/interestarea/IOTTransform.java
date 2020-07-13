@@ -33,7 +33,8 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
     private  Rect transformAfter;
     private Size picSize;            //原图宽高
     private Size realSize;            //     截图区域现实对应的宽高,用实际的m表示
-    public IOTTransform(String jsoname){
+    public IOTTransform(String jsoname) throws IOException {
+
         loadFromFile(jsoname);//从文件中加载所有的参数
     }
     public List<Point> transformPoint(List<List<Double>> dst){
@@ -73,11 +74,11 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         return  res;
 
     }
-    void loadFromFile(String  jsonname){
+    void loadFromFile(String  jsonname) throws IOException {
 
         //2.转换成固定格式
         String jsonStr = readJsonFile(jsonname);
-        logger.info("the json file content is" + jsonStr);
+        logger.debug("the json file content is" + jsonStr);
         Gson s = new Gson();
         Map<String,  ArrayList> m = s.fromJson(jsonStr,Map.class);
         if(m == null){
@@ -95,7 +96,7 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         ArrayList<ArrayList<Double>> picRect = m.get("picRect");
         ArrayList<List<Double>> picRect1 = transformScale(picRect);
         this.picRect = doubleIntArray_to_PointArray(picRect1);
-        logger.debug("感兴趣的区域"+ this.picRect);
+        logger.info("感兴趣的图片上的区域"+ this.picRect);
 
 
         ArrayList<ArrayList<Double>> realRect1 = m.get("realRect");
@@ -103,7 +104,7 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
 
         this.transformAfter = this.pointListToRect(this.realRect);
 
-        logger.debug("转换后的区域"+ this.transformAfter);
+        logger.info("转换后的区域"+ this.transformAfter);
 
 
 
@@ -114,7 +115,7 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         return picSize;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("multitracker/calibrate_camera_scale.json" ).getPath();//获IOTTransform its  =  new IOTTransform(xmlPath);
             //测试转换
@@ -144,11 +145,11 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
 
     }
 
-    private  String readJsonFile(String jsonFileName){
+    private  String readJsonFile(String jsonFileName) throws IOException {
         //读取json文件
         logger.info("read json file " + jsonFileName);
         String jsonStr = "";
-        try {
+
             //1.读取文件内容
             File jsonFile = new File(jsonFileName);
             FileReader fileReader = new FileReader(jsonFile);
@@ -163,9 +164,6 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
             jsonStr = sb.toString();
             logger.info("The file name is" + jsonStr);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return jsonStr;
     }
     private ArrayList<List<Double>> transformScale ( List<ArrayList<Double>> list){

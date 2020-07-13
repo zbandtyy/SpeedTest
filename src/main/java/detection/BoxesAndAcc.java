@@ -1,5 +1,8 @@
 package detection;
 
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+
 public class BoxesAndAcc{
     float acc;
     Box boxes;
@@ -45,5 +48,16 @@ public class BoxesAndAcc{
 
     public void setSize(int size) {
         this.size = size;
+    }
+    public Rect transfor( int w, int h ){
+
+        BoxesAndAcc tmp = this;
+        Box box = tmp.getBoxes();
+        float left = (box.getX() - box.getW()/2) * w;//w*（box.x - box.w/2）
+        float top =  (box.getY()  - box.getH()/2)*h;
+        float bot   = (box.getY() + box.getH()/2)*h;
+        float right = (box.getX() + box.getH()/2)*w;
+        return  new Rect(new Point(left,top),new Point(right,bot));
+
     }
 }

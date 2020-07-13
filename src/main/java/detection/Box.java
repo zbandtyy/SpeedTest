@@ -37,4 +37,14 @@ public class Box {
     public void setH(float h) {
         this.h = h;
     }
+
+    @Override
+    public String toString() {
+        return "Box{" +
+                "x=" + x +
+                ", y=" + y +
+                ", w=" + w +
+                ", h=" + h +
+                '}';
+    }
 }

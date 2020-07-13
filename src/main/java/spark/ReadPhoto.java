@@ -41,7 +41,7 @@ public class ReadPhoto {
                 .master(prop.getProperty("spark.master.url"))//设置主要的spark 环境  spark://mynode1:7077
 
                 .getOrCreate();	//获取或者创建一个新的sparksession
-
+        System.out.println("=============================");
         //directory to save image files with motion detected 有什么用？
         final String processedImageDir = prop.getProperty("processed.output.dir");//  /home/user/Apache/project
         logger.warn("Output directory for saving processed images is set to "+processedImageDir+". This is configured in processed.output.dir key of property file.");
@@ -77,7 +77,7 @@ public class ReadPhoto {
                 .select(functions.from_json(functions.col("message"),schema).as("json"))//选择数据的格式，在后面的query中使用
                 .select("json.*")
                 .as(Encoders.bean(VideoEventData.class));//将所有数据转换为 Dataset<VideoEventData> 不分开产生问题》怀疑历史数据被他一批读走了，限制
-
+        logger.warn("topic" +  prop.getProperty("kafka.topic"));
        // key-value pair of cameraId-VideoEventData 窗口进行分组的时候是针对聚合实践进行处理
         KeyValueGroupedDataset<String, VideoEventData> kvDataset = ds.groupByKey(new MapFunction<VideoEventData, String>() {
             @Override
@@ -119,14 +119,14 @@ public class ReadPhoto {
                     SpeedState s= null;
                     if(!state.exists()){
                         System.out.println("new peocessor");
-                        opencv = new SequenceOfFramesProcessor(5,AppConfig.IOTTRANSFORM_JSON_FILE);
+                        opencv = new SequenceOfFramesProcessor(10,AppConfig.IOTTRANSFORM_JSON_FILE);
 
                     }else {
                         System.out.println("use raw state");
                         s = state.get();
                         System.out.println("get state\n" + s );
-                        System.out.println("before opencv\n" + opencv );
                         opencv = new SequenceOfFramesProcessor(s);
+                        System.out.println("get opencv\n" + opencv );
 
                     }
 

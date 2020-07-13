@@ -14,7 +14,7 @@ import java.util.List;
  * @modified By：
  * @version: $
  */
-public interface DetectCar {
+public interface DetectCar  {
     List<Rect2d> detectObject(Mat frame);
      void  showBoundigBox(Mat frame) ;//在图片上显示bjects
 

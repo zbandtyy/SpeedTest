@@ -8,18 +8,23 @@ import detectmotion.yolo.ObjectDetector;
 import detectmotion.yolo.classifier.YOLOClassifier;
 import detectmotion.yolo.model.BoxPosition;
 import detectmotion.yolo.model.Recognition;
+import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import scala.App;
+import spark.ReadPhoto;
 import spark.config.AppConfig;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.opencv.highgui.HighGui.imshow;
+import static org.opencv.imgcodecs.Imgcodecs.imread;
 
 /**
  * @author ：tyy
@@ -28,28 +33,33 @@ import static org.opencv.highgui.HighGui.imshow;
  * @modified By：
  * @version: $
  */
-public class YoloDetectCar implements DetectCar {
+public class YoloDetectCar implements DetectCar, Serializable {
+    private static final org.apache.log4j.Logger logger = Logger.getLogger(ReadPhoto.class);
+
     Detector obj;
     List<Rect2d> detectedObjects;
     public YoloDetectCar(){
         obj = Detector.getYoloDetector(AppConfig.YOLO_RESOURCE_PATH);
+        System.out.println("=======load  yolo========");
     }
     @Override
-    public List<Rect2d> detectObject(Mat frame) {
+    public List<Rect2d> detectObject(Mat m) {
 
-        MatOfByte bytemat = new MatOfByte();
-
-        Imgcodecs.imencode(".jpg", frame, bytemat);
-
-        byte[] bytes = bytemat.toArray();
-        BoxesAndAcc[] res = obj.startYolo(bytes, frame.width(), frame.height(), frame.channels());
+        long size = m.total() * m.elemSize();
+        byte bytes[] = new byte[(int)size];  // you will have to delete[] that later
+        m.get(0,0,bytes);
+        System.out.println("start yolo detect: = " + bytes.length);
+        System.out.println( m.width() +"  " +m.height()  +" "+ m.channels());
+        BoxesAndAcc[] res = obj.startYolo(bytes, m.width(), m.height(), m.channels());
         ArrayList<Rect2d> last= new ArrayList<>(res.length);
         for (BoxesAndAcc re : res) {
-            if(re.isVaild() == true && re.getNames().equals("car")) {
-                Box bb = re.getBoxes();
-                last.add(new Rect2d(bb.getX(), bb.getY(), bb.getW(), bb.getH()));
+            if( re.isVaild() == true && re.getNames().equals("car")) {
+                Rect tmp  = re.transfor(m.width(),m.height());
+               last.add(new Rect2d(tmp.x,tmp.y,tmp.width,tmp.height));
+                logger.info(tmp);
             }
         }
+        logger.info("car length is:" + last.size());
         return  last;
    }
    public void removeOverlapped(){
@@ -75,8 +85,7 @@ public class YoloDetectCar implements DetectCar {
         }
     }
 
-
-    public static void main(String[] args) {
+    public  void testVideo(){
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture videoCapture = new VideoCapture();
         String path = Thread.currentThread().getContextClassLoader().getResource("test1.mp4").getPath();//获取资源路径
@@ -109,10 +118,16 @@ public class YoloDetectCar implements DetectCar {
 
             }
             frameCount++;
-
-
         }
         System.exit(0);
+    }
+    public static void main(String[] args) {
+        System.load(AppConfig.OPENCV_LIB_FILE);
+        System.load(AppConfig.YOLO_LIB_FILE);
+        Mat m = imread("/home/user/Apache/App1/exe/0.jpg", 1);
+        ///////////////YOLO识别//////////////////
+        YoloDetectCar dc = new YoloDetectCar();
+        dc.detectObject(m);
 
     }
 

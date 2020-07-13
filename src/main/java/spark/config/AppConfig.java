@@ -16,7 +16,8 @@ import java.util.Properties;
  * @version: $
  */
 public class AppConfig implements Serializable {
-    public static  final  String  KAFKA_CONFIG_FILE= "/home/user/share/shared/spark-example/speedtest/stream-processor.properties";
+    public static  final  String  KAFKA_CONFIG_FILE= "/home/user/Apache/App1/exe/stream-processor.properties";
+  // public static  final  String  KAFKA_CONFIG_FILE= "E:/spark/speed-test/speedtest/src/main/resources/stream-processor.properties";
 
     public  static  String OPENCV_LIB_FILE="/home/user/Apache/opencv3.4.7-install/lib/libopencv_java347.so";
     //YOLO的模型文件等的路径 ，目录形式必须如下
@@ -28,7 +29,7 @@ public class AppConfig implements Serializable {
 
     //YOLO的各种物体的名称文件(按行分割)  eg Car,Track
     public  static    String YOLO_LABEL_FILE="/mnt/hgfs/shared/yoloTest/data/coco.names";
-    public  static    String YOLO_LIB_FILE="/home/user/Apache/yolo/DetectionAndLicenseRecongnition/Detection/libjdetection.so";
+    public  static    String YOLO_LIB_FILE="/home/user/Apache/yolo/DetectionAndLicenseRecongnition/Detection/libdetection.so";
     public static     String EASYPR_LABLE_PATH="/home/user/Apache/EasyPR-install/libeasyprjni.so";
     public static     String MYSQL_CONNECT_URL="jdbc:mysql://192.168.0.100:3306/track?user=root&serverTimezone=UTC&useUnicode=true&characterEncoding=UTF-8";
     public static     String MYSQL_USER_NAME="root";
@@ -55,7 +56,9 @@ public class AppConfig implements Serializable {
               }
              if(prop.getProperty("yolo.resource.file") != null ){
                  YOLO_RESOURCE_PATH = prop.getProperty("yolo.resource.file");
-                System.out.println(YOLO_RESOURCE_PATH);
+             }
+             if(prop.getProperty("yolo.lib.file") != null ){
+                 YOLO_LIB_FILE = prop.getProperty("yolo.lib.file");
              }
              if(prop.getProperty("easypr.label.path") != null ){
                  YOLO_RESOURCE_PATH = prop.getProperty("easypr.label.path");
@@ -69,6 +72,7 @@ public class AppConfig implements Serializable {
              if(prop.getProperty("cascade.detectcar.file") != null ){
                  CASCADE_DETECTCAR_FILE = prop.getProperty("cascade.detectcar.file");
              }
+
 
          }
 

@@ -29,11 +29,10 @@ import static org.opencv.highgui.HighGui.waitKey;
  */
 public class SequenceOfFramesProcessor implements Serializable {
     private static final Logger logger = Logger.getLogger(SequenceOfFramesProcessor.class);
-
     static {
         System.out.println("loal opencv");
-     //   System.load(AppConfig.OPENCV_LIB_FILE);
-      System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.load(AppConfig.OPENCV_LIB_FILE);
+//      System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         System.out.println("loal opencv success");
     }
     int detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
@@ -49,14 +48,11 @@ public class SequenceOfFramesProcessor implements Serializable {
     public  SequenceOfFramesProcessor(){
 
     }
-
     public SequenceOfFramesProcessor(SpeedState state) {
         this.detectedFrameGap = state.getDetectedFrameGap();
         this.frameCount = state.getFrameCount();
        // this.mtracker = state.getMtracker();
     }
-
-
 
     public int getDetectedFrameGap() {
         return detectedFrameGap;
@@ -137,22 +133,34 @@ public class SequenceOfFramesProcessor implements Serializable {
      * @param eventDatas :接受到的一组数据
      */
     public  SequenceOfFramesProcessor  processFrames(List<VideoEventData> eventDatas){
+        if(mtracker == null){
+            System.out.println("processFrames mtracker is null");
+            return this;
+        }
+
         MatOfByte mob = new MatOfByte();
         for (VideoEventData ev : eventDatas) {
             Mat frame1 = ev.getMat();
+
+          //  Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+".jpg",frame1);
             Size size = mtracker.iot.getPicSize();
-            Mat frame = new Mat(frame1.rows(),frame1.cols(),frame1.type());
+            System.out.println(size);
+            Mat frame = new Mat();
             if(size.height != frame1.rows() || size.width != frame1.cols()){
                 Imgproc.resize(frame1,frame,size);
+            }else {
+                frame = frame1;
             }
-            //Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+".jpg",frame);
+
+          //  Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+"-test.jpg",frame);
             if(frame == null){
                 logger.info("frame is null,what happen?");
                 continue;
             }else {
                 logger.info("this is "+ frameCount +  " \n\n"  );
             }
-            if (frameCount % detectedFrameGap  == 0) {
+           // mtracker.drawdetectedBoundingBox(frame);
+            if (frameCount % detectedFrameGap  == 0 ) {
                 if(frameCount == 0) {
                     firstframetime =  lastframetime = ev.getTime();
                 } else{
@@ -167,16 +175,16 @@ public class SequenceOfFramesProcessor implements Serializable {
             long gaptime  = lastframetime - firstframetime;
             mtracker.drawStatistic(frame,FPS);
             mtracker.drawTrackerBox(frame,gaptime );//speed count
-            frameCount++;
 
-           // Imgcodecs.imencode(".jpg", frame, mob);
-           // Imgcodecs.imwrite("/home/user/share/shared/spark-example/speedtest/"+frameCount+"-result.jpg",frame);
             // convert the "matrix of bytes" into a byte array
 
-            byte[] data = new byte[(int) (frame.total() * frame.channels())];
-            frame.get(0, 0, data);
-            Imgproc.resize(frame,frame,new Size(ev.getCols(),ev.getRows()));
+            Mat resultFrame = new Mat();
+            Imgproc.resize(frame,resultFrame,new Size(frame1.cols(),frame1.rows()));
+          //  Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+"-result.jpg",resultFrame);
+            byte[] data = new byte[(int) (resultFrame.total() * resultFrame.channels())];
+            resultFrame.get(0, 0, data);
             ev.setData( Base64.getEncoder().encodeToString(data));
+            frameCount++;
 //            imshow("processed",frame);
 //            waitKey(10);
         }
@@ -223,6 +231,7 @@ public class SequenceOfFramesProcessor implements Serializable {
         batchstarttime = batchendtime;
         batchendtime = new Date().getTime();
         double bacthFPS =  detectedFrameGap*1.0 / (batchendtime  - batchstarttime)*1000 ;
+        logger.info("update FPS Success");
         return bacthFPS;
     }
 
@@ -243,6 +252,7 @@ public class SequenceOfFramesProcessor implements Serializable {
     public static void main(String[] args) {
         String path = Thread.currentThread().getContextClassLoader().getResource("test1.mp4").getPath();//获取资源路径
         String xmlPath =  Thread.currentThread().getContextClassLoader().getResource("multitracker/calibrate_camera_scale.json" ).getPath();//获
+        System.out.println(xmlPath);
         SequenceOfFramesProcessor opencv = new SequenceOfFramesProcessor(10,xmlPath);
         opencv.processVideo(path);
     }

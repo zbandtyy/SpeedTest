@@ -86,6 +86,7 @@ public class TrackerList implements Serializable {
     }
     //发现新的车辆
     public void createNewTrackersByArea(Mat frame,  List<Rect2d> cars ){
+        logger.info("create Cars" + cars.size());
         for(Rect2d carpos: cars){
             Tracker t = createTrackerByName(selectedType);
             t.init(frame,carpos);
