@@ -35,7 +35,7 @@ public class AppConfig implements Serializable {
     public static     String MYSQL_USER_NAME="root";
     public static     String MYSQL_USER_PASSWD="123456";
     public  static    String MYSQL_JDBC_CLASSNAME="com.mysql.cj.jdbc.Driver";
-    public  static    String IOTTRANSFORM_JSON_FILE="/home/user/Apache/spark/work/calibrate_camera_scale.json";
+    public  static    String IOTTRANSFORM_JSON_DIR="/home/user/Apache/App1/config/";
     public  static    String CASCADE_DETECTCAR_FILE="/home/user/share/shared/spark-example/speedtest/myhaar.xml";
 
 
@@ -66,8 +66,8 @@ public class AppConfig implements Serializable {
              if(prop.getProperty("easypr.label.path") != null ){
                  EASYPR_LABLE_PATH = prop.getProperty("easypr.label.path");
              }
-             if(prop.getProperty("iottransform.json.file") != null ){
-                 IOTTRANSFORM_JSON_FILE = prop.getProperty("iottransform.json.file");
+             if(prop.getProperty("iottransform.json.dir") != null ){
+                 IOTTRANSFORM_JSON_DIR = prop.getProperty("iottransform.json.dir");
              }
              if(prop.getProperty("cascade.detectcar.file") != null ){
                  CASCADE_DETECTCAR_FILE = prop.getProperty("cascade.detectcar.file");
@@ -85,7 +85,7 @@ public class AppConfig implements Serializable {
 
         System.out.println(AppConfig.YOLO_RESOURCE_PATH);
         System.out.println(AppConfig.YOLO_LABEL_FILE);
-        System.out.println(AppConfig.IOTTRANSFORM_JSON_FILE);
+        System.out.println(AppConfig.IOTTRANSFORM_JSON_DIR);
     }
 
 }

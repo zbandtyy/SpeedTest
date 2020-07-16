@@ -1,7 +1,11 @@
 package spark.config;
 
+import detection.Detector;
 import detectmotion.OpencvMultiTracker;
 import detectmotion.SequenceOfFramesProcessor;
+import detectmotion.TrackerList;
+import detectmotion.detector.DetectCar;
+import org.opencv.tracking.Tracker;
 import scala.Serializable;
 
 import java.util.Date;
@@ -14,31 +18,20 @@ import java.util.Date;
  * @version: $
  */
 public class SpeedState implements Serializable {
+    private  static  final  long serialVersionUID = 16L;
+
     public Integer detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
     public Integer frameCount = 0;//处理的是序列中的第几帧
-    public OpencvMultiTracker mtracker ;
+    public String  multiTracker = "" ;
 
 
-    public SpeedState(Integer detectedFrameGap, Integer frameCount,OpencvMultiTracker mtracker) {
-        this.detectedFrameGap = detectedFrameGap;
-        this.frameCount = frameCount;
-
-        this.mtracker =  mtracker ;
-    }
 
     public   SpeedState(SequenceOfFramesProcessor sep){
         this.detectedFrameGap = sep.getDetectedFrameGap();
         this.frameCount = sep.getFrameCount();
-        this.mtracker = sep.getMtracker();
+        multiTracker = sep.getMtracker().toJson();
     }
 
-    public OpencvMultiTracker getMtracker() {
-        return mtracker;
-    }
-
-    public void setMtracker(OpencvMultiTracker mtracker) {
-        this.mtracker = mtracker;
-    }
 
     public void setDetectedFrameGap(int detectedFrameGap) {
         this.detectedFrameGap = detectedFrameGap;
@@ -47,6 +40,9 @@ public class SpeedState implements Serializable {
     public SpeedState() {
 
     }
+
+
+
     public void processFrame(){
         this.frameCount ++;
     }
@@ -63,15 +59,20 @@ public class SpeedState implements Serializable {
         this.frameCount = frameCount;
     }
 
+    public String getMultiTracker() {
+        return multiTracker;
+    }
 
-
+    public void setMultiTracker(String multiTracker) {
+        this.multiTracker = multiTracker;
+    }
 
     @Override
     public String toString() {
         return "SpeedState{" +
                 "detectedFrameGap=" + detectedFrameGap +
                 ", frameCount=" + frameCount +
-                ", mtracker=" + mtracker +
+                ", multiTracker=" + multiTracker +
                 '}';
     }
 }

@@ -1,6 +1,8 @@
 package spark;
 
+import detectmotion.OpencvMultiTracker;
 import detectmotion.SequenceOfFramesProcessor;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.FlatMapGroupsWithStateFunction;
@@ -14,12 +16,16 @@ import org.apache.spark.sql.streaming.StreamingQuery;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
+import org.opencv.core.Size;
 import scala.Tuple2;
 import spark.config.AppConfig;
 import spark.config.SpeedState;
 import spark.type.VideoEventData;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -36,7 +42,7 @@ public class ReadPhoto {
         SparkSession spark = SparkSession
 
                 .builder()//使用builer创建sparkSession的实例
-                .appName("VideoStreamProcessor123456")
+                .appName("VideoStreamProcessor-11")
 
                 .master(prop.getProperty("spark.master.url"))//设置主要的spark 环境  spark://mynode1:7077
 
@@ -60,11 +66,15 @@ public class ReadPhoto {
 
         //Create DataSet from stream messages from kafka  配置kafka的数据格式
         //// Subscribe to 1 topic defaults to the earliest and latest offsets
+
+        //consumer.assign(Arrays.asList(p));
         Dataset<Row> ds1 = spark
                 .readStream()
                 .format("kafka")
                 .option("kafka.bootstrap.servers", prop.getProperty("kafka.bootstrap.servers"))//创建并且订阅了几个kafka主题
-                .option("subscribe", prop.getProperty("kafka.topic"))
+               .option("subscribe", prop.getProperty("kafka.topic"))
+                //.option("assign","{\"app1-input\":[3]}")
+
                 .option("failOnDataLoss",false)
                // .option("startingOffsets", "{\"video-kafka-large\":{\"1\":100,\"0\":100}}")//必须指定全部
                 .option("kafka.max.partition.fetch.bytes", prop.getProperty("kafka.max.partition.fetch.bytes"))
@@ -110,16 +120,32 @@ public class ReadPhoto {
                         (key, values, state) -> {
                     SequenceOfFramesProcessor opencv = null;
                     ArrayList<VideoEventData> sortedList = new ArrayList<VideoEventData>();
+                    Size picsize = null;
                     while (values.hasNext()){
                         VideoEventData tmp = values.next();
+                        picsize = new Size(tmp.getCols(),tmp.getRows());
                         sortedList.add(tmp);
                     }
                     sortedList.sort((d1,d2)-> (int) (d1.getTime() - d2.getTime()));
                     logger.warn("cameraId=" + key + "processed total frames=" + sortedList.size() +"actual size" );
                     SpeedState s= null;
                     if(!state.exists()){
-                        System.out.println("new peocessor");
-                        opencv = new SequenceOfFramesProcessor(10,AppConfig.IOTTRANSFORM_JSON_FILE);
+                        System.out.println("new peocessor" + key);
+                        String iotTransformFileName = new StringBuilder()
+                                .append(AppConfig.IOTTRANSFORM_JSON_DIR )
+                                .append("calibrate_camera_scale_")
+                                .append(key)
+                                .append(".json").toString();
+                        logger.info("iottransform read file name = " + iotTransformFileName);
+
+                        File file = new File(iotTransformFileName);
+                        if(!file.exists()){
+                            opencv = new SequenceOfFramesProcessor(10,picsize, new Size(8,30));
+                        }else {
+
+                            opencv = new SequenceOfFramesProcessor(10,iotTransformFileName);
+
+                        }
 
                     }else {
                         System.out.println("use raw state");

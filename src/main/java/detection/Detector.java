@@ -69,9 +69,10 @@ public class Detector implements Serializable {
     }
 
     private  static Detector uniqueDetector  = null;
-    public static Detector getYoloDetector(String Path) {
+    public  static Detector getYoloDetector(String Path) {
 
         if (uniqueDetector == null) {
+            System.out.println("uniqueDetector ====null" );
             synchronized (Detector.class) {//多个task并行，可能导致创建多个实例
                 if (uniqueDetector == null) {
                     if(Path.charAt(Path.length() - 1) != '/'){
@@ -85,14 +86,19 @@ public class Detector implements Serializable {
                     String weightsPath =Path+ "yolov3.weights";
                     String datacfg = Path+"cfg/coco.data";
                     String labelpath = Path+"data/labels";
+                    System.out.println("start load" );
+
                     uniqueDetector = new Detector(cfgPath, weightsPath,datacfg, labelpath,bs, gpu_index, gpuid);//只会初始化一次，创建的实例模型加载必须只能有一次
                     System.out.println("成功加载"+labelpath);
                 }
+
             }
         }
         return uniqueDetector;
+
+
     }
-    public  BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
+    public synchronized BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
         BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes ,"prediction",(float)0.5, (float)0.5, 1, w,h,c);// from jpgbytes
         System.out.println("recognize sucess,the length is" + boxesAndAccs.length);
         if(boxesAndAccs==null){

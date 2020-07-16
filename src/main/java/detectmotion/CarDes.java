@@ -14,16 +14,35 @@ import java.io.*;
  * @modified By：
  * @version: $
  */
-public class CarDes implements  Cloneable, Serializable {
+public class CarDes implements   Serializable {
     private static final long serialVersionUID = 1L;
     private Rect2d pos;//检测出来的车子的位置  当前的位置;  实时位置
     private Rect2d  previousPos = null;//更新一批数据的速度的第一次的位置  如果更新间隔为10帧，那么就是第一次10帧
     private Rect2d  netxPos = null;//更新一批数据的速度的第二次的位置   第二次10帧
     long count ;//对当前经过车辆的标记数
     double speed = 0;
-    Scalar color  = new Scalar(0,0,255);
     private Double carLength ;
-    private Tracker tracker;
+    private transient Tracker tracker; //新数据的时候可以new处理
+    int markedLost = 0;
+    int phase = 0;// 0 tracker阶段, 1 检测阶段
+
+    public  CarDes(){}
+
+    public void setCount(long count) {
+        this.count = count;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public int getMarkedLost() {
+        return markedLost;
+    }
+
+    public void setMarkedLost(int markedLost) {
+        this.markedLost = markedLost;
+    }
 
     public Double getCarLength() {
         return carLength;
@@ -32,9 +51,6 @@ public class CarDes implements  Cloneable, Serializable {
     public void setCarLength(Double carLength) {
         this.carLength = carLength;
     }
-
-
-    int phase = 0;// 0 tracker阶段, 1 检测阶段
 
     public void setPhase(int phase) {
         this.phase = phase;
@@ -54,8 +70,6 @@ public class CarDes implements  Cloneable, Serializable {
         this.count = count;
     }
 
-
-    int markedLost = 0;
     public void setMarkedDelete() {
         this.markedLost ++;
     }
@@ -64,13 +78,7 @@ public class CarDes implements  Cloneable, Serializable {
         return markedLost;
     }
 
-    public Scalar getColor() {
-        return color;
-    }
 
-    public void setColor(Scalar color) {
-        this.color = color;
-    }
 
     public Tracker getTracker() {
         return tracker;
@@ -113,6 +121,7 @@ public class CarDes implements  Cloneable, Serializable {
                 "pos=" + pos +
                 ", count=" + count +
                 ", speed=" + speed +
+                ",tracker=" + tracker +
                 '}';
     }
 }

@@ -21,16 +21,19 @@ import static org.opencv.core.CvType.*;
  * @author ：tyy
  * @date ：Created in 2020/5/30 15:46
  * @description：对感兴趣的区域进行提取和透视变换，以获得鸟瞰坐标,针对有json文件进行处理
+ *  使用透视变换 对原图区域大小（picSize（转换后图片原始 大小） ---》 realSize（区域对应的真实的大小））
+ *  的范围进行截取 （picRect（转换前的感兴趣区域）----》  realRect（转换后的感兴趣区域））
  * @modified By：
  * @version: $
  */
 public class IOTTransform implements Serializable,PerspectiveConversion {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
-    private Mat transformMap;//透视转换矩阵
-    private Mat inverseMap;//反向转换矩阵
+    ArrayList<List<Double>> mtxlist ;//图片变换矩阵
+    private transient Mat transformMap;//透视转换矩阵
+    private transient Mat inverseMap;//反向转换矩阵
     private ArrayList<Point> picRect;  //感兴趣区域,四个点的坐标 单通道Mat
     private ArrayList<Point> realRect;              //转换后的目标区域 单通道
-    private  Rect transformAfter;
+    private  Rect transformAfter;                //转换后的区域对应的矩阵
     private Size picSize;            //原图宽高
     private Size realSize;            //     截图区域现实对应的宽高,用实际的m表示
     public IOTTransform(String jsoname) throws IOException {
@@ -57,7 +60,12 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
 
         Mat src = Converters.vector_Point_to_Mat(dst,CV_32F);
 
-        logger.debug(src.type() + " " +src.channels()+" rows: " + src.rows() + " cols: " + src.cols());
+        logger.info(src.type() + " " +src.channels()+" rows: " + src.rows() + " cols: " + src.cols());
+        logger.info("src" + MatWrapper.MatToString(src));
+        if(transformMap == null){
+            transformMap = MatWrapper.doubleArrayToMat(mtxlist,CV_64F);
+        }
+        logger.info("trasnformMap"+MatWrapper.MatToString(transformMap));
 
         Mat res = new Mat(src.rows(),src.cols(),CV_32FC2);
         Core.perspectiveTransform(src,res,transformMap);
@@ -85,7 +93,7 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
             logger.error("the json file is null,cannot running");
             return;
         }
-        ArrayList<List<Double>> mtxlist = m.get("mtx");
+        mtxlist = m.get("mtx");
         transformMap = MatWrapper.doubleArrayToMat(mtxlist,CV_64F);
         ArrayList<List<Double>> imtxlist = m.get("imtx");
         inverseMap = MatWrapper.doubleArrayToMat(imtxlist,CV_64F);
@@ -180,6 +188,8 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         }
         return newlist;
     }
+
+    //检测到的点是否在（picRect转换前标记的）感兴趣的区域内
     public boolean isInsidePicArea(Point p) {
 
         Point[] mpa = new Point[this.picRect.size()];
@@ -250,6 +260,70 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
                     ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );
         }
         return -1;
+    }
+    public IOTTransform(){
+    }
+
+
+
+    public Mat getTransformMap() {
+        return transformMap;
+    }
+
+    public void setTransformMap(Mat transformMap) {
+        this.transformMap = transformMap;
+    }
+
+    public Mat getInverseMap() {
+        return inverseMap;
+    }
+
+    public void setInverseMap(Mat inverseMap) {
+        this.inverseMap = inverseMap;
+    }
+
+    public ArrayList<Point> getPicRect() {
+        return picRect;
+    }
+
+    public void setPicRect(ArrayList<Point> picRect) {
+        this.picRect = picRect;
+    }
+
+    public ArrayList<Point> getRealRect() {
+        return realRect;
+    }
+
+    public void setRealRect(ArrayList<Point> realRect) {
+        this.realRect = realRect;
+    }
+
+    public Rect getTransformAfter() {
+        return transformAfter;
+    }
+
+    public void setTransformAfter(Rect transformAfter) {
+        this.transformAfter = transformAfter;
+    }
+
+    public void setPicSize(Size picSize) {
+        this.picSize = picSize;
+    }
+
+    public Size getRealSize() {
+        return realSize;
+    }
+
+    public void setRealSize(Size realSize) {
+        this.realSize = realSize;
+    }
+
+    public ArrayList<List<Double>> getMtxlist() {
+        return mtxlist;
+    }
+
+    public void setMtxlist(ArrayList<List<Double>> mtxlist) {
+        this.mtxlist = mtxlist;
     }
 }
 

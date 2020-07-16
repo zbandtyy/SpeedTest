@@ -1,4 +1,5 @@
 package detectmotion;
+import com.google.gson.Gson;
 import detectmotion.interestarea.IOTTransform;
 import detectmotion.interestarea.PerspectiveConversion;
 import detectmotion.tuple.Tuple2;
@@ -7,6 +8,7 @@ import detectmotion.utils.PHASE;
 import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import org.opencv.tracking.*;
+import spark.type.VideoEventData;
 
 import java.io.Serializable;
 import  java.util.*;
@@ -18,22 +20,63 @@ import  java.util.*;
  * @version: $
  */
 public class TrackerList implements Serializable {
-    private static final Logger logger = Logger.getLogger(IOTTransform.class);
-    private String[] trackerTypes = {"BOOSTING", "MIL", "KCF", "TLD", "MEDIANFLOW", "GOTURN", "MOSSE", "CSRT"};
+    private static final Logger logger = Logger.getLogger(TrackerList.class);
+    private String selectedType = "MOSSE";
+    //对车辆进行维护，在增加一个tracker就相当于增加一辆车，与trackers完全同步
+    private  List<CarDes> trackers = new LinkedList<>();
+    private long startCount = 0;//计数
+
+    public TrackerList(List<CarDes> trackers, long startCount,String selectedType) {
+        this.trackers = trackers;
+        this.startCount = startCount;
+        this.selectedType  = selectedType;
+    }
+
+    public  TrackerList(){
+
+    }
+    public List<CarDes> getTrackers() {
+        return trackers;
+    }
+
+    public void setTrackers(List<CarDes> trackers) {
+        this.trackers = trackers;
+    }
+
+    public String getSelectedType() {
+        return selectedType;
+    }
+
+    public void setSelectedType(String selectedType) {
+        this.selectedType = selectedType;
+        System.out.println("you set"+ this.selectedType);
+    }
+
+    public long getStartCount() {
+        return startCount;
+    }
+
+    public void setStartCount(long startCount) {
+        this.startCount = startCount;
+    }
+
     Tracker createTrackerByName(String trackerType) {
+        String[] trackerTypes = {"BOOSTING", "MIL", "KCF", "TLD", "MEDIANFLOW", "GOTURN", "MOSSE", "CSRT"};
+
         Tracker tracker = null;
-        if (trackerType == trackerTypes[0])
+        if (trackerType.equals( trackerTypes[0]))
             tracker = TrackerBoosting.create();
-        else if (trackerType == trackerTypes[1])
+        else if (trackerType.equals(trackerTypes[1]))
             tracker = TrackerMIL.create();
-        else if (trackerType == trackerTypes[2])
+        else if (trackerType.equals(trackerTypes[2]))
             tracker = TrackerKCF.create();
-        else if (trackerType == trackerTypes[3])
+        else if (trackerType.equals(trackerTypes[3]))
             tracker = TrackerTLD.create();
-        else if (trackerType == trackerTypes[6])
+        else if (trackerType.equals(trackerTypes[6]))
             tracker = TrackerMOSSE.create();
         else {
-            System.out.println("Incorrect tracker name");
+
+            System.out.println("Incorrect tracker name:"+trackerType+"\n");
             System.out.println("Available trackers are: ");
             Integer str;
             for (int i = 0; i < trackerType.length(); i++) {
@@ -42,28 +85,23 @@ public class TrackerList implements Serializable {
         }
         return tracker;
     }//可以灵活应对新增加或者修改的tracker (Factory,反摄）E
-    String selectedType = "MOSSE";
-  //对车辆进行维护，在增加一个tracker就相当于增加一辆车，与trackers完全同步
-    private  List<CarDes> trackers = new LinkedList<>();
 
     public long getCurTrackersCount() {
         return startCount;
     }
-
-    long startCount = 0;//计数
-
     /***
      *
      * @param frame 更新的帧的信息
      * @param cars 要更新的位置
      * NOTE：会删除内部的所有tracker，所以调用的时候需要全部检查完成
+     *           删除没有检测到的index
      */
     public void updateTrackPos (Mat frame,  Map<Integer,Rect2d> cars ){
         if(cars == null || cars.size() <= 0){
             return;
         }
         ArrayList<CarDes> needModify = new ArrayList<>();
-        logger.debug("tracker size ===" + trackers.size());
+        logger.info("tracker size ===" + trackers.size());
         cars.forEach((index,pos)->{
             CarDes car= trackers.get(index);
             logger.debug("原来预测到的位置" + car.getPos());
@@ -72,31 +110,38 @@ public class TrackerList implements Serializable {
                     (car.getPos().y + pos.y) /2,pos.width,pos.height));
             needModify.add(car);
         } );
+        logger.info("updateTrackpos: 检测到的重合对象，并且重新创建更新tracker" + needModify.size());
         updateTrackPos(frame,needModify);
+        logger.info("updateTrackpos：删除没有检测到重合的对象" + (trackers.size() - needModify.size()));
+        trackers.retainAll(needModify);
 
     }
     //更新tracker
     public void updateTrackPos (Mat frame,  List<CarDes> cars ){
         for(CarDes car: cars){
-            Tracker t = createTrackerByName(selectedType);
-            logger.debug("更新重合 count = 的位置" + car);
+            Tracker t = createTrackerByName(this.selectedType);
+            logger.info("更新重合 count = " + car + "的位置");
             t.init(frame,car.getPos());
             car.setTracker(t);
         }
     }
+
     //发现新的车辆
     public void createNewTrackersByArea(Mat frame,  List<Rect2d> cars ){
         logger.info("create Cars" + cars.size());
         for(Rect2d carpos: cars){
+            logger.info(carpos+";");
             Tracker t = createTrackerByName(selectedType);
             t.init(frame,carpos);
             CarDes c = new CarDes(carpos,startCount++,t,0);// 与上面的区别 是否创建新的车辆
             trackers.add(c);//对count进行设置
+
         }
     }
 
     //iotArea表示感兴趣的区域，如果更新之后不再感兴趣的区域内就删掉
     public void update(Mat frame){
+        logger.warn("enter update tracker");
         int length = trackers.size();
         for(int i = 0 ; i < length; i ++ ){
             trackers.get(i).setPhase(PHASE.TRACKER);
@@ -104,10 +149,15 @@ public class TrackerList implements Serializable {
             Rect2d newPos = new Rect2d();
             //目标没有丢失
             Tracker  t = trackers.get(i).getTracker();
+            if(t == null){
+                logger.info(trackers.get(i).getPos()  + "trackers == null,count ==" + trackers.get(i).getCount());
+                return;
+            }
+            logger.warn(trackers.get(i));
             boolean res = t.update(frame,newPos) ;
             if(res != true ){
                 trackers.get(i).setMarkedDelete();
-                logger.debug("丢失目标 count " + trackers.get(i));
+                logger.info("丢失目标 count " + trackers.get(i) + "beacuse update cannot see");
            }else {
                trackers.get(i).setPos( newPos);
            }
@@ -118,7 +168,7 @@ public class TrackerList implements Serializable {
     public  void cleanLostedTrackers(int losttime){
 
        trackers.removeIf((carDes -> {
-           if(carDes.markedLost > losttime)
+           if(carDes.markedLost >= losttime)
                logger.warn("remove count = " + carDes.count +"because of track lost long time");
            return  carDes.markedLost > losttime;
        }));
@@ -156,9 +206,6 @@ public class TrackerList implements Serializable {
         return  this;
     }
 
-    public  TrackerList(){
-
-    }
     //获取列表进行操作
 
     public  ArrayList<Rect2d> getTrackedCarsPos(){
@@ -178,8 +225,6 @@ public class TrackerList implements Serializable {
         }
         return  arr;
     }
-
-
     public  ArrayList<Tuple3<Rect2d,Double,Double>> getSpeed(double time,PerspectiveConversion iot){
         ArrayList<Tuple3<Rect2d,Double,Double>> arr = new ArrayList<>(trackers.size());
 
@@ -260,4 +305,35 @@ public class TrackerList implements Serializable {
         return -1;
     }
 
+    @Override
+    public String toString() {
+        return "TrackerList{" +
+                "selectedType='" + selectedType + '\'' +
+                ", trackers=" + trackers +
+                ", startCount=" + startCount +
+                '}';
+    }
+    public String toJson(){
+
+        Gson gson = new Gson();
+        /**
+         * String toJson(Object src)
+         * 将对象转为 json，如 基本数据、POJO 对象、以及 Map、List 等
+         * 注意：如果 POJO 对象某个属性的值为 null，则 toJson(Object src) 默认不会对它进行转化
+         * 结果字符串中不会出现此属性
+         */
+        String json = gson.toJson(this);
+        return  json;
+    }
+    public TrackerList fromJson(String data){
+        Gson gson = new Gson();
+        /**
+         *  <T> T fromJson(String json, Class<T> classOfT)
+         *  json：被解析的 json 字符串
+         *  classOfT：解析结果的类型，可以是基本类型，也可以是 POJO 对象类型，gson 会自动转换
+         */
+        TrackerList p = gson.fromJson(data, TrackerList.class);
+        return p;
+    }
 }
+
