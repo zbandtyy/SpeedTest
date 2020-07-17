@@ -6,6 +6,7 @@ import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
 import detectmotion.utils.PHASE;
 import org.apache.log4j.Logger;
+import org.apache.spark.sql.sources.In;
 import org.opencv.core.*;
 import org.opencv.tracking.*;
 import spark.type.VideoEventData;
@@ -21,6 +22,8 @@ import  java.util.*;
  */
 public class TrackerList implements Serializable {
     private static final Logger logger = Logger.getLogger(TrackerList.class);
+    private  String  key  = null;//用来保存检测的对象是哪一个视频帧
+
     private String selectedType = "MOSSE";
     //对车辆进行维护，在增加一个tracker就相当于增加一辆车，与trackers完全同步
     private  List<CarDes> trackers = new LinkedList<>();
@@ -30,6 +33,10 @@ public class TrackerList implements Serializable {
         this.trackers = trackers;
         this.startCount = startCount;
         this.selectedType  = selectedType;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public  TrackerList(){
@@ -49,7 +56,7 @@ public class TrackerList implements Serializable {
 
     public void setSelectedType(String selectedType) {
         this.selectedType = selectedType;
-        System.out.println("you set"+ this.selectedType);
+        System.out.println(key +":you set"+ this.selectedType);
     }
 
     public long getStartCount() {
@@ -104,23 +111,23 @@ public class TrackerList implements Serializable {
         logger.info("tracker size ===" + trackers.size());
         cars.forEach((index,pos)->{
             CarDes car= trackers.get(index);
-            logger.debug("原来预测到的位置" + car.getPos());
-            logger.debug("现在检测到的位置" + pos);
+            logger.debug(key+": 原来预测到的位置" + car.getPos());
+            logger.debug(key+": 现在检测到的位置" + pos);
             car.setPos(new Rect2d((car.getPos().x + pos.x) /2,
                     (car.getPos().y + pos.y) /2,pos.width,pos.height));
             needModify.add(car);
         } );
-        logger.info("updateTrackpos: 检测到的重合对象，并且重新创建更新tracker" + needModify.size());
+        logger.info(key + ": updateTrackpos: 检测到的重合对象，并且重新创建更新tracker" + needModify.size());
         updateTrackPos(frame,needModify);
-        logger.info("updateTrackpos：删除没有检测到重合的对象" + (trackers.size() - needModify.size()));
-        trackers.retainAll(needModify);
+//        logger.info(key + ": updateTrackpos：删除没有检测到重合的对象" + (trackers.size() - needModify.size()));
+//        trackers.retainAll(needModify);
 
     }
     //更新tracker
     public void updateTrackPos (Mat frame,  List<CarDes> cars ){
         for(CarDes car: cars){
             Tracker t = createTrackerByName(this.selectedType);
-            logger.info("更新重合 count = " + car + "的位置");
+            logger.info(key + " 更新重合 count = " + car + "的位置");
             t.init(frame,car.getPos());
             car.setTracker(t);
         }
@@ -128,7 +135,7 @@ public class TrackerList implements Serializable {
 
     //发现新的车辆
     public void createNewTrackersByArea(Mat frame,  List<Rect2d> cars ){
-        logger.info("create Cars" + cars.size());
+        logger.info(key + " create Cars" + cars.size());
         for(Rect2d carpos: cars){
             logger.info(carpos+";");
             Tracker t = createTrackerByName(selectedType);
@@ -138,10 +145,19 @@ public class TrackerList implements Serializable {
 
         }
     }
+    public void setNewTracker(Mat frame,ArrayList<Integer> indexesofTracker ){
+        for (int i = 0; i < indexesofTracker.size(); i++) {
 
+           Integer index =  indexesofTracker.get(i);
+           CarDes car= trackers.get(index);
+           Tracker t = createTrackerByName(selectedType);
+           t.init(frame,car.getPos());
+           car.setTracker(t);
+        }
+    }
     //iotArea表示感兴趣的区域，如果更新之后不再感兴趣的区域内就删掉
     public void update(Mat frame){
-        logger.warn("enter update tracker");
+        logger.warn(key + " enter update tracker");
         int length = trackers.size();
         for(int i = 0 ; i < length; i ++ ){
             trackers.get(i).setPhase(PHASE.TRACKER);
@@ -150,17 +166,18 @@ public class TrackerList implements Serializable {
             //目标没有丢失
             Tracker  t = trackers.get(i).getTracker();
             if(t == null){
-                logger.info(trackers.get(i).getPos()  + "trackers == null,count ==" + trackers.get(i).getCount());
+                logger.info(key + ": "+trackers.get(i).getPos()  + "trackers == null,count ==" + trackers.get(i).getCount());
+                trackers.get(i).setMarkedDelete();
                 return;
             }
-            logger.warn(trackers.get(i));
             boolean res = t.update(frame,newPos) ;
             if(res != true ){
                 trackers.get(i).setMarkedDelete();
-                logger.info("丢失目标 count " + trackers.get(i) + "beacuse update cannot see");
+                logger.info(key + " 丢失目标 count " + trackers.get(i) + "beacuse update cannot see");
            }else {
-               trackers.get(i).setPos( newPos);
-           }
+                trackers.get(i).setPos( newPos);
+                logger.warn(key + "更新位置" + trackers.get(i));
+            }
         }
         return  ;
 
@@ -169,7 +186,7 @@ public class TrackerList implements Serializable {
 
        trackers.removeIf((carDes -> {
            if(carDes.markedLost >= losttime)
-               logger.warn("remove count = " + carDes.count +"because of track lost long time");
+               logger.warn(key +" remove count = " + carDes.count +"because of track lost long time");
            return  carDes.markedLost > losttime;
        }));
 
@@ -192,7 +209,7 @@ public class TrackerList implements Serializable {
             for (int i = 0; i < trackers.size(); i++) {
                 Rect2d pos = trackers.get(i).getPos();
                 if(!iot.isInsidePicArea(pos.br()) && !iot.isInsidePicArea(pos.tl()) ){
-                    logger.warn("remove count = " + trackers.get(i).count +"because   it goes beyond the interested  zone");
+                    logger.warn(key +" remove count = " + trackers.get(i).count +"because   it goes beyond the interested  zone");
                     deleted.add(trackers.get(i));
                 }
             }
@@ -297,17 +314,25 @@ public class TrackerList implements Serializable {
 //                System.out.println(previousPos);
 //                System.out.println(netxPos);
 //                System.out.println("=========================================================");
-                logger.warn("has position out of size");
+                logger.warn(key + " has position out of size");
             }
             return  Math.sqrt( ((pcx - ccx) *(pcx -ccx)*xratio*xratio)  +
                     ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );
         }
         return -1;
     }
+    public void markedDetectedLost(ArrayList<Integer> list){
+        for (int i = 0; i < list.size(); i++) {
+            CarDes car = trackers.get(i);
+            car.setMarkedDelete();
+            car.setMarkedDelete();
 
+        }
+
+    }
     @Override
     public String toString() {
-        return "TrackerList{" +
+        return key + ":TrackerList{" +
                 "selectedType='" + selectedType + '\'' +
                 ", trackers=" + trackers +
                 ", startCount=" + startCount +

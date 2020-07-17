@@ -98,24 +98,28 @@ public class Detector implements Serializable {
 
 
     }
-    public synchronized BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
-        BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes ,"prediction",(float)0.5, (float)0.5, 1, w,h,c);// from jpgbytes
-        System.out.println("recognize sucess,the length is" + boxesAndAccs.length);
-        if(boxesAndAccs==null){
-            System.out.println("No Boxes");
-        }
-        ArrayList<BoxesAndAcc> blist = new ArrayList<>();
-        for(BoxesAndAcc boxesAndAcc : boxesAndAccs){
-
-            if(boxesAndAcc.isVaild==true && ((boxesAndAcc.names.equals( "car") ||boxesAndAcc.names.equals( "person"))) ){
-                blist.add(boxesAndAcc);//这个内存交接后是不是会被释放？
+    public  BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
+        synchronized (Detector.class) {
+            BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes, "prediction", (float) 0.5, (float) 0.5, 1, w, h, c);// from jpgbytes
+            System.out.println("recognize sucess,the length is" + boxesAndAccs.length);
+            if (boxesAndAccs == null) {
+                System.out.println("No Boxes");
             }
-        }// or
+            ArrayList<BoxesAndAcc> blist = new ArrayList<>();
+            for (BoxesAndAcc boxesAndAcc : boxesAndAccs) {
 
-        BoxesAndAcc[] bArray = new BoxesAndAcc[blist.size()];
+                if (boxesAndAcc.isVaild == true && ((boxesAndAcc.names.equals("car") || boxesAndAcc.names.equals("person")))) {
+                    blist.add(boxesAndAcc);//这个内存交接后是不是会被释放？
+                }
+            }// or
+            String name = Thread.currentThread().getName();
+            System.out.println(name + "==== this yolo recognize" );
+            BoxesAndAcc[] bArray = new BoxesAndAcc[blist.size()];
 
-        blist.toArray(bArray);
-        return bArray;
+            blist.toArray(bArray);
+
+            return bArray;
+        }
     }
 
     public static void main(String[] args) throws Exception {

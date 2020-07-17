@@ -33,6 +33,14 @@ public class OpencvMultiTracker implements Serializable {
     PerspectiveConversion iot ;
     private   TrackerList trackers; ;
     private   DetectCar detector = null;
+    private  transient  String key = null;
+
+    public void setKey(String key) {
+        this.key = key;
+        trackers.setKey(key);
+
+    }
+
     private static final Logger logger = Logger.getLogger(OpencvMultiTracker.class);
     public PerspectiveConversion getIot() {
         return iot;
@@ -45,13 +53,15 @@ public class OpencvMultiTracker implements Serializable {
         return detector;
     }
     public OpencvMultiTracker(String jsonName) throws IOException {
+        logger.info(key +": creare json TRANSFORM" + jsonName);
+
         iot = new IOTTransform(jsonName);
         detector = new YoloDetectCar();
         trackers= new TrackerList();
     }
 
     public OpencvMultiTracker(Size picsize,Size realSize) {
-        logger.info("creare NULL TRANSFORM");
+        logger.info(key +": creare NULL TRANSFORM");
         iot = new NULLTransform(picsize,realSize);
         logger.info(iot);
         detector = new YoloDetectCar();
@@ -61,7 +71,7 @@ public class OpencvMultiTracker implements Serializable {
 
 
     public OpencvMultiTracker(){
-        logger.warn("new OpencvMultiTracker()");
+        logger.warn(key+":new OpencvMultiTracker()");
     }
     /***
      *
@@ -69,6 +79,7 @@ public class OpencvMultiTracker implements Serializable {
      * @param dectedObjects  检测到的目标
      * @param MatchedPreictObjects 已经与检测对象匹配的跟踪对象，是(tracker的编号，trackr的位置)组成的键值对
      * @return  预测的目标中  需要在原有tracker中进行更新的对象
+     * NOTE:dectedObjects 会在内部做删除已经匹配的处理
      */
     private Map<Integer, Rect2d> findSameObjectByArea(List<Rect2d> predictedObjtects, List<Rect2d> dectedObjects, Map<Integer, Rect2d> MatchedPreictObjects){
 
@@ -78,8 +89,8 @@ public class OpencvMultiTracker implements Serializable {
         if(MatchedPreictObjects == null) {
             MatchedPreictObjects = new HashMap<Integer, Rect2d>();       //数据采用的哈希表结构
         }
-        logger.debug("一开始检测到的对象" + dectedObjects.size());
-        logger.debug("预测的对象" + predictedObjtects.size());
+        logger.debug(key + ":一开始检测到的对象" + dectedObjects.size());
+        logger.debug(key + ":预测的对象" + predictedObjtects.size());
 
         //  3.在预测的位置中 找一个与  检测的结果中心点最近的一个，表明是统一车辆
         ArrayList<Rect2d> unew = new ArrayList<>();
@@ -96,17 +107,17 @@ public class OpencvMultiTracker implements Serializable {
             }
             //确定是与上一帧目标相同的patch ,
             if (maxArea > 0 && MatchedPreictObjects.get(maxIndex)  == null ) {
-                logger.debug("detected" + pRect);
-                logger.debug("MaxArea" + maxArea);
-                logger.debug("prect" + predictedObjtects.get(maxIndex));
+                logger.debug(key + ":detected" + pRect);
+                logger.debug(key + ":MaxArea" + maxArea);
+                logger.debug(key + ":prect" + predictedObjtects.get(maxIndex));
                 unew.add(pRect);
                 MatchedPreictObjects.put(maxIndex,pRect);//MatchedPreictObjects 存储的是
             }
         }
-        logger.debug("重合的对象" + unew.size());
+        logger.info(key + ":重合的对象" + unew.size());
         dectedObjects.removeAll(unew);//detectedObjects中剩下的是检测到的多余的【即新的车辆】
-        logger.debug("剩余的预测对象" + predictedObjtects.size());
-        logger.debug("剩余的检测对象" + dectedObjects.size());
+        logger.info(key  +":剩余的预测对象" + predictedObjtects.size());
+        logger.info(key +":剩余的检测对象,用来创建新的对象" + dectedObjects.size());
         return  MatchedPreictObjects;
     }
 
@@ -127,10 +138,27 @@ public class OpencvMultiTracker implements Serializable {
         //1.根据重合范围进行第一次更新
         Map<Integer, Rect2d> needAlterTrackerPos = findSameObjectByArea(trackedcarposes, dectedObjects, null);
         trackers.updateTrackPos(frame,needAlterTrackerPos);//对原来的进行位置跟踪更新，重新创建跟踪器进行跟踪【会删除之前维护的所有对象，重新创建】
-        createTrackerInList(frame,dectedObjects);//表示为新检测到的新物体,创建新的tracker
-        //(trackedcarposes)还剩下一个上一帧update预测到的，但是没有检测到匹配的
-        // 【这种情况 (1)可以继续追踪 （2）直接删除，下一次不进行跟踪了】 这个在updateTrackPos中做了删除处理
 
+        //2.(trackedcarposes)还剩下一个上一帧update预测到的，但是没有检测到匹配的
+        // 【这种情况 (1)可以继续追踪 （2）直接删除，下一次不进行跟踪了】 这个在updateTrackPos中做了删除处理,基于detector的失误
+        ArrayList<Integer> notMatchedTracker = new ArrayList<>();//上一批跟踪的对象，但是没有被跟踪到的
+        for (int i = 0; i < trackedcarposes.size(); i++) {
+            if(needAlterTrackerPos.get(i) == null){
+                notMatchedTracker.add(i);
+            }
+        }
+        reloadTracker(frame,notMatchedTracker);
+        trackers.markedDetectedLost(notMatchedTracker);//标记检测失败，次数未losttime - 1次（如果检测失败，还能容忍一次update失败，就会立即删除）
+
+
+        //3.创建新的tracker
+        createTrackerInList(frame,dectedObjects);//表示为新检测到的新物体,创建新的tracker 会改变内部的tracker的顺序，所以最后运行！！！！！！！
+
+
+    }
+    public void reloadTracker(Mat frame,ArrayList<Integer> indexofreloadlist){//检测不到但是跟踪到了的对象进行保留处理{
+        logger.warn(key + ": reload" + indexofreloadlist);
+        trackers.setNewTracker(frame,indexofreloadlist);
     }
     private   void saveDetectorStat(){
         trackers.updatePhaseAndnexPoses();
@@ -144,33 +172,45 @@ public class OpencvMultiTracker implements Serializable {
             for (int i = 0; i < willAddCar.size(); i++) {
                 Rect2d r = willAddCar.get(i);
                 if (!iot.isInsidePicArea(r.tl()) && !iot.isInsidePicArea(r.br())){
-                    logger.info("removed: br" + r.br() +"  tl" +  r.tl());
+                    logger.info(key + ":removed: br" + r.br() +"  tl" +  r.tl());
                     deletedRect.add(r);
                 }
             }
             willAddCar.removeAll(deletedRect);
-            logger.info("remove above all rect  size = " + deletedRect.size() +"because not in interested area");
+            logger.info(key + ":remove above all rect  size = " + deletedRect.size() +"because not in interested area");
         }
         trackers.createNewTrackersByArea(frame,willAddCar);
     }
 
-    public void trackObjectsofFrame(Mat frame){
+    public void trackObjectsofFrame(Mat frame,boolean reload){
+        if(reload == true){
+            int size = trackers.getTrackers().size();
+            ArrayList list = new ArrayList();
+            for (int i = 0; i < size; i++) {
+                list.add(i);
+            }
+            reloadTracker(frame,list);
+        }
         //1.预测位置
-        logger.info("enter tracker objects of frames>>>>>>");
       trackers.update(frame);//更新位置
       if(iot != null) {
           trackers.deletedNotInArea(iot);//删除不在指定范围内的车辆tracker
       }
+      cleanLost(3);//清理丢失的目标，消失的帧数  时间 进行清理
+
     }
     public void detectAndCorrectObjofFrame(Mat frame){
         if(detector == null){
             return;
         }
+        logger.info(key +":==========检测之前==========\n");
+
         List<Rect2d> dectedObjects = detector.detectObject(frame);
+        logger.info(key +":==========detected==========\n" + dectedObjects);
         correctBounding(frame, dectedObjects);
-        cleanLost(2);//清理丢失的目标，消失的帧数  时间 进行清理
+        cleanLost(3);//清理丢失的目标，消失的帧数  时间 进行清理
         saveDetectorStat();//更新状态为 detector阶段
-        logger.info("==========detected==========" + trackers.getTrackers());
+        logger.info(key +":==========检测完成最后剩下的trackers==========\n" + trackers.getTrackers());
         return  ;
     }
     public void drawCarsBoundingBoxAndCount(Mat frame){
@@ -284,7 +324,7 @@ public class OpencvMultiTracker implements Serializable {
         builder.registerTypeAdapter(PerspectiveConversion.class,new InheritanceAdapter<PerspectiveConversion>());
         OpencvMultiTracker opencvMultiTracker = builder.create().fromJson(data, OpencvMultiTracker.class);
 
-        TrackerList trakerlist = opencvMultiTracker.getTrackers();
+        //TrackerList trakerlist = opencvMultiTracker.getTrackers();
 
 
         /**

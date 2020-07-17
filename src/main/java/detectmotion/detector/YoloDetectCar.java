@@ -35,7 +35,6 @@ import static org.opencv.imgcodecs.Imgcodecs.imread;
  */
 public class YoloDetectCar implements DetectCar, Serializable {
     private static final org.apache.log4j.Logger logger = Logger.getLogger(YoloDetectCar.class);
-
     Detector obj;
     List<Rect2d> detectedObjects;
     public YoloDetectCar(){//每批会进行创建
@@ -47,19 +46,23 @@ public class YoloDetectCar implements DetectCar, Serializable {
         long size = m.total() * m.elemSize();
         byte bytes[] = new byte[(int)size];  // you will have to delete[] that later
         m.get(0,0,bytes);
-        System.out.println("start yolo detect: = " + bytes.length);
         System.out.println( m.width() +"  " +m.height()  +" "+ m.channels());
         BoxesAndAcc[] res = obj.startYolo(bytes, m.width(), m.height(), m.channels());
-        ArrayList<Rect2d> last= new ArrayList<>(res.length);
+        String name = Thread.currentThread().getName();
+        System.out.println(name + "end yolo" );
+        if(res.length  <= 0){
+            logger.warn("detector number < 0" + res.length);
+            return null;
+        }
+        ArrayList<Rect2d> last= new ArrayList<>();
         for (BoxesAndAcc re : res) {
             if( re.isVaild() == true && re.getNames().equals("car") ) {
-                logger.info(re);
+                logger.info("recognize object" + re);
                 if(re.getBoxes().getX() <0||re.getBoxes().getY() < 0||
                         re.getBoxes().getH() < 0 || re.getBoxes().getW() < 0){
                     continue;
                 }
                 Rect tmp  = re.transfor(m.width(),m.height());
-
                last.add(new Rect2d(tmp.x,tmp.y,tmp.width,tmp.height));
                 logger.info(tmp);
             }

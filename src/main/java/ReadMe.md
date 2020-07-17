@@ -31,6 +31,7 @@ MultiTracker的创建使用的是static，那么所有类共享该对象，那�
 3.需要注意
 直接拿到该对象进行状态保存是不行的，每次恢复的位置是不同的！！！！！！！！！！已测试n次，怀疑是每次都创建了新的对象，也可能是原来的对象销毁了，这里需要测试。
 
+
 * iot中的mtx 和 inversemtx 为地址【如果不合适，可以自己重新设置新的】
   * detector的是地址【如果不合适，可以自己重新设置新的】
   * trackerlist中的trcker是地址 【如果不合适，可以自己重新设置新的】，
@@ -38,4 +39,7 @@ MultiTracker的创建使用的是static，那么所有类共享该对象，那�
     2020-07-15 03:07:20 WARN TaskSetManager:66 - Lost task 120.0 in
     stage 3.0 (TID 322, 115.157.201.215, executor 0): CvException [org
 
+### 2关于tracker跟踪失败
+    可能产生问题的地方：
+        （1）对同一车辆重复标签（检测到了数据，但是tracker无法跟踪到） 当traker不可信时
 

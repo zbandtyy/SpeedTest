@@ -15,6 +15,8 @@ import spark.type.VideoEventData;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -61,69 +63,16 @@ public class SequenceOfFramesProcessor implements Serializable {
         return detectedFrameGap;
     }
 
-    public void setDetectedFrameGap(int detectedFrameGap) {
-        this.detectedFrameGap = detectedFrameGap;
-    }
 
     public int getFrameCount() {
         return frameCount;
     }
 
-    public void setFrameCount(int frameCount) {
-        this.frameCount = frameCount;
-    }
-
-    public double getVIDEO_FPS() {
-        return VIDEO_FPS;
-    }
-
-    public long getBatchstarttime() {
-        return batchstarttime;
-    }
-
-    public void setBatchstarttime(long batchstarttime) {
-        this.batchstarttime = batchstarttime;
-    }
-
-    public long getBatchendtime() {
-        return batchendtime;
-    }
-
-    public void setBatchendtime(long batchendtime) {
-        this.batchendtime = batchendtime;
-    }
-
-    public double getFPS() {
-        return FPS;
-    }
-
-    public void setFPS(double FPS) {
-        this.FPS = FPS;
-    }
 
     public OpencvMultiTracker getMtracker() {
         return mtracker;
     }
 
-    public void setMtracker(OpencvMultiTracker mtracker) {
-        this.mtracker = mtracker;
-    }
-
-    public long getFirstframetime() {
-        return firstframetime;
-    }
-
-    public void setFirstframetime(long firstframetime) {
-        this.firstframetime = firstframetime;
-    }
-
-    public long getLastframetime() {
-        return lastframetime;
-    }
-
-    public void setLastframetime(long lastframetime) {
-        this.lastframetime = lastframetime;
-    }
 
     public SequenceOfFramesProcessor (Integer detectedFrameGap, String iotTransformFileName) {
         this.detectedFrameGap = detectedFrameGap;
@@ -135,7 +84,6 @@ public class SequenceOfFramesProcessor implements Serializable {
     }
     public SequenceOfFramesProcessor (Integer detectedFrameGap, Size pic, Size real){
         this.detectedFrameGap = detectedFrameGap;
-
         this.mtracker = new OpencvMultiTracker(pic,real);
 
     }
@@ -146,15 +94,16 @@ public class SequenceOfFramesProcessor implements Serializable {
      * @param eventDatas :接受到的一组数据
      */
     public  SequenceOfFramesProcessor  processFrames(List<VideoEventData> eventDatas){
+
+
         if(mtracker == null){
-            System.out.println("processFrames mtracker is null");
             return this;
         }
-
-        MatOfByte mob = new MatOfByte();
+        int i = 0;
         for (VideoEventData ev : eventDatas) {
-            Mat frame1 = ev.getMat();
 
+            mtracker.setKey(ev.getCameraId());
+            Mat frame1 = ev.getMat();
           //  Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+".jpg",frame1);
             Size size = mtracker.iot.getPicSize();
             System.out.println(size);
@@ -170,10 +119,10 @@ public class SequenceOfFramesProcessor implements Serializable {
                 logger.info("frame is null,what happen?");
                 continue;
             }else {
-                logger.info("this is "+ frameCount +  " \n\n"  );
+                logger.info(ev.getCameraId() + ":this is "+ frameCount +  " \n\n"  );
             }
            // mtracker.drawdetectedBoundingBox(frame);
-            if (frameCount % detectedFrameGap  == 0 ) {
+            if (frameCount % detectedFrameGap  == 0  ) {
                 if(frameCount == 0) {
                     firstframetime =  lastframetime = ev.getTime();
                 } else{
@@ -183,7 +132,7 @@ public class SequenceOfFramesProcessor implements Serializable {
                 FPS = updateFPS();
                 mtracker.detectAndCorrectObjofFrame(frame);
             } else {
-                mtracker.trackObjectsofFrame(frame);
+                mtracker.trackObjectsofFrame(frame,i == 0);
             }
             long gaptime  = lastframetime - firstframetime;
             mtracker.drawStatistic(frame,FPS);
@@ -199,6 +148,7 @@ public class SequenceOfFramesProcessor implements Serializable {
             resultFrame.get(0, 0, data);
             ev.setData( Base64.getEncoder().encodeToString(data));
             frameCount++;
+            i++;
 //            imshow("processed",frame);
 //            waitKey(10);
         }
@@ -230,7 +180,7 @@ public class SequenceOfFramesProcessor implements Serializable {
 //                    }
 
             } else {
-                mtracker.trackObjectsofFrame(frame);
+                mtracker.trackObjectsofFrame(frame,false);
             }
             mtracker.drawStatistic(frame,FPS);
             mtracker.drawTrackerBox(frame,detectedFrameGap * VIDEO_FPS);//speed count
