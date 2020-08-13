@@ -5,6 +5,7 @@ import spark.PropertyFileReader;
 
 import java.io.Serializable;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * @author ：tyy
@@ -16,8 +17,8 @@ import java.util.Properties;
  * @version: $
  */
 public class AppConfig implements Serializable {
-    public static  final  String  KAFKA_CONFIG_FILE= "/home/user/Apache/App1/exe/stream-processor.properties";
-  // public static  final  String  KAFKA_CONFIG_FILE= "E:/spark/speed-test/speedtest/src/main/resources/stream-processor.properties";
+    public static    String  KAFKA_CONFIG_FILE= "/home/user/Apache/App1/exe/stream-processor.properties";
+   // public static  final  String  KAFKA_CONFIG_FILE= "E:/spark/speed-test/speedtest/src/main/resources/stream-processor.properties";
 
     public  static  String OPENCV_LIB_FILE="/home/user/Apache/opencv3.4.7-install/lib/libopencv_java347.so";
     //YOLO的模型文件等的路径 ，目录形式必须如下
@@ -36,7 +37,7 @@ public class AppConfig implements Serializable {
     public static     String MYSQL_USER_PASSWD="123456";
     public  static    String MYSQL_JDBC_CLASSNAME="com.mysql.cj.jdbc.Driver";
     public  static    String IOTTRANSFORM_JSON_DIR="/home/user/Apache/App1/config/";
-    public  static    String CASCADE_DETECTCAR_FILE="/home/user/share/shared/spark-example/speedtest/myhaar.xml";
+    public  static    String CASCADE_DETECTCAR_FILE="E:\\spark\\speed-test\\speedtest\\src\\main\\myhaar.xml";
 
 
     static{
@@ -48,6 +49,11 @@ public class AppConfig implements Serializable {
     }
     static void init() throws Exception {
          if(KAFKA_CONFIG_FILE != null){
+             String osName = System.getProperty("os.name");//获取指定键（即os.name）的系统属性,如：Windows 7。
+             if (Pattern.matches("Windows.*", osName)) {
+                 KAFKA_CONFIG_FILE = "E:/spark/speed-test/speedtest/src/main/resources/stream-processor.properties";
+             }
+
              System.out.println(AppConfig.KAFKA_CONFIG_FILE);
              Properties prop = PropertyFileReader.readPropertyFile();
               if(prop.getProperty("yolo.label.file") != null){

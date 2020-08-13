@@ -1,6 +1,7 @@
 
 package detection;
 
+import lombok.extern.slf4j.Slf4j;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import spark.config.AppConfig;
@@ -12,8 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
+@Slf4j
 public class Detector implements Serializable {
 
     private long peer;
@@ -100,6 +100,11 @@ public class Detector implements Serializable {
     }
     public  BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
         synchronized (Detector.class) {
+            if(jpgbytes.length < w * h * c && w*h*c <= 0){
+                log.warn(jpgbytes.length + "< (w=" + w + ")*(h="+ h+")*(c=" + c+")" + w*h*c);
+                return  null;
+
+            }
             BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes, "prediction", (float) 0.5, (float) 0.5, 1, w, h, c);// from jpgbytes
             System.out.println("recognize sucess,the length is" + boxesAndAccs.length);
             if (boxesAndAccs == null) {

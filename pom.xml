@@ -160,8 +160,6 @@
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>
             </plugin>
-
-
             <!--2.拷贝依赖到jar外面的lib目录-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -216,6 +214,13 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -233,6 +238,18 @@
             <groupId>opencv</groupId>
             <artifactId>opencv</artifactId>
             <version>3.4.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <!--            11是scala的版本-->
+            <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.11</artifactId>
+            <version>2.3.0</version>
         </dependency>
 
         <dependency>
@@ -259,17 +276,7 @@
             <artifactId>commons-math3</artifactId>
             <version>3.4.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <!--            11是scala的版本-->
-            <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.11</artifactId>
-            <version>2.3.0</version>
-        </dependency>
+
     </dependencies>
 
 </project>

@@ -36,8 +36,10 @@ public class NULLTransform implements PerspectiveConversion {
     public List<Point> transformPointList(List<Point> dst){
         return dst;
     }
+    //判断是否在感兴趣的区域，升级版本
     public boolean isInsidePicArea(Point p){
-        return  true;
+         return true;
+
     }
     public double getXRatio(){
         // 实际大小             转换后的区域宽

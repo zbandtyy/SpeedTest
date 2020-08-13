@@ -4,10 +4,6 @@ import detection.Box;
 import detection.BoxesAndAcc;
 import detection.Detector;
 import detectmotion.utils.RectCompute;
-import detectmotion.yolo.ObjectDetector;
-import detectmotion.yolo.classifier.YOLOClassifier;
-import detectmotion.yolo.model.BoxPosition;
-import detectmotion.yolo.model.Recognition;
 import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
@@ -33,16 +29,17 @@ import static org.opencv.imgcodecs.Imgcodecs.imread;
  * @modified By：
  * @version: $
  */
+
 public class YoloDetectCar implements DetectCar, Serializable {
     private static final org.apache.log4j.Logger logger = Logger.getLogger(YoloDetectCar.class);
     Detector obj;
-    List<Rect2d> detectedObjects;
+    List<Rect2d> detectedObjects = new ArrayList<>();
     public YoloDetectCar(){//每批会进行创建
         obj = Detector.getYoloDetector(AppConfig.YOLO_RESOURCE_PATH);
     }
     @Override
     public List<Rect2d> detectObject(Mat m) {
-
+        detectedObjects.clear();
         long size = m.total() * m.elemSize();
         byte bytes[] = new byte[(int)size];  // you will have to delete[] that later
         m.get(0,0,bytes);
@@ -63,7 +60,9 @@ public class YoloDetectCar implements DetectCar, Serializable {
                     continue;
                 }
                 Rect tmp  = re.transfor(m.width(),m.height());
-               last.add(new Rect2d(tmp.x,tmp.y,tmp.width,tmp.height));
+                Rect2d rect = new Rect2d(tmp.x,tmp.y,tmp.width,tmp.height);
+                last.add(rect);
+                detectedObjects.add(rect);
                 logger.info(tmp);
             }
         }

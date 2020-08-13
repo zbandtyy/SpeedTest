@@ -19,7 +19,6 @@ import java.util.Date;
  */
 public class SpeedState implements Serializable {
     private  static  final  long serialVersionUID = 16L;
-
     public Integer detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
     public Integer frameCount = 0;//处理的是序列中的第几帧
     public String  multiTracker = "" ;

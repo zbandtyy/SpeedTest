@@ -11,9 +11,11 @@ import detectmotion.tuple.Tuple;
 import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
 import detectmotion.utils.RectCompute;
-import org.apache.log4j.Logger;
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
+import org.slf4j.Logger;
 import spark.adapter.InheritanceAdapter;
 
 import java.io.IOException;
@@ -29,11 +31,18 @@ import static org.opencv.core.Core.FONT_HERSHEY_SIMPLEX;
  * @modified By：
  * @version: $
  */
+@Slf4j
 public class OpencvMultiTracker implements Serializable {
+    private static final Logger logger = log;
+
+    @Getter
     PerspectiveConversion iot ;
-    private   TrackerList trackers; ;
+    @Getter
+    private   TrackerList trackers;
+    @Getter
     private   DetectCar detector = null;
     private  transient  String key = null;
+    public  static  final int DEFAULT_LOST_TIME = 1;
 
     public void setKey(String key) {
         this.key = key;
@@ -41,29 +50,19 @@ public class OpencvMultiTracker implements Serializable {
 
     }
 
-    private static final Logger logger = Logger.getLogger(OpencvMultiTracker.class);
-    public PerspectiveConversion getIot() {
-        return iot;
-    }
 
-    public TrackerList getTrackers() {
-        return trackers;
-    }
-    public DetectCar getDetector() {
-        return detector;
-    }
+
     public OpencvMultiTracker(String jsonName) throws IOException {
         logger.info(key +": creare json TRANSFORM" + jsonName);
-
         iot = new IOTTransform(jsonName);
         detector = new YoloDetectCar();
         trackers= new TrackerList();
     }
 
-    public OpencvMultiTracker(Size picsize,Size realSize) {
+    public OpencvMultiTracker(Size picSize,Size realSize) {
         logger.info(key +": creare NULL TRANSFORM");
-        iot = new NULLTransform(picsize,realSize);
-        logger.info(iot);
+        iot = new NULLTransform(picSize,realSize);
+        logger.info(String.valueOf(iot));
         detector = new YoloDetectCar();
         trackers= new TrackerList();
     }
@@ -135,20 +134,22 @@ public class OpencvMultiTracker implements Serializable {
         }else if(dectedObjects.size() <= 0  ){//检测不出来对象 就使用预测对象替代
             return;
         }
-        //1.根据重合范围进行第一次更新
+        //1.创建新的Tracker，进行跟踪根据重合范围进行第一次更新
         Map<Integer, Rect2d> needAlterTrackerPos = findSameObjectByArea(trackedcarposes, dectedObjects, null);
         trackers.updateTrackPos(frame,needAlterTrackerPos);//对原来的进行位置跟踪更新，重新创建跟踪器进行跟踪【会删除之前维护的所有对象，重新创建】
 
-        //2.(trackedcarposes)还剩下一个上一帧update预测到的，但是没有检测到匹配的
-        // 【这种情况 (1)可以继续追踪 （2）直接删除，下一次不进行跟踪了】 这个在updateTrackPos中做了删除处理,基于detector的失误
-        ArrayList<Integer> notMatchedTracker = new ArrayList<>();//上一批跟踪的对象，但是没有被跟踪到的
-        for (int i = 0; i < trackedcarposes.size(); i++) {
-            if(needAlterTrackerPos.get(i) == null){
-                notMatchedTracker.add(i);
-            }
-        }
-        reloadTracker(frame,notMatchedTracker);
-        trackers.markedDetectedLost(notMatchedTracker);//标记检测失败，次数未losttime - 1次（如果检测失败，还能容忍一次update失败，就会立即删除）
+        //2.(trackedcarposes)还剩下一个上一帧update预测到的，但是没有检测到匹配的,（1）直接删除
+        // 【这种情况 (1)可以继续追踪 （2）直接删除，下一次不进行跟踪了】
+        // 【2】如果需要这段代码表明，没有检测到也继续进行跟踪这个在updateTrackPos中做了删除处理, 如果detector的检测率不高的话
+//        ArrayList<Integer> notMatchedTracker = new ArrayList<>();//上一批跟踪的对象，但是没有被跟踪到的
+//        for (int i = 0; i < trackedcarposes.size(); i++) {
+//            if(needAlterTrackerPos.get(i) == null){
+//                notMatchedTracker.add(i);
+//            }
+//        }
+//
+//        reloadTracker(frame,notMatchedTracker);
+//        trackers.markedDetectedLost(notMatchedTracker);//标记检测失败，次数未losttime - 1次（如果检测失败，还能容忍一次update失败，就会立即删除）
 
 
         //3.创建新的tracker
@@ -196,9 +197,26 @@ public class OpencvMultiTracker implements Serializable {
       if(iot != null) {
           trackers.deletedNotInArea(iot);//删除不在指定范围内的车辆tracker
       }
-      cleanLost(3);//清理丢失的目标，消失的帧数  时间 进行清理
+      cleanLost(DEFAULT_LOST_TIME);//清理丢失的目标，消失的帧数  时间 进行清理,只要发生丢失就进行清理
 
     }
+    //清理所有超过边界的边框
+    public  void deleteCarsOutFrame(List<Rect2d> rect2ds,Size frameSize){
+        int height = (int) frameSize.height;
+        ArrayList<Rect2d> deleted = new ArrayList<>();
+        for (Rect2d rect : rect2ds) {
+            double rh = ( (rect.y + rect.height) - height);
+
+            if( rh > 0 ){
+                deleted.add(rect);
+                log.info("删除超过边界的边框" + rect);
+                continue;
+            }
+
+        }
+        rect2ds.removeAll(deleted);
+    }
+
     public void detectAndCorrectObjofFrame(Mat frame){
         if(detector == null){
             return;
@@ -206,9 +224,10 @@ public class OpencvMultiTracker implements Serializable {
         logger.info(key +":==========检测之前==========\n");
 
         List<Rect2d> dectedObjects = detector.detectObject(frame);
+        deleteCarsOutFrame(dectedObjects,frame.size());
         logger.info(key +":==========detected==========\n" + dectedObjects);
         correctBounding(frame, dectedObjects);
-        cleanLost(3);//清理丢失的目标，消失的帧数  时间 进行清理
+        cleanLost(DEFAULT_LOST_TIME);//清理丢失的目标，消失的帧数  时间 进行清理
         saveDetectorStat();//更新状态为 detector阶段
         logger.info(key +":==========检测完成最后剩下的trackers==========\n" + trackers.getTrackers());
         return  ;
@@ -278,8 +297,6 @@ public class OpencvMultiTracker implements Serializable {
             return;
         drawCarsSpeed(time,frame);
     }
-
-
 
     public  void  drawStatistic(Mat frame,double batchFPS) {
         if(trackers == null || frame == null){

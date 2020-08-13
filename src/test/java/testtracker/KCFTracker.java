@@ -48,13 +48,18 @@ public class KCFTracker {
         //waitKey(1000*2);
         //3.对其余的视频帧进行处理
         Mat frame = new Mat();
-        MatOfRect2d objects = new MatOfRect2d();
         while (videoCapture.read(frame) ) {
 
+            MatOfRect2d objects = new MatOfRect2d();
             long start_time = new Date().getTime();
-            tracker.update(frame,objects);
+            boolean a = tracker.update(frame,objects);
             long end_time = new Date().getTime();
             System.out.println(end_time - start_time);
+            if(a == false){
+                System.out.println(a);
+                break;
+            }
+
 
             List<Rect2d> predictObjects = objects.toList();
             for (Rect2d obj:predictObjects) {
@@ -63,7 +68,7 @@ public class KCFTracker {
 
             imshow("process Image",frame);
             int keyboard = HighGui.waitKey(10);
-            if (keyboard == 'q' || keyboard == 27) {
+            if (keyboard == 'c' || keyboard == 27) {
                 break;
             }
 
@@ -77,6 +82,7 @@ public class KCFTracker {
 
     public static void main(String[] args) {
         String path = Thread.currentThread().getContextClassLoader().getResource("tese.mp4").getPath();//获取资源路径
+        path = "F:\\LPR\\data\\test3.mp4";
         new KCFTracker().processVideo(path);
     }
 

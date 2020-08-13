@@ -1,6 +1,8 @@
 package spark.type;
 
 import com.google.gson.Gson;
+import lombok.Getter;
+import lombok.Setter;
 import org.opencv.core.Mat;
 
 import java.io.Serializable;
@@ -14,7 +16,7 @@ import java.util.Base64;
  *
  */
 public class VideoEventData implements Serializable{
-
+	@Setter @Getter
 	private String cameraId;
 
 	public VideoEventData(String cameraId, Timestamp timestamp, int rows, int cols, int type, String data) {
@@ -26,55 +28,31 @@ public class VideoEventData implements Serializable{
 		this.data = data;
 	}
 	public VideoEventData(){}
+	@Setter
 	private Timestamp timestamp;
+	@Setter @Getter
 	private int rows;
+	@Setter @Getter
 	private int cols;
+	@Setter @Getter
 	private int type;
+	@Setter @Getter
 	private String data;
 	public  Mat getMat( )  {
 		Mat mat = new Mat(getRows(), getCols(), getType());
 		mat.put(0, 0, Base64.getDecoder().decode(getData()));
 		return mat;
 	}
-	public String getCameraId() {
-		return cameraId;
-	}
-	public void setCameraId(String cameraId) {
-		this.cameraId = cameraId;
-	}	
 	public Timestamp getTimestamp() {
 		return timestamp;
 	}
 	public  long getTime(){
 		return timestamp.getTime();
 	}
-	public void setTimestamp(Timestamp timestamp) {
-		this.timestamp = timestamp;
-	}
-	public int getRows() {
-		return rows;
-	}
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-	public int getCols() {
-		return cols;
-	}
-	public void setCols(int cols) {
-		this.cols = cols;
-	}
-	public int getType() {
-		return type;
-	}
-	public void setType(int type) {
-		this.type = type;
-	}
-	public String getData() {
-		return data;
-	}
-	public void setData(String d) {
-		this.data = d;
-	}
+
+
+
+
 	public void setFrame(byte[]  frameBytes) {
 		this.data = Base64.getEncoder().encodeToString(frameBytes);
 	}
