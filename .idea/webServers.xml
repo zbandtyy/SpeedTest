@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bac9b9b8-b9b0-455d-b296-12c8852f0ebc" name="服务器-master-node" url="http://115.157.201.215">
+        <fileTransfer host="115.157.201.215" port="22" rootFolder="/home/user/Apache/App1" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
