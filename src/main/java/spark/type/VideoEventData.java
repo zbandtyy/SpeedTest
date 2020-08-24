@@ -1,13 +1,28 @@
 package spark.type;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.spark.status.api.v1.SimpleDateParam;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Date;
+
+import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_COLOR;
+import static org.opencv.imgcodecs.Imgcodecs.imdecode;
 
 /**
  * Java Bean to hold JSON message
@@ -28,7 +43,7 @@ public class VideoEventData implements Serializable{
 		this.data = data;
 	}
 	public VideoEventData(){}
-	@Setter
+	@Getter @Setter
 	private Timestamp timestamp;
 	@Setter @Getter
 	private int rows;
@@ -38,20 +53,75 @@ public class VideoEventData implements Serializable{
 	private int type;
 	@Setter @Getter
 	private String data;
-	public  Mat getMat( )  {
-		Mat mat = new Mat(getRows(), getCols(), getType());
-		mat.put(0, 0, Base64.getDecoder().decode(getData()));
-		return mat;
+	@Getter @Setter
+	private String generateFrameTime = null;//帧再原视频的时间（播放的时间）
+	@Getter @Setter
+	private byte[] jpgImageBytes = null;
+	public long getGenerateTime(){
+
+		DateTimeFormatter dateTimeFormatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss-SSS");
+		LocalDateTime parse = LocalDateTime.parse(generateFrameTime, dateTimeFormatter1);
+		return parse.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+
 	}
+
+	/**
+	 *
+	 * @return  返回jpg的图片
+	 */
+	public byte[] getImagebytes() {
+		if(this.getData() == null){
+			return  jpgImageBytes;
+		}
+		//部分数据传送的原始的像素数组
+		byte[] pic = Base64.getDecoder().decode(this.getData());
+		//	System.out.println(pic.length);
+		if(pic.length >= this.getRows()*this.getCols() * 3) {
+
+			Mat frame = new Mat(this.getRows(), this.getCols(), this.getType());
+			frame.put(0, 0, pic);
+			MatOfByte mob = new MatOfByte();
+			Imgcodecs.imencode(".jpg", frame, mob);
+			return mob.toArray();
+		}else {
+			//有的数据传送的是经过jpg压缩的数据
+
+			return pic;
+		}
+	}
+	public  Mat getMat( )  {
+		byte[] imagebytes = this.getImagebytes();
+		MatOfByte matOfByte = new MatOfByte(imagebytes);
+		Mat imdecode = imdecode(matOfByte, CV_LOAD_IMAGE_COLOR);
+		return imdecode;
+	}
+
 	public Timestamp getTimestamp() {
 		return timestamp;
 	}
-	public  long getTime(){
-		return timestamp.getTime();
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		System.out.println("=================");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
+		Date parse = null;
+		try {
+			 parse = format.parse(String.valueOf(format));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		this.timestamp = new Timestamp(parse.getTime());
 	}
 
 
 
+	public  long getTime(){
+		return timestamp.getTime();
+	}
 
 	public void setFrame(byte[]  frameBytes) {
 		this.data = Base64.getEncoder().encodeToString(frameBytes);
@@ -70,7 +140,9 @@ public class VideoEventData implements Serializable{
 		return  json;
 	}
 	public VideoEventData fromJson(String data){
-		Gson gson = new Gson();
+		GsonBuilder builder = new GsonBuilder();
+		builder.setDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
+		Gson gson = builder.create();
 		/**
 		 *  <T> T fromJson(String json, Class<T> classOfT)
 		 *  json：被解析的 json 字符串
@@ -97,6 +169,7 @@ public class VideoEventData implements Serializable{
 				", cols=" + cols +
 				", type=" + type +
 				", data== null" + Boolean.toString(data == null )+ '\'' +
+				",generateFrameTime=" +(generateFrameTime) +
 				'}';
 	}
 }

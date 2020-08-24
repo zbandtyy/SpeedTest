@@ -49,14 +49,18 @@ public class SequenceOfFramesProcessor implements Serializable {
     private double FPS = 20;
     @Getter
     public   OpencvMultiTracker mtracker ;//所有的sequenceOfFrameProcessor都只拥有一个MultiTracker对象
-    long firstframetime = 0;//第一帧实际时间
-    long lastframetime = 0;//detectedFrameGap 的实际时间
+    @Getter @Setter
+    long firstFrameTime = 0;//第一帧实际时间
+    @Getter @Setter
+    long lastFrameTime = 0;//detectedFrameGap 的实际时间
     //一个cameraID中机器中应该只有一个这种对象
     public SequenceOfFramesProcessor(SpeedState state) {
 
         this.detectedFrameGap = state.getDetectedFrameGap();
         this.frameCount = state.getFrameCount();
         this.mtracker = OpencvMultiTracker.fromJson(state.getMultiTracker());
+        this.firstFrameTime = state.getFirstFrameTime();
+        this.lastFrameTime = state.getLastFrameTime();
     }
 
     public SequenceOfFramesProcessor (Integer detectedFrameGap, String iotTransformFileName) {
@@ -103,25 +107,34 @@ public class SequenceOfFramesProcessor implements Serializable {
            // mtracker.drawdetectedBoundingBox(frame);
             if (frameCount % detectedFrameGap  == 0  ) {
                 if(frameCount == 0) {
-                    firstframetime =  lastframetime = ev.getTime();
+                    firstFrameTime =  lastFrameTime = ev.getGenerateTime();//第一次的时间是相等的
                 } else{
-                    firstframetime = lastframetime;
-                    lastframetime = ev.getTime();
+                    firstFrameTime = lastFrameTime;//10帧更新一次firstframTime
+                    lastFrameTime = ev.getGenerateTime();
+                    logger.warn(ev.getCameraId() + " " + frameCount  + ":firstframetime"
+                            + firstFrameTime  + "lastframetime:=" + firstFrameTime + "minus"
+                            +  (lastFrameTime - firstFrameTime));
                 }
                 FPS = updateFPS();
                 mtracker.detectAndCorrectObjofFrame(frame);
             } else {
                 mtracker.trackObjectsofFrame(frame,firstEnter == 0);
             }
-            long gaptime  = lastframetime - firstframetime;
-            mtracker.drawStatistic(frame,FPS);
-            mtracker.drawTrackerBox(frame,gaptime );//speed count
-
-            // convert the "matrix of bytes" into a byte array
+            long gaptime  = lastFrameTime - firstFrameTime;//10帧消耗的总时间
+/////////////////////////指定输出的数据的格式//////////////////////////////////
+            //先对数据的输出大小进行更改 640 480
             Mat resultFrame = new Mat();
             Imgproc.resize(frame,resultFrame,new Size(frame1.cols(),frame1.rows()));
-//            Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+"-"
-//                    +ev.getCameraId()+"-result.jpg",resultFrame);
+            double scaleX = (float) (frame1.cols() * 1.0 / frame.cols());
+            double scaleY= (float) (frame1.rows() * 1.0 / frame.rows());
+            logger.warn(String.format("scale (X,Y)=(%.3f,%.3f)",scaleX,scaleY));
+            //对图片进行绘制
+            mtracker.drawStatistic(resultFrame,FPS,scaleX,scaleY);
+            mtracker.drawTrackerBox(resultFrame,gaptime,scaleX,scaleY );//speed count
+
+            // convert the "matrix of bytes" into a byte array
+            Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+"-"
+                    +ev.getCameraId()+"-result.jpg",resultFrame);
             byte[] data = new byte[(int) (resultFrame.total() * resultFrame.channels())];
             resultFrame.get(0, 0, data);
             ev.setData( Base64.getEncoder().encodeToString(data));
@@ -160,8 +173,8 @@ public class SequenceOfFramesProcessor implements Serializable {
             } else {
                 mtracker.trackObjectsofFrame(frame,false);
             }
-            mtracker.drawStatistic(frame,FPS);
-            mtracker.drawTrackerBox(frame,detectedFrameGap * VIDEO_FPS);//speed count
+            mtracker.drawStatistic(frame,FPS,1,1);
+            mtracker.drawTrackerBox(frame,detectedFrameGap * VIDEO_FPS,1,1);//speed count
             frameCount++;
             imshow("processed",frame);
             waitKey(10);
@@ -186,8 +199,8 @@ public class SequenceOfFramesProcessor implements Serializable {
                 ", batchendtime=" + batchendtime +
                 ", FPS=" + FPS +
                 ", mtracker=" + mtracker +
-                ", firstframetime=" + firstframetime +
-                ", lastframetime=" + lastframetime +
+                ", firstframetime=" + firstFrameTime +
+                ", lastframetime=" + lastFrameTime +
                 '}';
     }
 

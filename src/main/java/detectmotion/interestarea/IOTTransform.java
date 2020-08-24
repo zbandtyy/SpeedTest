@@ -1,5 +1,8 @@
 package detectmotion.interestarea;
 import detectmotion.utils.MatWrapper;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.opencv.core.*;
 import com.google.gson.Gson;
@@ -26,15 +29,24 @@ import static org.opencv.core.CvType.*;
  * @modified By：
  * @version: $
  */
+@Slf4j
 public class IOTTransform implements Serializable,PerspectiveConversion {
     private static final Logger logger = Logger.getLogger(IOTTransform.class);
-    ArrayList<List<Double>> mtxlist ;//图片变换矩阵
+    @Getter @Setter
+    ArrayList<List<Double>> mtxlist ;//图片变换矩阵,透视转换矩阵,for serialize
+    @Getter @Setter
     private transient Mat transformMap;//透视转换矩阵
+    @Getter @Setter
     private transient Mat inverseMap;//反向转换矩阵
+    @Getter @Setter
     private ArrayList<Point> picRect;  //感兴趣区域,四个点的坐标 单通道Mat
+    @Getter @Setter
     private ArrayList<Point> realRect;              //转换后的目标区域 单通道
+    @Getter @Setter
     private  Rect transformAfter;                //转换后的区域对应的矩阵
+    @Getter
     private Size picSize;            //原图宽高
+    @Getter @Setter
     private Size realSize;            //     截图区域现实对应的宽高,用实际的m表示
     public IOTTransform(String jsoname) throws IOException {
 
@@ -65,15 +77,14 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         if(transformMap == null){
             transformMap = MatWrapper.doubleArrayToMat(mtxlist,CV_64F);
         }
-        logger.info("trasnformMap"+MatWrapper.MatToString(transformMap));
 
         Mat res = new Mat(src.rows(),src.cols(),CV_32FC2);
         Core.perspectiveTransform(src,res,transformMap);
         Mat tr = res.reshape(2,src.rows() * src.cols());
-
+        logger.info("transform after point" + MatWrapper.MatToString(tr));
         ArrayList<Point>  arr = new ArrayList<>();
         Converters.Mat_to_vector_Point2d(tr,arr);
-
+        logger.info("after list " + arr);
         return  arr.subList(0,dst.size());
     }
     private Mat transformMatFrame(Mat src){
@@ -119,9 +130,7 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         ArrayList<Double> real = m.get("realSize");
         this.realSize = new Size(real.get(0),real.get(1));
     }
-    public Size getPicSize() {
-        return picSize;
-    }
+
 
     public static void main(String[] args) throws IOException {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -242,9 +251,39 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
         return   realSize.height *1.0/  transformAfter.height;
     }
 
+    private Point getRectCenter(Rect2d r){
+        return  new Point(r.x + r.width/2,r.y + r.height /2);
+    }
+    /***
+     *
+     * @param pre 上一次的坐标位置
+     * @param p 当前的坐标位置
+     * @param time 经历的时间
+     * @return
+     */
+    @Override
+    public   double calculateSpeed(Rect2d pre,Rect2d p,double time) {
 
-    private   double getDistance(Point previousPos, Point netxPos, double xratio, double yratio){
+        Point precenter = getRectCenter(pre);
+        Point pcenter = getRectCenter(p);
+        double dis = getDistance(precenter,pcenter);
+        log.warn("speed == " + (dis / time) * 1000);
+        return (dis / time) * 1000;// m / s
+    }
 
+
+
+    @Override
+    public    double getDistance(Point previousPos, Point netxPos){
+
+        log.warn("init previous" + previousPos + "next" + netxPos);
+        List<Point> list = Arrays.asList(previousPos, netxPos);
+        List<Point> res = transformPointList(list);
+        double xratio = this.getXRatio();
+        double yratio = this.getYRatio();
+        log.warn("xratio=" + xratio + "yratio=" + yratio);
+        previousPos = res.get(0);
+        netxPos = res.get(1);
         if(previousPos != null && netxPos != null){
             double pcx = previousPos.x ;
             double pcy = previousPos.y ;
@@ -254,8 +293,7 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
                 System.out.println("previouspos = ===============================================" + previousPos);
                 System.out.println("nextpos" + netxPos);
             }
-
-
+            log.warn("leave: previous" + previousPos + "next" + netxPos);
             return  Math.sqrt( ((pcx - ccx) *(pcx -ccx)*xratio*xratio)  +
                     ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );
         }
@@ -264,66 +302,8 @@ public class IOTTransform implements Serializable,PerspectiveConversion {
     public IOTTransform(){
     }
 
-
-
-    public Mat getTransformMap() {
-        return transformMap;
-    }
-
-    public void setTransformMap(Mat transformMap) {
-        this.transformMap = transformMap;
-    }
-
-    public Mat getInverseMap() {
-        return inverseMap;
-    }
-
-    public void setInverseMap(Mat inverseMap) {
-        this.inverseMap = inverseMap;
-    }
-
-    public ArrayList<Point> getPicRect() {
-        return picRect;
-    }
-
-    public void setPicRect(ArrayList<Point> picRect) {
-        this.picRect = picRect;
-    }
-
-    public ArrayList<Point> getRealRect() {
-        return realRect;
-    }
-
-    public void setRealRect(ArrayList<Point> realRect) {
-        this.realRect = realRect;
-    }
-
-    public Rect getTransformAfter() {
-        return transformAfter;
-    }
-
-    public void setTransformAfter(Rect transformAfter) {
-        this.transformAfter = transformAfter;
-    }
-
     public void setPicSize(Size picSize) {
         this.picSize = picSize;
-    }
-
-    public Size getRealSize() {
-        return realSize;
-    }
-
-    public void setRealSize(Size realSize) {
-        this.realSize = realSize;
-    }
-
-    public ArrayList<List<Double>> getMtxlist() {
-        return mtxlist;
-    }
-
-    public void setMtxlist(ArrayList<List<Double>> mtxlist) {
-        this.mtxlist = mtxlist;
     }
 }
 

@@ -48,7 +48,7 @@ public class YoloDetectCar implements DetectCar, Serializable {
         String name = Thread.currentThread().getName();
         System.out.println(name + "end yolo" );
         if(res.length  <= 0){
-            logger.warn("detector number < 0" + res.length);
+            logger.warn("detector number <= 0" + res.length);
             return null;
         }
         ArrayList<Rect2d> last= new ArrayList<>();

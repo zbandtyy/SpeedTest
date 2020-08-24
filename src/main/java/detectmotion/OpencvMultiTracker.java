@@ -7,6 +7,7 @@ import detectmotion.detector.YoloDetectCar;
 import detectmotion.interestarea.IOTTransform;
 import detectmotion.interestarea.NULLTransform;
 import detectmotion.interestarea.PerspectiveConversion;
+import detectmotion.interestarea.SpeedCalculator;
 import detectmotion.tuple.Tuple;
 import detectmotion.tuple.Tuple2;
 import detectmotion.tuple.Tuple3;
@@ -49,9 +50,6 @@ public class OpencvMultiTracker implements Serializable {
         trackers.setKey(key);
 
     }
-
-
-
     public OpencvMultiTracker(String jsonName) throws IOException {
         logger.info(key +": creare json TRANSFORM" + jsonName);
         iot = new IOTTransform(jsonName);
@@ -104,7 +102,7 @@ public class OpencvMultiTracker implements Serializable {
                     maxIndex = i;
                 }
             }
-            //确定是与上一帧目标相同的patch ,
+            //确定是与上一帧目标相同的patch
             if (maxArea > 0 && MatchedPreictObjects.get(maxIndex)  == null ) {
                 logger.debug(key + ":detected" + pRect);
                 logger.debug(key + ":MaxArea" + maxArea);
@@ -136,6 +134,7 @@ public class OpencvMultiTracker implements Serializable {
         }
         //1.创建新的Tracker，进行跟踪根据重合范围进行第一次更新
         Map<Integer, Rect2d> needAlterTrackerPos = findSameObjectByArea(trackedcarposes, dectedObjects, null);
+        //2.使用新的位置进行更新
         trackers.updateTrackPos(frame,needAlterTrackerPos);//对原来的进行位置跟踪更新，重新创建跟踪器进行跟踪【会删除之前维护的所有对象，重新创建】
 
         //2.(trackedcarposes)还剩下一个上一帧update预测到的，但是没有检测到匹配的,（1）直接删除
@@ -172,6 +171,7 @@ public class OpencvMultiTracker implements Serializable {
             ArrayList<Rect2d> deletedRect = new ArrayList<>();
             for (int i = 0; i < willAddCar.size(); i++) {
                 Rect2d r = willAddCar.get(i);
+                //左上或者右下有一个在框内部，就不会删除
                 if (!iot.isInsidePicArea(r.tl()) && !iot.isInsidePicArea(r.br())){
                     logger.info(key + ":removed: br" + r.br() +"  tl" +  r.tl());
                     deletedRect.add(r);
@@ -182,6 +182,8 @@ public class OpencvMultiTracker implements Serializable {
         }
         trackers.createNewTrackersByArea(frame,willAddCar);
     }
+
+
 
     public void trackObjectsofFrame(Mat frame,boolean reload){
         if(reload == true){
@@ -195,13 +197,16 @@ public class OpencvMultiTracker implements Serializable {
         //1.预测位置
       trackers.update(frame);//更新位置
       if(iot != null) {
-          trackers.deletedNotInArea(iot);//删除不在指定范围内的车辆tracker
+          trackers.deletedNotInArea(iot);//删除不在指定范围内的车辆tracker,超过范围的车辆就不会被跟踪！！！！！！！！！！！！
       }
       cleanLost(DEFAULT_LOST_TIME);//清理丢失的目标，消失的帧数  时间 进行清理,只要发生丢失就进行清理
 
     }
     //清理所有超过边界的边框
     public  void deleteCarsOutFrame(List<Rect2d> rect2ds,Size frameSize){
+        if(rect2ds == null || frameSize == null){
+            return;
+        }
         int height = (int) frameSize.height;
         ArrayList<Rect2d> deleted = new ArrayList<>();
         for (Rect2d rect : rect2ds) {
@@ -232,45 +237,50 @@ public class OpencvMultiTracker implements Serializable {
         logger.info(key +":==========检测完成最后剩下的trackers==========\n" + trackers.getTrackers());
         return  ;
     }
-    public void drawCarsBoundingBoxAndCount(Mat frame){
+    public void drawCarsBoundingBoxAndCount(Mat frame,double scaleX,double scaleY){
 
         ArrayList<Tuple2<Rect2d,Long>> manyCarsInfo = trackers.getPosAndCount();
         for (Tuple carInfos : manyCarsInfo) {
             Optional<Rect2d> carpos = carInfos._1();
             Rect2d pos = carpos.get();
-            Imgproc.rectangle(frame, pos.tl(), pos.br(), new Scalar(0,255,0),2);
+            Rect2d scaleRect = new Rect2d(pos.x * scaleX, pos.y * scaleY,
+                    pos.width * scaleX, pos.height * scaleY);
+
+            Imgproc.rectangle(frame, scaleRect.tl(), scaleRect.br(), new Scalar(0,255,0),1);
             Optional<Long> count = carInfos._2();
             Imgproc.putText(frame, "" +count.get(),
-                    new Point(pos.tl().x + pos.width / 2, pos.y - 5)
-                    , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,255,0), 2);//显示标识
+                    new Point(scaleRect.tl().x + scaleRect.width / 2, scaleRect.y - 5)
+                    , FONT_HERSHEY_SIMPLEX, 0.25, new Scalar(0,255,0), 1);//显示标识
         }
-
-
     }
 
-    public void drawCarsSpeed(double time,Mat frame){
-        ArrayList<Tuple3<Rect2d, Double,Double>> speedandpos = trackers.getSpeed(time, iot);
+    public void drawCarsSpeed(double time,Mat frame,double scaleX,double scaleY){
+
+        SpeedCalculator speedCalculator = new SpeedCalculator(iot, trackers.getTrackers());
+        //获取位置，速度  车辆长度
+        ArrayList<Tuple3<Rect2d, Double,Double>> speedandpos = speedCalculator.calulateSpeed(time);
         DecimalFormat df = new DecimalFormat("#.00");
-        DecimalFormat dflength = new DecimalFormat("#");
         double V = 0;
         double S = 0;
         double L =0;
-
         for (int i = 0; i < speedandpos.size(); i++) {
             Optional<Rect2d> carpos = speedandpos.get(i)._1();
             Rect2d pos = carpos.get();
+            Rect2d scaleRect = new Rect2d(pos.x * scaleX, pos.y * scaleY,
+                    pos.width * scaleX, pos.height * scaleY);
+            pos = scaleRect;
             Optional<Double> count = speedandpos.get(i)._2();//m/s
             String str = df.format(count.get()*3.6);
             Imgproc.putText(frame, str +"km/h",
                     new Point(pos.tl().x + pos.width / 2, pos.y - 20)
-                    , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,0,255), 2);//显示标识
+                    , FONT_HERSHEY_SIMPLEX, 0.3, new Scalar(0,0,255), 1);//显示标识
             Optional<Double> carlength = speedandpos.get(i)._3();
-//            String str = dflength.format(carlength.get());
-//            Imgproc.putText(frame, str,
+//            String str1 = df.format(carlength.get());
+//            Imgproc.putText(frame, str1,
 //                    new Point(pos.tl().x + pos.width / 2, pos.y + 10)
-//                    , FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0,0,255), 2);//显示标识
-            L = L + carlength.get();
-            V = V + count.get();
+//                    , FONT_HERSHEY_SIMPLEX, 0.3, new Scalar(0,0,255), 1);//显示标识
+            L = L + carlength.orElse(0.0);
+            V = V + count.orElse(0.0);
             S = S +  V*time;
         }
         if(speedandpos.size() > 0) {
@@ -279,7 +289,7 @@ public class OpencvMultiTracker implements Serializable {
             L = L / speedandpos.size();
             String str= df.format((V * time) / (L + S) );
             Imgproc.putText(frame, "flow" + str,
-                    new Point(10, 75 )
+                    new Point(10 * scaleX, 50 *scaleY )
                     , FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);//显示标识
         }
 
@@ -290,24 +300,25 @@ public class OpencvMultiTracker implements Serializable {
      * @param frame  需要处理的帧，进行绘制
      * @param time   detectedFramegap每次进行detect的时间gap
      */
-    public  void  drawTrackerBox(Mat frame,double time) {
+    public  void  drawTrackerBox(Mat frame,double time,double scaleX,double scaleY) {
 
-        drawCarsBoundingBoxAndCount( frame);
+        drawCarsBoundingBoxAndCount( frame,scaleX,scaleY);
         if(time == 0)
             return;
-        drawCarsSpeed(time,frame);
+        drawCarsSpeed(time,frame,scaleX,scaleY);
     }
 
-    public  void  drawStatistic(Mat frame,double batchFPS) {
+    public  void  drawStatistic(Mat frame,double batchFPS,double scaleX,double scaleY) {
         if(trackers == null || frame == null){
             return;
         }
-        Imgproc.putText(frame, "FPS:" + String.format("%.2f", batchFPS),
-                new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
-
+        log.warn(String.format("10*scaleX = %.3f, 50 * scaleY = %.3f", 10*scaleX, 50 * scaleY));
+       /* Imgproc.putText(frame, "FPS:" + String.format("%.2f", batchFPS),
+                new Point(10*scaleX, 50 * scaleY), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+        */
 
         Imgproc.putText(frame,"count:" + trackers.getCurTrackersCount(),
-                new Point(10,110), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255,0,0), 2);
+                new Point(10 * scaleX,110 * scaleY), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255,0,0), 2);
     }
     //for test
     public  void  drawdetectedBoundingBox(Mat frame ) {

@@ -5,6 +5,8 @@ import detectmotion.OpencvMultiTracker;
 import detectmotion.SequenceOfFramesProcessor;
 import detectmotion.TrackerList;
 import detectmotion.detector.DetectCar;
+import lombok.Getter;
+import lombok.Setter;
 import org.opencv.tracking.Tracker;
 import scala.Serializable;
 
@@ -18,17 +20,22 @@ import java.util.Date;
  * @version: $
  */
 public class SpeedState implements Serializable {
+    //如果增加，不能使用原生类型int long 等
     private  static  final  long serialVersionUID = 16L;
     public Integer detectedFrameGap ;//设置检测的帧数间隔进行部分的识别，即识别的帧数
+    @Getter @Setter
+    public  Long firstFrameTime = 0l;
+    @Getter @Setter
+    public  Long lastFrameTime = 0l;
     public Integer frameCount = 0;//处理的是序列中的第几帧
     public String  multiTracker = "" ;
-
-
 
     public   SpeedState(SequenceOfFramesProcessor sep){
         this.detectedFrameGap = sep.getDetectedFrameGap();
         this.frameCount = sep.getFrameCount();
         multiTracker = sep.getMtracker().toJson();
+        this.firstFrameTime = sep.getFirstFrameTime();
+        this.lastFrameTime = sep.getLastFrameTime();
     }
 
 

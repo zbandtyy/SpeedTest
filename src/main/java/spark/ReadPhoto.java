@@ -1,10 +1,7 @@
 package spark;
 
-import detectmotion.OpencvMultiTracker;
 import detectmotion.SequenceOfFramesProcessor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.TopicPartition;
-import org.apache.log4j.Logger;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.FlatMapGroupsWithStateFunction;
 import org.apache.spark.api.java.function.MapFunction;
@@ -24,14 +21,12 @@ import spark.config.SpeedState;
 import spark.type.VideoEventData;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
-import lombok.extern.log4j.Log4j;
+
 @Slf4j
 public class ReadPhoto {
 
@@ -45,7 +40,7 @@ public class ReadPhoto {
         SparkSession spark = SparkSession
 
                 .builder()//使用builer创建sparkSession的实例
-                .appName("VideoStreamProcessor-11")
+                .appName("app1")
                 .master(prop.getProperty("spark.master.url"))//设置主要的spark 环境  spark://mynode1:7077
                 .getOrCreate();	//获取或者创建一个新的sparksession
         System.out.println("=============================");
@@ -57,14 +52,14 @@ public class ReadPhoto {
         StructType schema =  DataTypes.createStructType(new StructField[] {
                 DataTypes.createStructField("cameraId", DataTypes.StringType, false),
                 DataTypes.createStructField("timestamp", DataTypes.TimestampType, false),
+                DataTypes.createStructField("generateFrameTime", DataTypes.StringType, false),
                 DataTypes.createStructField("rows", DataTypes.IntegerType, false),
                 DataTypes.createStructField("cols", DataTypes.IntegerType, false),
                 DataTypes.createStructField("type", DataTypes.IntegerType, false),
-                DataTypes.createStructField("data", DataTypes.StringType, false)
+                DataTypes.createStructField("data", DataTypes.StringType, false),
+                DataTypes.createStructField("jpgImageBytes", DataTypes.BinaryType, true),//当使用的是VideoEvent数据对象而不是json对象进行的发送数据
         });
-
         log.warn(prop.getProperty("kafka.bootstrap.servers"));
-
         //Create DataSet from stream messages from kafka  配置kafka的数据格式
         //// Subscribe to 1 topic defaults to the earliest and latest offsets
 
@@ -79,15 +74,18 @@ public class ReadPhoto {
                // .option("startingOffsets", "{\"video-kafka-large\":{\"1\":100,\"0\":100}}")//必须指定全部
                 .option("kafka.max.partition.fetch.bytes", prop.getProperty("kafka.max.partition.fetch.bytes"))
                 .option("kafka.max.poll.records", prop.getProperty("kafka.max.poll.records"))
-                .option("maxOffsetsPerTrigger","40")//开了最多的200个Task处理全部的历史数据，groupby的时候shuffle存储空间不够，应该限制接受的一批 数据大小
+                .option("maxOffsetsPerTrigger","20")//开了最多的200个Task处理全部的历史数据，groupby的时候shuffle存储空间不够，应该限制接受的一批 数据大小
                 .option("startingOffsets", "earliest")
                 //.option("endingOffsets", "{\"video-kafka-large\":{\"0\":50,\"1\":-1}")
                 .load();
+
         Dataset<VideoEventData> ds= ds1.selectExpr("CAST(value AS STRING) as message")//读取数据
                 .select(functions.from_json(functions.col("message"),schema).as("json"))//选择数据的格式，在后面的query中使用
                 .select("json.*")
                 .as(Encoders.bean(VideoEventData.class));//将所有数据转换为 Dataset<VideoEventData> 不分开产生问题》怀疑历史数据被他一批读走了，限制
         log.warn("topic" +  prop.getProperty("kafka.topic"));
+
+
        // key-value pair of cameraId-VideoEventData 窗口进行分组的时候是针对聚合实践进行处理
         KeyValueGroupedDataset<String, VideoEventData> kvDataset = ds.groupByKey(new MapFunction<VideoEventData, String>() {
             @Override
@@ -95,9 +93,11 @@ public class ReadPhoto {
                 return value.getCameraId();
             }
         }, Encoders.STRING());
-       /////////////////// //1. YOLO识别测试///////////////////////////////////////////
-        //对每组数据应用给定的函数，同时维护用户定义的每组状态。结果数据集将表示函数返回的对象。
-        // 对于静态批处理数据集,每个组调用该函数一次。
+
+
+        ///////////////// //1. YOLO识别测试///////////////////////////////////////////
+//        对每组数据应用给定的函数，同时维护用户定义的每组状态。结果数据集将表示函数返回的对象。
+//         对于静态批处理数据集,每个组调用该函数一次。
         Dataset<VideoEventData> dfTrack = kvDataset.flatMapGroupsWithState(
                 (FlatMapGroupsWithStateFunction<String, VideoEventData, SpeedState,VideoEventData >)
                         (key, values, state) -> {
@@ -147,35 +147,8 @@ public class ReadPhoto {
                     log.info("====================end a batch ===================");
                     return sortedList.iterator();
         }, OutputMode.Append(),  Encoders.bean(SpeedState.class),
-                Encoders.bean(VideoEventData.class) ,GroupStateTimeout.NoTimeout());// OutputMode.Update(),Encoders.bean(String.class),, GroupStateTimeout.NoTimeout());
+                Encoders.bean(VideoEventData.class) , GroupStateTimeout.NoTimeout());// OutputMode.Update(),Encoders.bean(String.class),, GroupStateTimeout.NoTimeout());
 
-
-//        Dataset<VideoEventData> dfTrack = kvDataset.flatMapGroupsWithState(
-//                (FlatMapGroupsWithStateFunction<String, VideoEventData, StateTest,VideoEventData >)
-//                        (key, values, state) -> {
-//                    SequenceOfFramesProcessor opencv = null;
-//                    ArrayList<VideoEventData> sortedList = new ArrayList<VideoEventData>();
-//                    while (values.hasNext()){
-//                        VideoEventData tmp = values.next();
-//                        sortedList.add(tmp);
-//                    }
-//                    StateTest st = null;
-//                    if(!state.exists()){
-//                        st = new StateTest("0",5,10);
-//                    }else {
-//                       st =  state.get();
-//                       String id = String.format("%d",Integer.parseInt(st.getId()) + 1);
-//                       st.framcount += sortedList.size();
-//                       st.id = id;
-//                    }
-//                    System.out.println("before state"+st);
-//                    state.update(st);
-//
-//                    return  sortedList.iterator();
-//
-//
-//        }, OutputMode.Append(),  Encoders.bean(StateTest.class),
-//                Encoders.bean(VideoEventData.class) ,GroupStateTimeout.NoTimeout());// OutputMode.Update(),Encoders.bean(String.class),, GroupStateTimeout.NoTimeout());
 
 
         Dataset<Row> djson = dfTrack.flatMap(new FlatMapFunction<VideoEventData, Tuple2<String, String>>() {

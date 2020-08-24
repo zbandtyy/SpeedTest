@@ -79,7 +79,6 @@ public class AppConfig implements Serializable {
                  CASCADE_DETECTCAR_FILE = prop.getProperty("cascade.detectcar.file");
              }
 
-
          }
 
 

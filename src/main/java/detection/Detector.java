@@ -99,11 +99,10 @@ public class Detector implements Serializable {
 
     }
     public  BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
-        synchronized (Detector.class) {
+        synchronized (this) {
             if(jpgbytes.length < w * h * c && w*h*c <= 0){
                 log.warn(jpgbytes.length + "< (w=" + w + ")*(h="+ h+")*(c=" + c+")" + w*h*c);
                 return  null;
-
             }
             BoxesAndAcc[] boxesAndAccs = this.execComputeBoxesAndAccByInputBytes(this.getPeer(), jpgbytes, "prediction", (float) 0.5, (float) 0.5, 1, w, h, c);// from jpgbytes
             System.out.println("recognize sucess,the length is" + boxesAndAccs.length);
@@ -120,7 +119,6 @@ public class Detector implements Serializable {
             String name = Thread.currentThread().getName();
             System.out.println(name + "==== this yolo recognize" );
             BoxesAndAcc[] bArray = new BoxesAndAcc[blist.size()];
-
             blist.toArray(bArray);
 
             return bArray;

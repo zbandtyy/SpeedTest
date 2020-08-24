@@ -86,23 +86,26 @@ public class TrackerList implements Serializable {
         }
         ArrayList<CarDes> needModify = new ArrayList<>();
         logger.info("tracker size ===" + trackers.size());
+        //更新新的位置，(为检测的位置 + 跟踪位置)/2
         cars.forEach((index,pos)->{
+            //index是需要跟新的车辆的信息  cars是更新的车辆位置
             CarDes car= trackers.get(index);
             logger.debug(key+": 原来预测到的位置" + car.getPos());
             logger.debug(key+": 现在检测到的位置" + pos);
-            car.setPos(new Rect2d((car.getPos().x + pos.x) /2,
-                    (car.getPos().y + pos.y) /2,pos.width,pos.height));
+            car.setPos(new Rect2d( pos.x, pos.y,pos.width,pos.height));
             needModify.add(car);
         } );
         logger.info(key + ": updateTrackpos: 检测到的重合对象，并且重新创建更新tracker" + needModify.size());
+        //更新位置和tracker对象
         updateTrackPos(frame,needModify);
 //        logger.info(key + ": updateTrackpos：删除没有检测到重合的对象" + (trackers.size() - needModify.size()));
 //        trackers.retainAll(needModify);
 
     }
-    //更新tracker
+    //只在检测阶段，更新tracker
     public void updateTrackPos (Mat frame,  List<CarDes> cars ){
         for(CarDes car: cars){
+
             Tracker t = createTrackerByName(this.selectedType);
             logger.info(key + " 更新重合 count = " + car + "的位置");
             t.init(frame,car.getPos());
@@ -118,6 +121,7 @@ public class TrackerList implements Serializable {
             Tracker t = createTrackerByName(selectedType);
             t.init(frame,carpos);
             CarDes c = new CarDes(carpos,startCount++,t,0);// 与上面的区别 是否创建新的车辆
+            c.setPos(carpos);
             trackers.add(c);//对count进行设置
 
         }
@@ -134,6 +138,7 @@ public class TrackerList implements Serializable {
     }
 
     //iotArea表示感兴趣的区域，如果更新之后不再感兴趣的区域内就删掉
+    //车辆经历的阶段为跟踪阶段[不改变]
     public void update(Mat frame){
         logger.warn(key + " enter update tracker");
         int length = trackers.size();
@@ -237,85 +242,6 @@ public class TrackerList implements Serializable {
             arr.add(new Tuple2<>(car.getPos(),car.getCount()));
         }
         return  arr;
-    }
-    public  ArrayList<Tuple3<Rect2d,Double,Double>> getSpeed(double time,PerspectiveConversion iot){
-        ArrayList<Tuple3<Rect2d,Double,Double>> arr = new ArrayList<>(trackers.size());
-
-        for (int i = 0; i < trackers.size(); i++) {
-            CarDes car = trackers.get(i);
-            Rect2d pre = car.getPreviousPos();
-            Rect2d p = car.getNetxPos();
-            if(pre == null || p == null)
-                    continue;
-            if(car.getPhase() == PHASE.TRACKER && car.speed != 0){//速度为0 不显示
-                arr.add(new Tuple3<>(car.getPos(),car.speed,car.getCarLength()));
-                continue;
-            }
-
-            if(car.getPhase() == PHASE.DETECTOR ) {
-                //计算速度/////
-                if (( car.speed != 0) &&
-                        (!iot.isInsidePicArea(getRectCenter(pre)) || !iot.isInsidePicArea(getRectCenter(p)))) {
-                    arr.add(new Tuple3<>(car.getPos(), car.speed,car.getCarLength()));
-                } else if (iot.isInsidePicArea(getRectCenter(pre)) && iot.isInsidePicArea(getRectCenter(p))){
-                    double s = calculateSpeed(p,pre,time,iot);
-                    double carLength =  calculateCarLength(p.tl(),p.br(),iot);
-                   // System.out.println(carLength);
-                    car.setCarLength(carLength);
-                    if (car.speed == 0) {
-                        car.speed = s;
-                    } else {
-                        car.speed = (car.speed +  s) / 2;
-                    }
-                    arr.add(new Tuple3<>(car.getPos(), car.speed,car.getCarLength()));
-                }
-            }
-        }
-        return  arr;
-    }
-
-    private  Point getRectCenter(Rect2d r){
-        return  new Point(r.x + r.width/2,r.y + r.height /2);
-    }
-    private double calculateCarLength(Point tl,Point br,PerspectiveConversion iot){
-        double yratio = iot.getYRatio();
-        List<Point> list = Arrays.asList(tl, br);
-        List<Point> res = iot.transformPointList(list);
-//        System.out.println(res.get(0));
-//        System.out.println(res.get(1));
-        double carLength = Math.sqrt(((res.get(0).y - res.get(1).y) * (res.get(0).y - res.get(1).y))*yratio*yratio);
- //       System.out.println(res.get(0).y - res.get(1).y);
-        return  carLength;
-    }
-    private  double calculateSpeed(Rect2d pre,Rect2d p,double time,PerspectiveConversion iot){
-        double xratio = iot.getXRatio();
-        double yratio = iot.getYRatio();
-        Point precenter = getRectCenter(pre);
-        Point pcenter = getRectCenter(p);
-        List<Point> list = Arrays.asList(precenter, pcenter);
-        List<Point> res = iot.transformPointList(list);
-        double dis = getDistance(res.get(0),res.get(1), xratio, yratio);
-        return  dis;
-
-    }
-    private   double getDistance(Point previousPos, Point netxPos, double xratio, double yratio){
-
-        if(previousPos != null && netxPos != null){
-            double pcx = previousPos.x ;
-            double pcy = previousPos.y ;
-            double ccx = netxPos.x;
-            double ccy = netxPos.y ;
-
-            if(pcx < 0 || pcy <0 || ccx < 0 || ccy < 0){
-//                System.out.println(previousPos);
-//                System.out.println(netxPos);
-//                System.out.println("=========================================================");
-                logger.warn(key + " has position out of size");
-            }
-            return  Math.sqrt( ((pcx - ccx) *(pcx -ccx)*xratio*xratio)  +
-                    ((pcy - ccy)*(pcy - ccy)*yratio*yratio)   );
-        }
-        return -1;
     }
     public void markedDetectedLost(ArrayList<Integer> list){
         for (int i = 0; i < list.size(); i++) {
