@@ -1,0 +1,1331 @@
+18:33:15:743 Executor task launch worker for task 3 INFO  ReadPhoto:104 - ====================start  batch========================
+18:33:15:773 Executor task launch worker for task 3 WARN  ReadPhoto:115 - cameraId=vid-01processed total frames=20actual size
+18:33:15:773 Executor task launch worker for task 3 WARN  ReadPhoto:119 - new processorvid-01
+18:33:15:801 Executor task launch worker for task 3 INFO  ReadPhoto:125 - iottransform read file name = /home/user/Apache/App1/config/calibrate_camera_scale_vid-01.json
+18:33:15:870 Executor task launch worker for task 3 INFO  OpencvMultiTracker:54 - null: creare json TRANSFORM/home/user/Apache/App1/config/calibrate_camera_scale_vid-01.json
+18:33:15:872 Executor task launch worker for task 3 INFO  IOTTransform:157 - read json file /home/user/Apache/App1/config/calibrate_camera_scale_vid-01.json
+18:33:15:876 Executor task launch worker for task 3 INFO  IOTTransform:172 - The file name is{"mtx": [[-6.123567731561292, -6.031066708425921, 5465.940957682712], [-0.11710842849179315, -6.924342338349694, 1980.9995638811133], [-0.00016042250478327759, -0.006994560299664455, 1.0]], "imtx": [[0.16625047688847805, -0.772286492132604, 621.1839132469518], [-0.004813205508334389, -0.12583424022495482, 275.5862721326955], [-6.995938238858388e-06, -0.0010040473144941084, 1.0]], "picRect": [[0.111979, 0.63704], [0.77344, 0.63704], [0.54948, 0.324074], [0.28177, 0.33056]], "realRect": [[0.0, 1080.0], [1920.0, 1080.0], [1920.0, 0.0], [0.0, 0.0]], "imagsize": [1920, 1080], "realSize": [18, 50]}
+
+18:33:15:979 Executor task launch worker for task 3 INFO  IOTTransform:106 - 感兴趣的图片上的区域[{215.0, 688.0}, {1485.0, 688.0}, {1055.0, 350.0}, {541.0, 357.0}]
+18:33:15:981 Executor task launch worker for task 3 INFO  IOTTransform:114 - 转换后的区域{0, 0, 1920x1080}
+18:33:21:553 Executor task launch worker for task 3 INFO  ReadPhoto:141 - vid-01PID: 300936@node0
+18:33:21:562 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:21:591 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 0 
+
+
+18:33:21:633 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:33:21:633 Executor task launch worker for task 3 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:33:50:363 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@454b61ce
+18:33:50:365 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {1116, 946, 255x128}
+18:33:50:367 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@1a9921a3
+18:33:50:367 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {920, 560, 183x123}
+18:33:50:367 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@3f09e5d2
+18:33:50:367 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {846, 229, 46x31}
+18:33:50:367 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@48abc9d4
+18:33:50:367 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {887, 232, 42x29}
+18:33:50:368 Executor task launch worker for task 3 INFO  YoloDetectCar:69 - car length is:4
+18:33:50:368 Executor task launch worker for task 3 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{1116.0, 946.0, 255.0x128.0}, {920.0, 560.0, 183.0x123.0}, {846.0, 229.0, 46.0x31.0}, {887.0, 232.0, 42.0x29.0}]
+18:33:50:369 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{1371.0, 1074.0}  tl{1116.0, 946.0}
+18:33:50:369 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{892.0, 260.0}  tl{846.0, 229.0}
+18:33:50:369 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{929.0, 261.0}  tl{887.0, 232.0}
+18:33:50:369 Executor task launch worker for task 3 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 3because not in interested area
+18:33:50:369 Executor task launch worker for task 3 INFO  TrackerList:118 - vid-01 create Cars1
+18:33:50:370 Executor task launch worker for task 3 INFO  TrackerList:120 - {920.0, 560.0, 183.0x123.0};
+18:33:52:863 Executor task launch worker for task 3 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={920.0, 560.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}]
+18:33:52:880 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:52:880 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:52:918 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:52:927 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 1 
+
+
+18:33:52:928 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:52:947 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={920.0, 560.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:52:947 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={920.0, 560.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:52:947 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:52:950 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:52:950 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:52:971 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:52:974 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 2 
+
+
+18:33:52:974 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:000 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={920.0, 560.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:001 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={917.0, 555.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:001 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:004 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:004 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:021 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:024 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 3 
+
+
+18:33:53:024 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:050 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={917.0, 555.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:050 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={914.0, 550.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:051 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:053 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:053 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:071 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:074 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 4 
+
+
+18:33:53:074 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:100 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={914.0, 550.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:100 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={913.0, 545.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:100 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:103 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:103 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:120 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:124 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 5 
+
+
+18:33:53:125 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:149 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={913.0, 545.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:150 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={910.0, 540.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:150 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:153 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:153 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:166 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:169 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 6 
+
+
+18:33:53:169 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:195 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={910.0, 540.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:195 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={907.0, 531.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:195 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:200 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:200 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:213 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:218 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 7 
+
+
+18:33:53:218 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:244 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={907.0, 531.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:244 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={904.0, 526.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:244 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:248 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:248 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:262 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:267 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 8 
+
+
+18:33:53:268 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:293 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={904.0, 526.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:293 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={903.0, 523.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:293 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:297 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:298 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:311 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:313 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 9 
+
+
+18:33:53:314 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:33:53:338 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={903.0, 523.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:338 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={900.0, 518.0, 183.0x123.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}
+18:33:53:338 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:33:53:341 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:33:53:341 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:33:53:354 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:33:53:356 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 10 
+
+
+18:33:53:357 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:114 - vid-01 10:firstframetime1597334400040lastframetime:=1597334400040minus400
+18:33:53:357 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:33:53:358 Executor task launch worker for task 3 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:34:21:735 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@6db16154
+18:34:21:736 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {916, 518, 151x101}
+18:34:21:736 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@5b6179b1
+18:34:21:736 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {1053, 778, 302x207}
+18:34:21:736 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@5813fec2
+18:34:21:737 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {847, 230, 45x30}
+18:34:21:737 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@7570454f
+18:34:21:737 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {698, 255, 55x34}
+18:34:21:737 Executor task launch worker for task 3 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@13ad2174
+18:34:21:737 Executor task launch worker for task 3 INFO  YoloDetectCar:66 - {886, 230, 44x30}
+18:34:21:737 Executor task launch worker for task 3 INFO  YoloDetectCar:69 - car length is:5
+18:34:21:737 Executor task launch worker for task 3 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{916.0, 518.0, 151.0x101.0}, {1053.0, 778.0, 302.0x207.0}, {847.0, 230.0, 45.0x30.0}, {698.0, 255.0, 55.0x34.0}, {886.0, 230.0, 44.0x30.0}]
+18:34:21:742 Executor task launch worker for task 3 INFO  OpencvMultiTracker:114 - vid-01:重合的对象1
+18:34:21:742 Executor task launch worker for task 3 INFO  OpencvMultiTracker:116 - vid-01:剩余的预测对象1
+18:34:21:743 Executor task launch worker for task 3 INFO  OpencvMultiTracker:117 - vid-01:剩余的检测对象,用来创建新的对象4
+18:34:21:743 Executor task launch worker for task 3 INFO  TrackerList:88 - tracker size ===1
+18:34:21:746 Executor task launch worker for task 3 INFO  TrackerList:98 - vid-01: updateTrackpos: 检测到的重合对象，并且重新创建更新tracker1
+18:34:21:758 Executor task launch worker for task 3 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={916.0, 518.0, 151.0x101.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@446b70d2}的位置
+18:34:21:759 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{1355.0, 985.0}  tl{1053.0, 778.0}
+18:34:21:760 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{892.0, 260.0}  tl{847.0, 230.0}
+18:34:21:760 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{753.0, 289.0}  tl{698.0, 255.0}
+18:34:21:760 Executor task launch worker for task 3 INFO  OpencvMultiTracker:176 - vid-01:removed: br{930.0, 260.0}  tl{886.0, 230.0}
+18:34:21:760 Executor task launch worker for task 3 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 4because not in interested area
+18:34:21:760 Executor task launch worker for task 3 INFO  TrackerList:118 - vid-01 create Cars0
+18:34:21:760 Executor task launch worker for task 3 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={916.0, 518.0, 151.0x101.0}, count=0, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5d676169}]
+18:34:21:767 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:21:768 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:21:776 Executor task launch worker for task 3 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:34:21:777 Executor task launch worker for task 3 INFO  IOTTransform:64 - src
+[[[991.5 568.5 ]
+]
+[[1011.5 621.5 ]
+]
+
+18:34:21:783 Executor task launch worker for task 3 INFO  IOTTransform:72 - transform after point
+[[[1286.6468505859375 660.6998291015625 ]
+]
+[[1275.5379638671875 695.54443359375 ]
+]
+
+18:34:21:783 Executor task launch worker for task 3 INFO  IOTTransform:75 - after list [{1286.6468505859375, 660.6998291015625}, {1275.5379638671875, 695.54443359375}]
+18:34:21:783 Executor task launch worker for task 3 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:34:21:783 Executor task launch worker for task 3 WARN  SpeedCalculator:96 - rawx{991.5, 568.5}rawy{1011.5, 621.5}
+18:34:21:784 Executor task launch worker for task 3 WARN  SpeedCalculator:98 - time == 400.0distance1.6165344380308446res[0]{1286.6468505859375, 660.6998291015625}res[1]{1275.5379638671875, 695.54443359375}
+18:34:21:784 Executor task launch worker for task 3 WARN  SpeedCalculator:99 - speed == 4.041336095077112
+18:34:21:784 Executor task launch worker for task 3 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:34:21:784 Executor task launch worker for task 3 INFO  IOTTransform:64 - src
+[[[916.0 518.0 ]
+]
+[[1067.0 619.0 ]
+]
+
+18:34:21:784 Executor task launch worker for task 3 INFO  IOTTransform:72 - transform after point
+[[[1179.489990234375 618.4119873046875 ]
+]
+[[1371.438232421875 694.1614990234375 ]
+]
+
+18:34:21:784 Executor task launch worker for task 3 INFO  IOTTransform:75 - after list [{1179.489990234375, 618.4119873046875}, {1371.438232421875, 694.1614990234375}]
+18:34:21:814 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:21:820 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 11 
+
+
+18:34:21:820 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:21:837 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={916.0, 518.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:837 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={916.0, 518.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:837 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:21:839 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:21:840 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:21:856 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:21:858 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 12 
+
+
+18:34:21:858 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:21:878 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={916.0, 518.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:879 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={915.0, 515.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:879 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:21:881 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:21:881 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:21:897 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:21:900 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 13 
+
+
+18:34:21:900 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:21:919 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={915.0, 515.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:920 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={912.0, 512.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:920 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:21:922 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:21:922 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:21:938 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:21:940 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 14 
+
+
+18:34:21:940 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:21:961 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={912.0, 512.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:961 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={911.0, 507.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:21:961 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:21:967 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:21:967 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:21:982 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:21:985 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 15 
+
+
+18:34:21:985 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:22:006 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={911.0, 507.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:006 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={908.0, 504.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:006 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:22:009 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:22:009 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:22:025 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:22:028 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 16 
+
+
+18:34:22:028 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:22:047 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={908.0, 504.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:047 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={905.0, 497.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:047 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:22:050 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:22:050 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:22:125 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:22:127 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 17 
+
+
+18:34:22:128 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:22:145 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={905.0, 497.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:145 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={904.0, 494.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:145 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:22:153 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:22:153 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:22:166 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:22:170 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 18 
+
+
+18:34:22:170 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:22:188 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={904.0, 494.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:188 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={903.0, 489.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:189 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:22:196 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:22:196 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:22:214 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:22:219 Executor task launch worker for task 3 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 19 
+
+
+18:34:22:219 Executor task launch worker for task 3 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:22:236 Executor task launch worker for task 3 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={903.0, 489.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:236 Executor task launch worker for task 3 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={900.0, 486.0, 151.0x101.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@5d676169}
+18:34:22:236 Executor task launch worker for task 3 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:22:240 Executor task launch worker for task 3 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:22:241 Executor task launch worker for task 3 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:22:272 Executor task launch worker for task 3 INFO  ReadPhoto:145 - after opencv
+SpeedState{detectedFrameGap=10, frameCount=20, multiTracker={"iot":{"CLASSNAME":"detectmotion.interestarea.IOTTransform","INSTANCE":{"mtxlist":[[-6.123567731561292,-6.031066708425921,5465.940957682712],[-0.11710842849179315,-6.924342338349694,1980.9995638811133],[-1.6042250478327759E-4,-0.006994560299664455,1.0]],"picRect":[{"x":215.0,"y":688.0},{"x":1485.0,"y":688.0},{"x":1055.0,"y":350.0},{"x":541.0,"y":357.0}],"realRect":[{"x":0.0,"y":1080.0},{"x":1920.0,"y":1080.0},{"x":1920.0,"y":0.0},{"x":0.0,"y":0.0}],"transformAfter":{"x":0,"y":0,"width":1920,"height":1080},"picSize":{"width":1920.0,"height":1080.0},"realSize":{"width":18.0,"height":50.0}}},"trackers":{"key":"vid-01","selectedType":"KCF","trackers":[{"pos":{"x":900.0,"y":486.0,"width":151.0,"height":101.0},"previousPos":{"x":920.0,"y":560.0,"width":183.0,"height":123.0},"netxPos":{"x":916.0,"y":518.0,"width":151.0,"height":101.0},"count":0,"speed":4.041336095077112,"carLength":3.5069218388310186,"markedLost":0,"phase":1}],"startCount":1},"detector":{"CLASSNAME":"detectmotion.detector.YoloDetectCar","INSTANCE":{"obj":{"peer":139723408287472},"detectedObjects":[{"x":916.0,"y":518.0,"width":151.0,"height":101.0},{"x":1053.0,"y":778.0,"width":302.0,"height":207.0},{"x":847.0,"y":230.0,"width":45.0,"height":30.0},{"x":698.0,"y":255.0,"width":55.0,"height":34.0},{"x":886.0,"y":230.0,"width":44.0,"height":30.0}]}}}}
+18:34:22:272 Executor task launch worker for task 3 INFO  ReadPhoto:146 - after opencv
+SequenceOfFramesProcessor{detectedFrameGap=10, frameCount=20, batchstarttime=1598265201633, batchendtime=1598265233357, FPS=0.3152187618207036, mtracker=detectmotion.OpencvMultiTracker@6b9f50c1, firstframetime=1597334400040, lastframetime=1597334400440}
+18:34:22:273 Executor task launch worker for task 3 INFO  ReadPhoto:147 - ====================end a batch ===================
+18:34:27:671 Executor task launch worker for task 326 INFO  ReadPhoto:104 - ====================start  batch========================
+18:34:27:697 Executor task launch worker for task 326 WARN  ReadPhoto:115 - cameraId=vid-01processed total frames=20actual size
+18:34:27:697 Executor task launch worker for task 326 INFO  ReadPhoto:134 - use raw state
+18:34:27:697 Executor task launch worker for task 326 INFO  ReadPhoto:136 - get state
+SpeedState{detectedFrameGap=10, frameCount=20, multiTracker={"iot":{"CLASSNAME":"detectmotion.interestarea.IOTTransform","INSTANCE":{"mtxlist":[[-6.123567731561292,-6.031066708425921,5465.940957682712],[-0.11710842849179315,-6.924342338349694,1980.9995638811133],[-1.6042250478327759E-4,-0.006994560299664455,1.0]],"picRect":[{"x":215.0,"y":688.0},{"x":1485.0,"y":688.0},{"x":1055.0,"y":350.0},{"x":541.0,"y":357.0}],"realRect":[{"x":0.0,"y":1080.0},{"x":1920.0,"y":1080.0},{"x":1920.0,"y":0.0},{"x":0.0,"y":0.0}],"transformAfter":{"x":0,"y":0,"width":1920,"height":1080},"picSize":{"width":1920.0,"height":1080.0},"realSize":{"width":18.0,"height":50.0}}},"trackers":{"key":"vid-01","selectedType":"KCF","trackers":[{"pos":{"x":900.0,"y":486.0,"width":151.0,"height":101.0},"previousPos":{"x":920.0,"y":560.0,"width":183.0,"height":123.0},"netxPos":{"x":916.0,"y":518.0,"width":151.0,"height":101.0},"count":0,"speed":4.041336095077112,"carLength":3.5069218388310186,"markedLost":0,"phase":1}],"startCount":1},"detector":{"CLASSNAME":"detectmotion.detector.YoloDetectCar","INSTANCE":{"obj":{"peer":139723408287472},"detectedObjects":[{"x":916.0,"y":518.0,"width":151.0,"height":101.0},{"x":1053.0,"y":778.0,"width":302.0,"height":207.0},{"x":847.0,"y":230.0,"width":45.0,"height":30.0},{"x":698.0,"y":255.0,"width":55.0,"height":34.0},{"x":886.0,"y":230.0,"width":44.0,"height":30.0}]}}}}
+18:34:28:135 Executor task launch worker for task 326 WARN  OpencvMultiTracker:71 - null:new OpencvMultiTracker()
+18:34:28:147 Executor task launch worker for task 326 INFO  ReadPhoto:138 - get opencv
+SequenceOfFramesProcessor{detectedFrameGap=10, frameCount=20, batchstarttime=1598265267698, batchendtime=0, FPS=20.0, mtracker=detectmotion.OpencvMultiTracker@74d15fdb, firstframetime=1597334400040, lastframetime=1597334400440}
+18:34:28:148 Executor task launch worker for task 326 INFO  ReadPhoto:141 - vid-01PID: 300936@node0
+18:34:28:158 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:28:164 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 20 
+
+
+18:34:28:164 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:114 - vid-01 20:firstframetime1597334400440lastframetime:=1597334400440minus400
+18:34:28:165 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:34:28:165 Executor task launch worker for task 326 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:34:58:333 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@190a57f4
+18:34:58:335 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {1012, 676, 239x153}
+18:34:58:335 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@37a89920
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {908, 472, 145x104}
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@6e3f9b89
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {847, 231, 45x30}
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@106e3e12
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {699, 260, 58x35}
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@5b907e1c
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {895, 231, 43x28}
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@28028dd7
+18:34:58:336 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {936, 245, 43x27}
+18:34:58:337 Executor task launch worker for task 326 INFO  YoloDetectCar:69 - car length is:6
+18:34:58:337 Executor task launch worker for task 326 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{1012.0, 676.0, 239.0x153.0}, {908.0, 472.0, 145.0x104.0}, {847.0, 231.0, 45.0x30.0}, {699.0, 260.0, 58.0x35.0}, {895.0, 231.0, 43.0x28.0}, {936.0, 245.0, 43.0x27.0}]
+18:34:58:337 Executor task launch worker for task 326 INFO  OpencvMultiTracker:114 - vid-01:重合的对象1
+18:34:58:337 Executor task launch worker for task 326 INFO  OpencvMultiTracker:116 - vid-01:剩余的预测对象1
+18:34:58:338 Executor task launch worker for task 326 INFO  OpencvMultiTracker:117 - vid-01:剩余的检测对象,用来创建新的对象5
+18:34:58:338 Executor task launch worker for task 326 INFO  TrackerList:88 - tracker size ===1
+18:34:58:339 Executor task launch worker for task 326 INFO  TrackerList:98 - vid-01: updateTrackpos: 检测到的重合对象，并且重新创建更新tracker1
+18:34:58:352 Executor task launch worker for task 326 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={908.0, 472.0, 145.0x104.0}, count=0, speed=4.041336095077112,tracker=null}的位置
+18:34:58:353 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{892.0, 261.0}  tl{847.0, 231.0}
+18:34:58:354 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{757.0, 295.0}  tl{699.0, 260.0}
+18:34:58:354 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{938.0, 259.0}  tl{895.0, 231.0}
+18:34:58:354 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{979.0, 272.0}  tl{936.0, 245.0}
+18:34:58:355 Executor task launch worker for task 326 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 4because not in interested area
+18:34:58:355 Executor task launch worker for task 326 INFO  TrackerList:118 - vid-01 create Cars1
+18:34:58:356 Executor task launch worker for task 326 INFO  TrackerList:120 - {1012.0, 676.0, 239.0x153.0};
+18:34:58:359 Executor task launch worker for task 326 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={908.0, 472.0, 145.0x104.0}, count=0, speed=4.041336095077112,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}, CarDes{pos={1012.0, 676.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}]
+18:34:58:371 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:371 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:372 Executor task launch worker for task 326 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:34:58:373 Executor task launch worker for task 326 INFO  IOTTransform:64 - src
+[[[980.5 524.0 ]
+]
+[[991.5 568.5 ]
+]
+
+18:34:58:373 Executor task launch worker for task 326 INFO  IOTTransform:72 - transform after point
+[[[1310.3878173828125 624.345703125 ]
+]
+[[1286.6468505859375 660.6998291015625 ]
+]
+
+18:34:58:373 Executor task launch worker for task 326 INFO  IOTTransform:75 - after list [{1310.3878173828125, 624.345703125}, {1286.6468505859375, 660.6998291015625}]
+18:34:58:373 Executor task launch worker for task 326 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:34:58:374 Executor task launch worker for task 326 WARN  SpeedCalculator:96 - rawx{980.5, 524.0}rawy{991.5, 568.5}
+18:34:58:374 Executor task launch worker for task 326 WARN  SpeedCalculator:98 - time == 400.0distance1.6977142680949577res[0]{1310.3878173828125, 624.345703125}res[1]{1286.6468505859375, 660.6998291015625}
+18:34:58:374 Executor task launch worker for task 326 WARN  SpeedCalculator:99 - speed == 4.244285670237395
+18:34:58:374 Executor task launch worker for task 326 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:34:58:374 Executor task launch worker for task 326 INFO  IOTTransform:64 - src
+[[[908.0 472.0 ]
+]
+[[1053.0 576.0 ]
+]
+
+18:34:58:374 Executor task launch worker for task 326 INFO  IOTTransform:72 - transform after point
+[[[1201.80078125 569.5013427734375 ]
+]
+[[1393.483642578125 666.3150634765625 ]
+]
+
+18:34:58:375 Executor task launch worker for task 326 INFO  IOTTransform:75 - after list [{1201.80078125, 569.5013427734375}, {1393.483642578125, 666.3150634765625}]
+18:34:58:394 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:396 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 21 
+
+
+18:34:58:396 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:406 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={908.0, 472.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:407 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={908.0, 472.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:424 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={1012.0, 676.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:425 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={1012.0, 676.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:425 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:428 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:428 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:447 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:449 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 22 
+
+
+18:34:58:449 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:469 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={908.0, 472.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:470 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={907.0, 470.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:499 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={1012.0, 676.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:500 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={1009.0, 667.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:500 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:503 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:503 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:522 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:525 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 23 
+
+
+18:34:58:525 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:545 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={907.0, 470.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:545 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={906.0, 466.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:573 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={1009.0, 667.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:573 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={1004.0, 660.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:573 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:576 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:577 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:594 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:596 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 24 
+
+
+18:34:58:596 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:615 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={906.0, 466.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:616 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={903.0, 462.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:643 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={1004.0, 660.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:643 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={1001.0, 651.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:643 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:647 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:647 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:663 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:664 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 25 
+
+
+18:34:58:664 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:683 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={903.0, 462.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:684 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={902.0, 456.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:711 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={1001.0, 651.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:711 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={992.0, 634.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:711 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:715 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:715 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:728 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:731 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 26 
+
+
+18:34:58:731 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:750 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={902.0, 456.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:750 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={899.0, 452.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:780 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={992.0, 634.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:781 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={989.0, 625.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:781 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:784 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:784 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:796 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:799 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 27 
+
+
+18:34:58:799 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:817 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={899.0, 452.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:818 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={900.0, 450.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:847 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={989.0, 625.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:847 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={984.0, 618.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:847 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:849 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:850 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:862 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:864 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 28 
+
+
+18:34:58:864 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:883 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={900.0, 450.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:884 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={897.0, 446.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:914 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={984.0, 618.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:915 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={981.0, 609.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:915 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:917 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:918 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:58:930 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:58:932 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 29 
+
+
+18:34:58:933 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:34:58:953 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={897.0, 446.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:953 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={896.0, 444.0, 145.0x104.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}
+18:34:58:984 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={981.0, 609.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:984 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={978.0, 604.0, 239.0x153.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}
+18:34:58:984 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:34:58:988 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:34:58:988 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:34:59:008 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:34:59:011 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 30 
+
+
+18:34:59:012 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:114 - vid-01 30:firstframetime1597334400840lastframetime:=1597334400840minus400
+18:34:59:013 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:34:59:013 Executor task launch worker for task 326 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:35:27:931 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@3346a8c
+18:35:27:932 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {897, 444, 123x84}
+18:35:27:932 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@3fe42308
+18:35:27:932 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {990, 565, 208x144}
+18:35:27:932 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@1874d3b9
+18:35:27:932 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {847, 230, 47x32}
+18:35:27:933 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@273cd0af
+18:35:27:933 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {715, 258, 56x39}
+18:35:27:933 Executor task launch worker for task 326 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@77caece
+18:35:27:933 Executor task launch worker for task 326 INFO  YoloDetectCar:66 - {935, 244, 45x29}
+18:35:27:933 Executor task launch worker for task 326 INFO  YoloDetectCar:69 - car length is:5
+18:35:27:933 Executor task launch worker for task 326 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{897.0, 444.0, 123.0x84.0}, {990.0, 565.0, 208.0x144.0}, {847.0, 230.0, 47.0x32.0}, {715.0, 258.0, 56.0x39.0}, {935.0, 244.0, 45.0x29.0}]
+18:35:27:933 Executor task launch worker for task 326 INFO  OpencvMultiTracker:114 - vid-01:重合的对象2
+18:35:27:933 Executor task launch worker for task 326 INFO  OpencvMultiTracker:116 - vid-01:剩余的预测对象2
+18:35:27:934 Executor task launch worker for task 326 INFO  OpencvMultiTracker:117 - vid-01:剩余的检测对象,用来创建新的对象3
+18:35:27:934 Executor task launch worker for task 326 INFO  TrackerList:88 - tracker size ===2
+18:35:27:934 Executor task launch worker for task 326 INFO  TrackerList:98 - vid-01: updateTrackpos: 检测到的重合对象，并且重新创建更新tracker2
+18:35:27:946 Executor task launch worker for task 326 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={897.0, 444.0, 123.0x84.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@3a73a88d}的位置
+18:35:27:947 Executor task launch worker for task 326 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={990.0, 565.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@5b8c9f7f}的位置
+18:35:27:948 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{894.0, 262.0}  tl{847.0, 230.0}
+18:35:27:949 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{771.0, 297.0}  tl{715.0, 258.0}
+18:35:27:949 Executor task launch worker for task 326 INFO  OpencvMultiTracker:176 - vid-01:removed: br{980.0, 273.0}  tl{935.0, 244.0}
+18:35:27:949 Executor task launch worker for task 326 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 3because not in interested area
+18:35:27:949 Executor task launch worker for task 326 INFO  TrackerList:118 - vid-01 create Cars0
+18:35:27:949 Executor task launch worker for task 326 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={897.0, 444.0, 123.0x84.0}, count=0, speed=4.244285670237395,tracker=org.opencv.tracking.TrackerKCF@199e214a}, CarDes{pos={990.0, 565.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}]
+18:35:27:960 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:27:961 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:27:961 Executor task launch worker for task 326 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:35:27:961 Executor task launch worker for task 326 INFO  IOTTransform:64 - src
+[[[958.5 486.0 ]
+]
+[[980.5 524.0 ]
+]
+
+18:35:27:962 Executor task launch worker for task 326 INFO  IOTTransform:72 - transform after point
+[[[1306.08642578125 586.1371459960938 ]
+]
+[[1310.3878173828125 624.345703125 ]
+]
+
+18:35:27:962 Executor task launch worker for task 326 INFO  IOTTransform:75 - after list [{1306.08642578125, 586.1371459960938}, {1310.3878173828125, 624.345703125}]
+18:35:27:962 Executor task launch worker for task 326 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:35:27:962 Executor task launch worker for task 326 WARN  SpeedCalculator:96 - rawx{958.5, 486.0}rawy{980.5, 524.0}
+18:35:27:962 Executor task launch worker for task 326 WARN  SpeedCalculator:98 - time == 400.0distance1.7693742683505413res[0]{1306.08642578125, 586.1371459960938}res[1]{1310.3878173828125, 624.345703125}
+18:35:27:962 Executor task launch worker for task 326 WARN  SpeedCalculator:99 - speed == 4.423435670876353
+18:35:27:962 Executor task launch worker for task 326 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:35:27:962 Executor task launch worker for task 326 INFO  IOTTransform:64 - src
+[[[897.0 444.0 ]
+]
+[[1020.0 528.0 ]
+]
+
+18:35:27:962 Executor task launch worker for task 326 INFO  IOTTransform:72 - transform after point
+[[[1202.361572265625 532.768798828125 ]
+]
+[[1387.761962890625 628.1607666015625 ]
+]
+
+18:35:27:962 Executor task launch worker for task 326 INFO  IOTTransform:75 - after list [{1202.361572265625, 532.768798828125}, {1387.761962890625, 628.1607666015625}]
+18:35:27:975 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:27:977 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 31 
+
+
+18:35:27:977 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:27:988 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={897.0, 444.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:27:988 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={897.0, 444.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:27:999 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={990.0, 565.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:27:999 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={990.0, 565.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:27:999 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:002 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:002 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:014 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:016 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 32 
+
+
+18:35:28:016 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:035 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={897.0, 444.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:035 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={896.0, 442.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:051 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={990.0, 565.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:051 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={988.0, 559.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:051 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:055 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:055 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:067 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:071 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 33 
+
+
+18:35:28:072 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:094 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={896.0, 442.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:094 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={895.0, 438.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:112 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={988.0, 559.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:112 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={986.0, 551.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:112 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:115 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:115 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:127 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:131 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 34 
+
+
+18:35:28:131 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:152 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={895.0, 438.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:152 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={894.0, 436.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:173 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={986.0, 551.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:173 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={984.0, 547.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:173 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:179 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:179 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:191 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:194 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 35 
+
+
+18:35:28:194 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:212 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={894.0, 436.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:212 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={893.0, 432.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:231 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={984.0, 547.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:231 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={980.0, 535.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:231 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:238 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:238 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:254 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:257 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 36 
+
+
+18:35:28:259 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:284 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={893.0, 432.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:284 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={890.0, 428.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:305 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={980.0, 535.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:305 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={976.0, 529.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:305 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:309 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:310 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:323 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:326 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 37 
+
+
+18:35:28:326 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:343 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={890.0, 428.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:343 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={891.0, 426.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:360 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={976.0, 529.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:360 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={974.0, 525.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:360 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:364 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:364 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:376 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:379 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 38 
+
+
+18:35:28:379 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:396 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={891.0, 426.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:396 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={888.0, 424.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:413 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={974.0, 525.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:413 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={972.0, 521.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:413 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:417 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:418 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:432 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:28:434 Executor task launch worker for task 326 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 39 
+
+
+18:35:28:434 Executor task launch worker for task 326 WARN  TrackerList:143 - vid-01 enter update tracker
+18:35:28:455 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={888.0, 424.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:455 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={889.0, 422.0, 123.0x84.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@199e214a}
+18:35:28:473 Executor task launch worker for task 326 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={972.0, 521.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:474 Executor task launch worker for task 326 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={970.0, 515.0, 208.0x144.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@2749c0db}
+18:35:28:474 Executor task launch worker for task 326 WARN  TrackerList:167 - vid-01 leave update tracker
+18:35:28:477 Executor task launch worker for task 326 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:35:28:477 Executor task launch worker for task 326 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:35:28:492 Executor task launch worker for task 326 INFO  ReadPhoto:145 - after opencv
+SpeedState{detectedFrameGap=10, frameCount=40, multiTracker={"iot":{"CLASSNAME":"detectmotion.interestarea.IOTTransform","INSTANCE":{"mtxlist":[[-6.123567731561292,-6.031066708425921,5465.940957682712],[-0.11710842849179315,-6.924342338349694,1980.9995638811133],[-1.6042250478327759E-4,-0.006994560299664455,1.0]],"picRect":[{"x":215.0,"y":688.0},{"x":1485.0,"y":688.0},{"x":1055.0,"y":350.0},{"x":541.0,"y":357.0}],"realRect":[{"x":0.0,"y":1080.0},{"x":1920.0,"y":1080.0},{"x":1920.0,"y":0.0},{"x":0.0,"y":0.0}],"transformAfter":{"x":0,"y":0,"width":1920,"height":1080},"picSize":{"width":1920.0,"height":1080.0},"realSize":{"width":18.0,"height":50.0}}},"trackers":{"key":"vid-01","selectedType":"KCF","trackers":[{"pos":{"x":889.0,"y":422.0,"width":123.0,"height":84.0},"previousPos":{"x":908.0,"y":472.0,"width":145.0,"height":104.0},"netxPos":{"x":897.0,"y":444.0,"width":123.0,"height":84.0},"count":0,"speed":4.423435670876353,"carLength":4.41629480432581,"markedLost":0,"phase":1},{"pos":{"x":970.0,"y":515.0,"width":208.0,"height":144.0},"previousPos":{"x":1012.0,"y":676.0,"width":239.0,"height":153.0},"netxPos":{"x":990.0,"y":565.0,"width":208.0,"height":144.0},"count":1,"speed":0.0,"markedLost":0,"phase":1}],"startCount":2},"detector":{"CLASSNAME":"detectmotion.detector.YoloDetectCar","INSTANCE":{"obj":{"peer":139723408287472},"detectedObjects":[{"x":897.0,"y":444.0,"width":123.0,"height":84.0},{"x":990.0,"y":565.0,"width":208.0,"height":144.0},{"x":847.0,"y":230.0,"width":47.0,"height":32.0},{"x":715.0,"y":258.0,"width":56.0,"height":39.0},{"x":935.0,"y":244.0,"width":45.0,"height":29.0}]}}}}
+18:35:28:492 Executor task launch worker for task 326 INFO  ReadPhoto:146 - after opencv
+SequenceOfFramesProcessor{detectedFrameGap=10, frameCount=40, batchstarttime=1598265268165, batchendtime=1598265299013, FPS=0.3241701244813278, mtracker=detectmotion.OpencvMultiTracker@74d15fdb, firstframetime=1597334400840, lastframetime=1597334401240}
+18:35:28:492 Executor task launch worker for task 326 INFO  ReadPhoto:147 - ====================end a batch ===================
+18:35:33:450 Executor task launch worker for task 529 INFO  ReadPhoto:104 - ====================start  batch========================
+18:35:33:495 Executor task launch worker for task 529 WARN  ReadPhoto:115 - cameraId=vid-01processed total frames=20actual size
+18:35:33:497 Executor task launch worker for task 529 INFO  ReadPhoto:134 - use raw state
+18:35:33:497 Executor task launch worker for task 529 INFO  ReadPhoto:136 - get state
+SpeedState{detectedFrameGap=10, frameCount=40, multiTracker={"iot":{"CLASSNAME":"detectmotion.interestarea.IOTTransform","INSTANCE":{"mtxlist":[[-6.123567731561292,-6.031066708425921,5465.940957682712],[-0.11710842849179315,-6.924342338349694,1980.9995638811133],[-1.6042250478327759E-4,-0.006994560299664455,1.0]],"picRect":[{"x":215.0,"y":688.0},{"x":1485.0,"y":688.0},{"x":1055.0,"y":350.0},{"x":541.0,"y":357.0}],"realRect":[{"x":0.0,"y":1080.0},{"x":1920.0,"y":1080.0},{"x":1920.0,"y":0.0},{"x":0.0,"y":0.0}],"transformAfter":{"x":0,"y":0,"width":1920,"height":1080},"picSize":{"width":1920.0,"height":1080.0},"realSize":{"width":18.0,"height":50.0}}},"trackers":{"key":"vid-01","selectedType":"KCF","trackers":[{"pos":{"x":889.0,"y":422.0,"width":123.0,"height":84.0},"previousPos":{"x":908.0,"y":472.0,"width":145.0,"height":104.0},"netxPos":{"x":897.0,"y":444.0,"width":123.0,"height":84.0},"count":0,"speed":4.423435670876353,"carLength":4.41629480432581,"markedLost":0,"phase":1},{"pos":{"x":970.0,"y":515.0,"width":208.0,"height":144.0},"previousPos":{"x":1012.0,"y":676.0,"width":239.0,"height":153.0},"netxPos":{"x":990.0,"y":565.0,"width":208.0,"height":144.0},"count":1,"speed":0.0,"markedLost":0,"phase":1}],"startCount":2},"detector":{"CLASSNAME":"detectmotion.detector.YoloDetectCar","INSTANCE":{"obj":{"peer":139723408287472},"detectedObjects":[{"x":897.0,"y":444.0,"width":123.0,"height":84.0},{"x":990.0,"y":565.0,"width":208.0,"height":144.0},{"x":847.0,"y":230.0,"width":47.0,"height":32.0},{"x":715.0,"y":258.0,"width":56.0,"height":39.0},{"x":935.0,"y":244.0,"width":45.0,"height":29.0}]}}}}
+18:35:33:515 Executor task launch worker for task 529 WARN  OpencvMultiTracker:71 - null:new OpencvMultiTracker()
+18:35:33:589 Executor task launch worker for task 529 INFO  ReadPhoto:138 - get opencv
+SequenceOfFramesProcessor{detectedFrameGap=10, frameCount=40, batchstarttime=1598265333504, batchendtime=0, FPS=20.0, mtracker=detectmotion.OpencvMultiTracker@4c41bfb0, firstframetime=1597334400840, lastframetime=1597334401240}
+18:35:33:590 Executor task launch worker for task 529 INFO  ReadPhoto:141 - vid-01PID: 300936@node0
+18:35:33:597 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:35:33:603 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 40 
+
+
+18:35:33:607 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:114 - vid-01 40:firstframetime1597334401240lastframetime:=1597334401240minus400
+18:35:33:607 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:35:33:607 Executor task launch worker for task 529 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:36:01:877 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@5bfa0019
+18:36:01:877 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {893, 416, 115x81}
+18:36:01:877 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@48a61179
+18:36:01:878 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {714, 275, 53x35}
+18:36:01:878 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@7d5afd47
+18:36:01:878 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {991, 528, 155x105}
+18:36:01:878 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@3ca77163
+18:36:01:878 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {846, 230, 47x32}
+18:36:01:878 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@37d64426
+18:36:01:879 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {934, 244, 45x28}
+18:36:01:880 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@4f83a67c
+18:36:01:880 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {720, 259, 54x38}
+18:36:01:880 Executor task launch worker for task 529 INFO  YoloDetectCar:69 - car length is:6
+18:36:01:880 Executor task launch worker for task 529 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{893.0, 416.0, 115.0x81.0}, {714.0, 275.0, 53.0x35.0}, {991.0, 528.0, 155.0x105.0}, {846.0, 230.0, 47.0x32.0}, {934.0, 244.0, 45.0x28.0}, {720.0, 259.0, 54.0x38.0}]
+18:36:01:880 Executor task launch worker for task 529 INFO  OpencvMultiTracker:114 - vid-01:重合的对象2
+18:36:01:880 Executor task launch worker for task 529 INFO  OpencvMultiTracker:116 - vid-01:剩余的预测对象2
+18:36:01:880 Executor task launch worker for task 529 INFO  OpencvMultiTracker:117 - vid-01:剩余的检测对象,用来创建新的对象4
+18:36:01:881 Executor task launch worker for task 529 INFO  TrackerList:88 - tracker size ===2
+18:36:01:881 Executor task launch worker for task 529 INFO  TrackerList:98 - vid-01: updateTrackpos: 检测到的重合对象，并且重新创建更新tracker2
+18:36:01:892 Executor task launch worker for task 529 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={893.0, 416.0, 115.0x81.0}, count=0, speed=4.423435670876353,tracker=null}的位置
+18:36:01:893 Executor task launch worker for task 529 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={991.0, 528.0, 155.0x105.0}, count=1, speed=0.0,tracker=null}的位置
+18:36:01:894 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{767.0, 310.0}  tl{714.0, 275.0}
+18:36:01:894 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{893.0, 262.0}  tl{846.0, 230.0}
+18:36:01:894 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{979.0, 272.0}  tl{934.0, 244.0}
+18:36:01:894 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{774.0, 297.0}  tl{720.0, 259.0}
+18:36:01:894 Executor task launch worker for task 529 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 4because not in interested area
+18:36:01:894 Executor task launch worker for task 529 INFO  TrackerList:118 - vid-01 create Cars0
+18:36:01:895 Executor task launch worker for task 529 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={893.0, 416.0, 115.0x81.0}, count=0, speed=4.423435670876353,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}, CarDes{pos={991.0, 528.0, 155.0x105.0}, count=1, speed=0.0,tracker=org.opencv.tracking.TrackerKCF@62b283b7}]
+18:36:01:905 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:01:906 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:01:908 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:01:909 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[950.5 456.5 ]
+]
+[[958.5 486.0 ]
+]
+
+18:36:01:909 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1324.960205078125 550.5330200195312 ]
+]
+[[1306.08642578125 586.1371459960938 ]
+]
+
+18:36:01:909 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1324.960205078125, 550.5330200195312}, {1306.08642578125, 586.1371459960938}]
+18:36:01:909 Executor task launch worker for task 529 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:36:01:909 Executor task launch worker for task 529 WARN  SpeedCalculator:96 - rawx{950.5, 456.5}rawy{958.5, 486.0}
+18:36:01:910 Executor task launch worker for task 529 WARN  SpeedCalculator:98 - time == 400.0distance1.6578089043170374res[0]{1324.960205078125, 550.5330200195312}res[1]{1306.08642578125, 586.1371459960938}
+18:36:01:910 Executor task launch worker for task 529 WARN  SpeedCalculator:99 - speed == 4.144522260792593
+18:36:01:910 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:01:910 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[893.0 416.0 ]
+]
+[[1008.0 497.0 ]
+]
+
+18:36:01:910 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1223.251708984375 489.0927429199219 ]
+]
+[[1404.11376953125 598.34814453125 ]
+]
+
+18:36:01:910 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1223.251708984375, 489.0927429199219}, {1404.11376953125, 598.34814453125}]
+18:36:01:911 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:01:911 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[1068.5 580.5 ]
+]
+[[1094.0 637.0 ]
+]
+
+18:36:01:911 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1416.607177734375 669.5162353515625 ]
+]
+[[1397.6810302734375 704.4607543945312 ]
+]
+
+18:36:01:911 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1416.607177734375, 669.5162353515625}, {1397.6810302734375, 704.4607543945312}]
+18:36:01:912 Executor task launch worker for task 529 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:36:01:912 Executor task launch worker for task 529 WARN  SpeedCalculator:96 - rawx{1068.5, 580.5}rawy{1094.0, 637.0}
+18:36:01:912 Executor task launch worker for task 529 WARN  SpeedCalculator:98 - time == 400.0distance1.627502696634387res[0]{1416.607177734375, 669.5162353515625}res[1]{1397.6810302734375, 704.4607543945312}
+18:36:01:912 Executor task launch worker for task 529 WARN  SpeedCalculator:99 - speed == 4.068756741585967
+18:36:01:912 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:01:912 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[991.0 528.0 ]
+]
+[[1146.0 633.0 ]
+]
+
+18:36:01:912 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1327.76171875 627.99462890625 ]
+]
+[[1486.77294921875 702.3079223632812 ]
+]
+
+18:36:01:912 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1327.76171875, 627.99462890625}, {1486.77294921875, 702.3079223632812}]
+18:36:01:930 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:01:933 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 41 
+
+
+18:36:01:933 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:01:941 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={893.0, 416.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:01:942 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={893.0, 416.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:01:953 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={991.0, 528.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:01:953 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={991.0, 528.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:01:953 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:01:956 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:01:957 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:01:974 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:01:976 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 42 
+
+
+18:36:01:976 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:01:987 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={893.0, 416.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:01:987 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={892.0, 413.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:004 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={991.0, 528.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:004 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={990.0, 523.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:004 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:008 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:009 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:027 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:029 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 43 
+
+
+18:36:02:029 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:043 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={892.0, 413.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:043 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={891.0, 412.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:060 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={990.0, 523.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:061 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={989.0, 520.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:061 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:065 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:065 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:083 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:085 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 44 
+
+
+18:36:02:085 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:103 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={891.0, 412.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:103 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={890.0, 409.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:120 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={989.0, 520.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:120 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={986.0, 515.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:120 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:123 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:124 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:139 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:141 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 45 
+
+
+18:36:02:141 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:157 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={890.0, 409.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:157 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={889.0, 406.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:174 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={986.0, 515.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:174 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={983.0, 506.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:174 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:178 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:178 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:192 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:195 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 46 
+
+
+18:36:02:195 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:209 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={889.0, 406.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:209 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={888.0, 403.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:226 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={983.0, 506.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:226 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={980.0, 501.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:226 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:229 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:229 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:243 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:244 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 47 
+
+
+18:36:02:245 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:259 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={888.0, 403.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:259 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={887.0, 402.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:276 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={980.0, 501.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:277 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={979.0, 498.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:277 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:282 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:282 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:302 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:305 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 48 
+
+
+18:36:02:305 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:320 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={887.0, 402.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:321 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={886.0, 399.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:338 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={979.0, 498.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:338 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={978.0, 493.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:338 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:341 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:341 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:355 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:357 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 49 
+
+
+18:36:02:357 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:02:371 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={886.0, 399.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:371 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={885.0, 398.0, 115.0x81.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}
+18:36:02:388 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={978.0, 493.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:388 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={977.0, 490.0, 155.0x105.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}
+18:36:02:388 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:02:391 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:02:391 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:02:405 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:02:407 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 50 
+
+
+18:36:02:408 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:114 - vid-01 50:firstframetime1597334401640lastframetime:=1597334401640minus400
+18:36:02:409 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:36:02:409 Executor task launch worker for task 529 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:36:30:591 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@67400cb3
+18:36:30:592 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {884, 396, 104x72}
+18:36:30:592 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@3522f661
+18:36:30:592 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {717, 283, 53x35}
+18:36:30:592 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@1e409371
+18:36:30:592 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {983, 474, 154x112}
+18:36:30:593 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@68190435
+18:36:30:593 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {847, 230, 47x32}
+18:36:30:593 Executor task launch worker for task 529 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@f5ba811
+18:36:30:593 Executor task launch worker for task 529 INFO  YoloDetectCar:66 - {934, 244, 46x30}
+18:36:30:593 Executor task launch worker for task 529 INFO  YoloDetectCar:69 - car length is:5
+18:36:30:593 Executor task launch worker for task 529 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{884.0, 396.0, 104.0x72.0}, {717.0, 283.0, 53.0x35.0}, {983.0, 474.0, 154.0x112.0}, {847.0, 230.0, 47.0x32.0}, {934.0, 244.0, 46.0x30.0}]
+18:36:30:593 Executor task launch worker for task 529 INFO  OpencvMultiTracker:114 - vid-01:重合的对象2
+18:36:30:593 Executor task launch worker for task 529 INFO  OpencvMultiTracker:116 - vid-01:剩余的预测对象2
+18:36:30:593 Executor task launch worker for task 529 INFO  OpencvMultiTracker:117 - vid-01:剩余的检测对象,用来创建新的对象3
+18:36:30:593 Executor task launch worker for task 529 INFO  TrackerList:88 - tracker size ===2
+18:36:30:594 Executor task launch worker for task 529 INFO  TrackerList:98 - vid-01: updateTrackpos: 检测到的重合对象，并且重新创建更新tracker2
+18:36:30:606 Executor task launch worker for task 529 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={884.0, 396.0, 104.0x72.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@6599ca0e}的位置
+18:36:30:607 Executor task launch worker for task 529 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={983.0, 474.0, 154.0x112.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@62b283b7}的位置
+18:36:30:608 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{770.0, 318.0}  tl{717.0, 283.0}
+18:36:30:608 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{894.0, 262.0}  tl{847.0, 230.0}
+18:36:30:608 Executor task launch worker for task 529 INFO  OpencvMultiTracker:176 - vid-01:removed: br{980.0, 274.0}  tl{934.0, 244.0}
+18:36:30:608 Executor task launch worker for task 529 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 3because not in interested area
+18:36:30:608 Executor task launch worker for task 529 INFO  TrackerList:118 - vid-01 create Cars0
+18:36:30:608 Executor task launch worker for task 529 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={884.0, 396.0, 104.0x72.0}, count=0, speed=4.144522260792593,tracker=org.opencv.tracking.TrackerKCF@2d68d665}, CarDes{pos={983.0, 474.0, 154.0x112.0}, count=1, speed=4.068756741585967,tracker=org.opencv.tracking.TrackerKCF@37a913a2}]
+18:36:30:616 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:616 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:617 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:30:617 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[936.0 432.0 ]
+]
+[[950.5 456.5 ]
+]
+
+18:36:30:617 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1322.0057373046875 515.6676635742188 ]
+]
+[[1324.960205078125 550.5330200195312 ]
+]
+
+18:36:30:617 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1322.0057373046875, 515.6676635742188}, {1324.960205078125, 550.5330200195312}]
+18:36:30:617 Executor task launch worker for task 529 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:36:30:617 Executor task launch worker for task 529 WARN  SpeedCalculator:96 - rawx{936.0, 432.0}rawy{950.5, 456.5}
+18:36:30:617 Executor task launch worker for task 529 WARN  SpeedCalculator:98 - time == 400.0distance1.6143745010884665res[0]{1322.0057373046875, 515.6676635742188}res[1]{1324.960205078125, 550.5330200195312}
+18:36:30:617 Executor task launch worker for task 529 WARN  SpeedCalculator:99 - speed == 4.035936252721166
+18:36:30:617 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[884.0 396.0 ]
+]
+[[988.0 468.0 ]
+]
+
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1221.7633056640625 452.2583312988281 ]
+]
+[[1400.8021240234375 565.5111694335938 ]
+]
+
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1221.7633056640625, 452.2583312988281}, {1400.8021240234375, 565.5111694335938}]
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[1060.0 530.0 ]
+]
+[[1068.5 580.5 ]
+]
+
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1467.2451171875 630.1470336914062 ]
+]
+[[1416.607177734375 669.5162353515625 ]
+]
+
+18:36:30:618 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1467.2451171875, 630.1470336914062}, {1416.607177734375, 669.5162353515625}]
+18:36:30:618 Executor task launch worker for task 529 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:36:30:618 Executor task launch worker for task 529 WARN  SpeedCalculator:96 - rawx{1060.0, 530.0}rawy{1068.5, 580.5}
+18:36:30:618 Executor task launch worker for task 529 WARN  SpeedCalculator:98 - time == 400.0distance1.8834584606272573res[0]{1467.2451171875, 630.1470336914062}res[1]{1416.607177734375, 669.5162353515625}
+18:36:30:619 Executor task launch worker for task 529 WARN  SpeedCalculator:99 - speed == 4.708646151568143
+18:36:30:619 Executor task launch worker for task 529 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:36:30:619 Executor task launch worker for task 529 INFO  IOTTransform:64 - src
+[[[983.0 474.0 ]
+]
+[[1137.0 586.0 ]
+]
+
+18:36:30:619 Executor task launch worker for task 529 INFO  IOTTransform:72 - transform after point
+[[[1379.7373046875 572.6604614257812 ]
+]
+[[1533.20166015625 673.4757690429688 ]
+]
+
+18:36:30:619 Executor task launch worker for task 529 INFO  IOTTransform:75 - after list [{1379.7373046875, 572.6604614257812}, {1533.20166015625, 673.4757690429688}]
+18:36:30:632 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:634 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 51 
+
+
+18:36:30:635 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:644 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={884.0, 396.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:644 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={884.0, 396.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:653 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={983.0, 474.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:653 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={983.0, 474.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:653 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:656 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:657 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:670 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:672 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 52 
+
+
+18:36:30:672 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:684 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={884.0, 396.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:684 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={884.0, 394.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:695 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={983.0, 474.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:696 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={981.0, 470.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:696 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:700 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:700 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:713 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:716 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 53 
+
+
+18:36:30:716 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:727 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={884.0, 394.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:727 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={882.0, 392.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:739 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={981.0, 470.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:739 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={981.0, 466.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:739 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:742 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:742 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:756 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:758 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 54 
+
+
+18:36:30:758 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:770 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={882.0, 392.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:770 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={882.0, 390.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:783 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={981.0, 466.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:783 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={979.0, 462.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:783 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:787 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:787 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:800 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:802 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 55 
+
+
+18:36:30:802 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:814 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={882.0, 390.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:814 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={880.0, 386.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:825 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={979.0, 462.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:826 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={977.0, 456.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:826 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:828 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:829 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:842 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:844 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 56 
+
+
+18:36:30:844 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:855 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={880.0, 386.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:855 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={880.0, 384.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:866 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={977.0, 456.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:866 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={975.0, 452.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:866 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:869 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:869 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:883 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:884 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 57 
+
+
+18:36:30:884 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:896 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={880.0, 384.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:896 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={878.0, 382.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:911 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={975.0, 452.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:911 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={973.0, 448.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:911 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:914 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:914 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:928 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:930 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 58 
+
+
+18:36:30:930 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:942 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={878.0, 382.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:942 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={878.0, 380.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:953 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={973.0, 448.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:953 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={973.0, 444.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:953 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:30:957 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:30:957 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:30:971 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:30:972 Executor task launch worker for task 529 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 59 
+
+
+18:36:30:973 Executor task launch worker for task 529 WARN  TrackerList:143 - vid-01 enter update tracker
+18:36:30:985 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={878.0, 380.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:985 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={878.0, 378.0, 104.0x72.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@2d68d665}
+18:36:30:997 Executor task launch worker for task 529 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={973.0, 444.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:997 Executor task launch worker for task 529 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={971.0, 440.0, 154.0x112.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@37a913a2}
+18:36:30:997 Executor task launch worker for task 529 WARN  TrackerList:167 - vid-01 leave update tracker
+18:36:31:001 Executor task launch worker for task 529 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:36:31:001 Executor task launch worker for task 529 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:36:31:013 Executor task launch worker for task 529 INFO  ReadPhoto:145 - after opencv
+SpeedState{detectedFrameGap=10, frameCount=60, multiTracker={"iot":{"CLASSNAME":"detectmotion.interestarea.IOTTransform","INSTANCE":{"mtxlist":[[-6.123567731561292,-6.031066708425921,5465.940957682712],[-0.11710842849179315,-6.924342338349694,1980.9995638811133],[-1.6042250478327759E-4,-0.006994560299664455,1.0]],"picRect":[{"x":215.0,"y":688.0},{"x":1485.0,"y":688.0},{"x":1055.0,"y":350.0},{"x":541.0,"y":357.0}],"realRect":[{"x":0.0,"y":1080.0},{"x":1920.0,"y":1080.0},{"x":1920.0,"y":0.0},{"x":0.0,"y":0.0}],"transformAfter":{"x":0,"y":0,"width":1920,"height":1080},"picSize":{"width":1920.0,"height":1080.0},"realSize":{"width":18.0,"height":50.0}}},"trackers":{"key":"vid-01","selectedType":"KCF","trackers":[{"pos":{"x":878.0,"y":378.0,"width":104.0,"height":72.0},"previousPos":{"x":893.0,"y":416.0,"width":115.0,"height":81.0},"netxPos":{"x":884.0,"y":396.0,"width":104.0,"height":72.0},"count":0,"speed":4.035936252721166,"carLength":5.243186950683594,"markedLost":0,"phase":1},{"pos":{"x":971.0,"y":440.0,"width":154.0,"height":112.0},"previousPos":{"x":991.0,"y":528.0,"width":155.0,"height":105.0},"netxPos":{"x":983.0,"y":474.0,"width":154.0,"height":112.0},"count":1,"speed":4.708646151568143,"carLength":4.667375352647569,"markedLost":0,"phase":1}],"startCount":2},"detector":{"CLASSNAME":"detectmotion.detector.YoloDetectCar","INSTANCE":{"obj":{"peer":139723408287472},"detectedObjects":[{"x":884.0,"y":396.0,"width":104.0,"height":72.0},{"x":717.0,"y":283.0,"width":53.0,"height":35.0},{"x":983.0,"y":474.0,"width":154.0,"height":112.0},{"x":847.0,"y":230.0,"width":47.0,"height":32.0},{"x":934.0,"y":244.0,"width":46.0,"height":30.0}]}}}}
+18:36:31:014 Executor task launch worker for task 529 INFO  ReadPhoto:146 - after opencv
+SequenceOfFramesProcessor{detectedFrameGap=10, frameCount=60, batchstarttime=1598265333607, batchendtime=1598265362409, FPS=0.34719811124227484, mtracker=detectmotion.OpencvMultiTracker@4c41bfb0, firstframetime=1597334401640, lastframetime=1597334402040}
+18:36:31:014 Executor task launch worker for task 529 INFO  ReadPhoto:147 - ====================end a batch ===================
+18:36:35:786 Executor task launch worker for task 732 INFO  ReadPhoto:104 - ====================start  batch========================
+18:36:35:829 Executor task launch worker for task 732 WARN  ReadPhoto:115 - cameraId=vid-01processed total frames=20actual size
+18:36:35:829 Executor task launch worker for task 732 INFO  ReadPhoto:134 - use raw state
+18:36:35:829 Executor task launch worker for task 732 INFO  ReadPhoto:136 - get state
+SpeedState{detectedFrameGap=10, frameCount=60, multiTracker={"iot":{"CLASSNAME":"detectmotion.interestarea.IOTTransform","INSTANCE":{"mtxlist":[[-6.123567731561292,-6.031066708425921,5465.940957682712],[-0.11710842849179315,-6.924342338349694,1980.9995638811133],[-1.6042250478327759E-4,-0.006994560299664455,1.0]],"picRect":[{"x":215.0,"y":688.0},{"x":1485.0,"y":688.0},{"x":1055.0,"y":350.0},{"x":541.0,"y":357.0}],"realRect":[{"x":0.0,"y":1080.0},{"x":1920.0,"y":1080.0},{"x":1920.0,"y":0.0},{"x":0.0,"y":0.0}],"transformAfter":{"x":0,"y":0,"width":1920,"height":1080},"picSize":{"width":1920.0,"height":1080.0},"realSize":{"width":18.0,"height":50.0}}},"trackers":{"key":"vid-01","selectedType":"KCF","trackers":[{"pos":{"x":878.0,"y":378.0,"width":104.0,"height":72.0},"previousPos":{"x":893.0,"y":416.0,"width":115.0,"height":81.0},"netxPos":{"x":884.0,"y":396.0,"width":104.0,"height":72.0},"count":0,"speed":4.035936252721166,"carLength":5.243186950683594,"markedLost":0,"phase":1},{"pos":{"x":971.0,"y":440.0,"width":154.0,"height":112.0},"previousPos":{"x":991.0,"y":528.0,"width":155.0,"height":105.0},"netxPos":{"x":983.0,"y":474.0,"width":154.0,"height":112.0},"count":1,"speed":4.708646151568143,"carLength":4.667375352647569,"markedLost":0,"phase":1}],"startCount":2},"detector":{"CLASSNAME":"detectmotion.detector.YoloDetectCar","INSTANCE":{"obj":{"peer":139723408287472},"detectedObjects":[{"x":884.0,"y":396.0,"width":104.0,"height":72.0},{"x":717.0,"y":283.0,"width":53.0,"height":35.0},{"x":983.0,"y":474.0,"width":154.0,"height":112.0},{"x":847.0,"y":230.0,"width":47.0,"height":32.0},{"x":934.0,"y":244.0,"width":46.0,"height":30.0}]}}}}
+18:36:35:832 Executor task launch worker for task 732 WARN  OpencvMultiTracker:71 - null:new OpencvMultiTracker()
+18:36:35:840 Executor task launch worker for task 732 INFO  ReadPhoto:138 - get opencv
+SequenceOfFramesProcessor{detectedFrameGap=10, frameCount=60, batchstarttime=1598265395829, batchendtime=0, FPS=20.0, mtracker=detectmotion.OpencvMultiTracker@13b1e110, firstframetime=1597334401640, lastframetime=1597334402040}
+18:36:35:842 Executor task launch worker for task 732 INFO  ReadPhoto:141 - vid-01PID: 300936@node0
+18:36:35:870 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:36:35:879 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 60 
+
+
+18:36:35:880 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:114 - vid-01 60:firstframetime1597334402040lastframetime:=1597334402040minus400
+18:36:35:880 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:36:35:880 Executor task launch worker for task 732 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+
+18:37:04:440 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@2aa86b76
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {879, 373, 99x71}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@340b7baa
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {975, 440, 129x91}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@7c1c3927
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {1372, 921, 302x157}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@60b9eed5
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {716, 284, 64x43}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@9a3ca6f
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {847, 230, 46x32}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@661a26da
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {1830, 925, 178x150}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:57 - recognize objectdetection.BoxesAndAcc@7b52ee3f
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:66 - {934, 244, 45x29}
+18:37:04:441 Executor task launch worker for task 732 INFO  YoloDetectCar:69 - car length is:7
+18:37:04:442 Executor task launch worker for task 732 INFO  OpencvMultiTracker:233 - vid-01:==========detected==========
+[{879.0, 373.0, 99.0x71.0}, {975.0, 440.0, 129.0x91.0}, {1372.0, 921.0, 302.0x157.0}, {716.0, 284.0, 64.0x43.0}, {847.0, 230.0, 46.0x32.0}, {1830.0, 925.0, 178.0x150.0}, {934.0, 244.0, 45.0x29.0}]
+18:37:04:442 Executor task launch worker for task 732 INFO  OpencvMultiTracker:114 - vid-01:重合的对象2
+18:37:04:442 Executor task launch worker for task 732 INFO  OpencvMultiTracker:116 - vid-01:剩余的预测对象2
+18:37:04:442 Executor task launch worker for task 732 INFO  OpencvMultiTracker:117 - vid-01:剩余的检测对象,用来创建新的对象5
+18:37:04:442 Executor task launch worker for task 732 INFO  TrackerList:88 - tracker size ===2
+18:37:04:442 Executor task launch worker for task 732 INFO  TrackerList:98 - vid-01: updateTrackpos: 检测到的重合对象，并且重新创建更新tracker2
+18:37:04:453 Executor task launch worker for task 732 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={879.0, 373.0, 99.0x71.0}, count=0, speed=4.035936252721166,tracker=null}的位置
+18:37:04:454 Executor task launch worker for task 732 INFO  TrackerList:110 - vid-01 更新重合 count = CarDes{pos={975.0, 440.0, 129.0x91.0}, count=1, speed=4.708646151568143,tracker=null}的位置
+18:37:04:455 Executor task launch worker for task 732 INFO  OpencvMultiTracker:176 - vid-01:removed: br{1674.0, 1078.0}  tl{1372.0, 921.0}
+18:37:04:455 Executor task launch worker for task 732 INFO  OpencvMultiTracker:176 - vid-01:removed: br{780.0, 327.0}  tl{716.0, 284.0}
+18:37:04:455 Executor task launch worker for task 732 INFO  OpencvMultiTracker:176 - vid-01:removed: br{893.0, 262.0}  tl{847.0, 230.0}
+18:37:04:455 Executor task launch worker for task 732 INFO  OpencvMultiTracker:176 - vid-01:removed: br{2008.0, 1075.0}  tl{1830.0, 925.0}
+18:37:04:455 Executor task launch worker for task 732 INFO  OpencvMultiTracker:176 - vid-01:removed: br{979.0, 273.0}  tl{934.0, 244.0}
+18:37:04:456 Executor task launch worker for task 732 INFO  OpencvMultiTracker:181 - vid-01:remove above all rect  size = 5because not in interested area
+18:37:04:456 Executor task launch worker for task 732 INFO  TrackerList:118 - vid-01 create Cars0
+18:37:04:456 Executor task launch worker for task 732 INFO  OpencvMultiTracker:237 - vid-01:==========检测完成最后剩下的trackers==========
+[CarDes{pos={879.0, 373.0, 99.0x71.0}, count=0, speed=4.035936252721166,tracker=org.opencv.tracking.TrackerKCF@543268c6}, CarDes{pos={975.0, 440.0, 129.0x91.0}, count=1, speed=4.708646151568143,tracker=org.opencv.tracking.TrackerKCF@4355309d}]
+18:37:04:466 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:467 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:467 Executor task launch worker for task 732 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:37:04:467 Executor task launch worker for task 732 INFO  IOTTransform:64 - src
+[[[928.5 408.5 ]
+]
+[[936.0 432.0 ]
+]
+
+18:37:04:468 Executor task launch worker for task 732 INFO  IOTTransform:72 - transform after point
+[[[1337.5745849609375 476.6798400878906 ]
+]
+[[1322.0057373046875 515.6676635742188 ]
+]
+
+18:37:04:468 Executor task launch worker for task 732 INFO  IOTTransform:75 - after list [{1337.5745849609375, 476.6798400878906}, {1322.0057373046875, 515.6676635742188}]
+18:37:04:468 Executor task launch worker for task 732 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:37:04:468 Executor task launch worker for task 732 WARN  SpeedCalculator:96 - rawx{928.5, 408.5}rawy{936.0, 432.0}
+18:37:04:468 Executor task launch worker for task 732 WARN  SpeedCalculator:98 - time == 400.0distance1.810883547230366res[0]{1337.5745849609375, 476.6798400878906}res[1]{1322.0057373046875, 515.6676635742188}
+18:37:04:468 Executor task launch worker for task 732 WARN  SpeedCalculator:99 - speed == 4.527208868075914
+18:37:04:468 Executor task launch worker for task 732 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:37:04:468 Executor task launch worker for task 732 INFO  IOTTransform:64 - src
+[[[879.0 373.0 ]
+]
+[[978.0 444.0 ]
+]
+
+18:37:04:468 Executor task launch worker for task 732 INFO  IOTTransform:72 - transform after point
+[[[1237.8770751953125 402.7003173828125 ]
+]
+[[1414.6885986328125 533.9015502929688 ]
+]
+
+18:37:04:468 Executor task launch worker for task 732 INFO  IOTTransform:75 - after list [{1237.8770751953125, 402.7003173828125}, {1414.6885986328125, 533.9015502929688}]
+18:37:04:469 Executor task launch worker for task 732 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:37:04:469 Executor task launch worker for task 732 INFO  IOTTransform:64 - src
+[[[1039.5 485.5 ]
+]
+[[1060.0 530.0 ]
+]
+
+18:37:04:469 Executor task launch worker for task 732 INFO  IOTTransform:72 - transform after point
+[[[1493.625 586.3155517578125 ]
+]
+[[1467.2451171875 630.1470336914062 ]
+]
+
+18:37:04:469 Executor task launch worker for task 732 INFO  IOTTransform:75 - after list [{1493.625, 586.3155517578125}, {1467.2451171875, 630.1470336914062}]
+18:37:04:469 Executor task launch worker for task 732 WARN  SpeedCalculator:95 - xratio=0.009375yratio=0.046296296296296294
+18:37:04:469 Executor task launch worker for task 732 WARN  SpeedCalculator:96 - rawx{1039.5, 485.5}rawy{1060.0, 530.0}
+18:37:04:469 Executor task launch worker for task 732 WARN  SpeedCalculator:98 - time == 400.0distance2.044250163103049res[0]{1493.625, 586.3155517578125}res[1]{1467.2451171875, 630.1470336914062}
+18:37:04:469 Executor task launch worker for task 732 WARN  SpeedCalculator:99 - speed == 5.110625407757623
+18:37:04:470 Executor task launch worker for task 732 INFO  IOTTransform:63 - 13 2 rows: 2 cols: 1
+18:37:04:470 Executor task launch worker for task 732 INFO  IOTTransform:64 - src
+[[[975.0 440.0 ]
+]
+[[1104.0 531.0 ]
+]
+
+18:37:04:470 Executor task launch worker for task 732 INFO  IOTTransform:72 - transform after point
+[[[1413.6888427734375 528.147705078125 ]
+]
+[[1555.3909912109375 631.2612915039062 ]
+]
+
+18:37:04:470 Executor task launch worker for task 732 INFO  IOTTransform:75 - after list [{1413.6888427734375, 528.147705078125}, {1555.3909912109375, 631.2612915039062}]
+18:37:04:486 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:489 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 61 
+
+
+18:37:04:489 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:495 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={879.0, 373.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:496 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={879.0, 373.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:505 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={975.0, 440.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:505 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={975.0, 440.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:505 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:509 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:509 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:522 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:524 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 62 
+
+
+18:37:04:524 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:532 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={879.0, 373.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:533 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={878.0, 372.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:548 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={975.0, 440.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:548 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={974.0, 437.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:548 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:553 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:553 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:567 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:568 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 63 
+
+
+18:37:04:569 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:578 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={878.0, 372.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:579 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={879.0, 371.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:594 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={974.0, 437.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:594 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={973.0, 434.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:595 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:597 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:597 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:610 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:614 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 64 
+
+
+18:37:04:614 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:626 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={879.0, 371.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:626 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={878.0, 368.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:642 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={973.0, 434.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:642 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={972.0, 431.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:643 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:645 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:645 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:661 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:663 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 65 
+
+
+18:37:04:663 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:676 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={878.0, 368.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:676 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={877.0, 365.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:692 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={972.0, 431.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:692 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={969.0, 426.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:693 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:697 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:697 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:714 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:717 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 66 
+
+
+18:37:04:717 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:729 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={877.0, 365.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:729 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={876.0, 362.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:745 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={969.0, 426.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:745 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={970.0, 423.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:745 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:749 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:749 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:765 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:767 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 67 
+
+
+18:37:04:767 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:780 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={876.0, 362.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:780 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={875.0, 361.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:797 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={970.0, 423.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:797 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={967.0, 420.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:797 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:800 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:800 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:819 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:821 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 68 
+
+
+18:37:04:821 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:836 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={875.0, 361.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:836 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={874.0, 360.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:852 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={967.0, 420.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:852 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={966.0, 419.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:852 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:856 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:856 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:873 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:874 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 69 
+
+
+18:37:04:875 Executor task launch worker for task 732 WARN  TrackerList:143 - vid-01 enter update tracker
+18:37:04:888 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={874.0, 360.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:888 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={875.0, 359.0, 99.0x71.0}, count=0, speed=4.527208868075914,tracker=org.opencv.tracking.TrackerKCF@543268c6}
+18:37:04:903 Executor task launch worker for task 732 WARN  TrackerList:161 - vid-01更新之前CarDes{pos={966.0, 419.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:903 Executor task launch worker for task 732 WARN  TrackerList:163 - vid-01更新位置CarDes{pos={965.0, 414.0, 129.0x91.0}, count=1, speed=5.110625407757623,tracker=org.opencv.tracking.TrackerKCF@4355309d}
+18:37:04:903 Executor task launch worker for task 732 WARN  TrackerList:167 - vid-01 leave update tracker
+18:37:04:907 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:130 - scale (X,Y)=(0.333,0.444)
+18:37:04:907 Executor task launch worker for task 732 WARN  OpencvMultiTracker:315 - 10*scaleX = 3.333, 50 * scaleY = 22.222
+18:37:04:972 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:93 - need set size 1920x1080
+18:37:04:974 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:105 - vid-01:this is 70 
+
+
+18:37:04:975 Executor task launch worker for task 732 WARN  SequenceOfFramesProcessor:114 - vid-01 70:firstframetime1597334402440lastframetime:=1597334402440minus400
+18:37:04:975 Executor task launch worker for task 732 INFO  SequenceOfFramesProcessor:189 - update FPS Success
+18:37:04:975 Executor task launch worker for task 732 INFO  OpencvMultiTracker:229 - vid-01:==========检测之前==========
+

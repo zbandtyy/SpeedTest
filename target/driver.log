@@ -1,0 +1,3 @@
+2020-08-18 13:05:19 WARN  main ReadPhoto:49 - Output directory for saving processed images is set to /home/user/Apache/App1/output. This is configured in processed.output.dir key of property file.
+2020-08-18 13:05:19 WARN  main ReadPhoto:62 - node0:9092
+2020-08-18 13:05:23 WARN  main ReadPhoto:86 - topicapp1-input
