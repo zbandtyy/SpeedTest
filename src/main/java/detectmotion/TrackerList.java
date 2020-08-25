@@ -160,7 +160,7 @@ public class TrackerList implements Serializable {
             } else {
                 logger.warn(key + "更新之前" + trackers.get(i));
                 trackers.get(i).setPos(newPos);
-                logger.warn(key + "更新位置" + trackers.get(i));
+               logger.warn(key + "更新位置" + trackers.get(i));
             }
         }
         deleteOutFrame(frame.size());

@@ -77,7 +77,6 @@ public class Detector implements Serializable {
                 if (uniqueDetector == null) {
                     if(Path.charAt(Path.length() - 1) != '/'){
                         Path+="/";
-
                     }
                     int bs =1;// for default...
                     int gpu_index = 0; // Gpu for default...
@@ -96,10 +95,10 @@ public class Detector implements Serializable {
         }
         return uniqueDetector;
 
-
     }
     public  BoxesAndAcc[] startYolo(byte[] jpgbytes, int w, int h, int c) {
-        synchronized (this) {
+        log.warn( Thread.currentThread().getName() + "======enter yolo =====");
+        synchronized (uniqueDetector) {
             if(jpgbytes.length < w * h * c && w*h*c <= 0){
                 log.warn(jpgbytes.length + "< (w=" + w + ")*(h="+ h+")*(c=" + c+")" + w*h*c);
                 return  null;

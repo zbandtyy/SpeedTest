@@ -74,7 +74,7 @@ public class ReadPhoto {
                // .option("startingOffsets", "{\"video-kafka-large\":{\"1\":100,\"0\":100}}")//必须指定全部
                 .option("kafka.max.partition.fetch.bytes", prop.getProperty("kafka.max.partition.fetch.bytes"))
                 .option("kafka.max.poll.records", prop.getProperty("kafka.max.poll.records"))
-                .option("maxOffsetsPerTrigger","20")//开了最多的200个Task处理全部的历史数据，groupby的时候shuffle存储空间不够，应该限制接受的一批 数据大小
+                .option("maxOffsetsPerTrigger","40")//开了最多的200个Task处理全部的历史数据，groupby的时候shuffle存储空间不够，应该限制接受的一批 数据大小
                 .option("startingOffsets", "earliest")
                 //.option("endingOffsets", "{\"video-kafka-large\":{\"0\":50,\"1\":-1}")
                 .load();

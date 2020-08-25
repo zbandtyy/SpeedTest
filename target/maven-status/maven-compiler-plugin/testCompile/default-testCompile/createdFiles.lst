@@ -9,6 +9,7 @@ testmiscs\TestTrackerEnv.class
 testtracker\CornerDetector.class
 testtracker\GoodFeaturesToTrackDemo$1.class
 testtracker\GoodFeaturesToTrack.class
+testIOT\TestIOT.class
 testtracker\GoodFeaturesToTrackDemo.class
 testtracker\ObjectDetection.class
 testmiscs\TimeSort.class

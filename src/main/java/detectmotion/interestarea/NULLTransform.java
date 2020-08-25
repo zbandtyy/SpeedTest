@@ -13,7 +13,7 @@ import java.util.List;
  * @author ：tyy
  * @date ：Created in 2020/7/11 21:21
  * @description：
- * @modified By：整个区域都在指定的范围内  【整张图片的检测范围都有效】
+ * @modified By：整个区域都在指定的范围内  【整张图片的检测范围都有效】,需要负责计算距离
  * @version: $
  */
 @Slf4j
@@ -63,14 +63,6 @@ public class NULLTransform implements PerspectiveConversion {
 
     }
 
-    public double getXRatio() {
-
-        return scaleX;
-    }
-
-    public double getYRatio() {
-        return scaleY;
-    }
 
     @Override
     public double getDistance(Point previousPos, Point netxPos) {
@@ -86,6 +78,8 @@ public class NULLTransform implements PerspectiveConversion {
             }
             log.warn("leave: previous" + previousPos + "next" + netxPos);
             return Math.sqrt(((pcx - ccx) * (pcx - ccx) * scaleX * scaleX) +
+
+
                     ((pcy - ccy) * (pcy - ccy) * scaleY * scaleY));
         }
         return -1;
@@ -94,8 +88,9 @@ public class NULLTransform implements PerspectiveConversion {
     @Override
     public double calculateSpeed(Rect2d pre, Rect2d p, double time) {
 
-        scaleX = (((pre.width / CARWIDTH) + (p.width / CARWIDTH))) / 2;
-        scaleY = (((pre.height / CARHEIGHT) + (p.height / CARHEIGHT))) / 2;
+        scaleX = ((( CARWIDTH / pre.width ) + (CARWIDTH / p.width))) / 2;
+        scaleY = (((CARHEIGHT / pre.height) + (CARHEIGHT / p.height))) / 2;
+        log.warn(String.format("scalex,scaley=(%.2f,%.2f)",scaleX,scaleY));
         Point precenter = getRectCenter(pre);
         Point pcenter = getRectCenter(p);
         double dis = getDistance(precenter, pcenter);

@@ -18,9 +18,6 @@ public interface PerspectiveConversion {
     public List<Point> transformPointList(List<Point> dst);
     public Size getPicSize();
     public boolean isInsidePicArea(Point p);
-    public double getXRatio();
-    public double getYRatio();
-
     /**
      *
      * @param pre 再图片中的计算位置,  第一次检测

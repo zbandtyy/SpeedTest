@@ -127,14 +127,14 @@ public class SequenceOfFramesProcessor implements Serializable {
             Imgproc.resize(frame,resultFrame,new Size(frame1.cols(),frame1.rows()));
             double scaleX = (float) (frame1.cols() * 1.0 / frame.cols());
             double scaleY= (float) (frame1.rows() * 1.0 / frame.rows());
-            logger.warn(String.format("scale (X,Y)=(%.3f,%.3f)",scaleX,scaleY));
+            logger.warn(String.format("draw picture scale (X,Y)=(%.3f,%.3f)",scaleX,scaleY));
             //对图片进行绘制
             mtracker.drawStatistic(resultFrame,FPS,scaleX,scaleY);
             mtracker.drawTrackerBox(resultFrame,gaptime,scaleX,scaleY );//speed count
 
             // convert the "matrix of bytes" into a byte array
-            Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+"-"
-                    +ev.getCameraId()+"-result.jpg",resultFrame);
+//            Imgcodecs.imwrite("/home/user/Apache/App1/output/"+frameCount+"-"
+//                    +ev.getCameraId()+"-result.jpg",resultFrame);
             byte[] data = new byte[(int) (resultFrame.total() * resultFrame.channels())];
             resultFrame.get(0, 0, data);
             ev.setData( Base64.getEncoder().encodeToString(data));

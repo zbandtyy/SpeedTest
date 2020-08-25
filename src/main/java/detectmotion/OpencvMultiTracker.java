@@ -250,10 +250,17 @@ public class OpencvMultiTracker implements Serializable {
             Optional<Long> count = carInfos._2();
             Imgproc.putText(frame, "" +count.get(),
                     new Point(scaleRect.tl().x + scaleRect.width / 2, scaleRect.y - 5)
-                    , FONT_HERSHEY_SIMPLEX, 0.25, new Scalar(0,255,0), 1);//显示标识
+                    , FONT_HERSHEY_SIMPLEX, 0.4, new Scalar(0,255,0), 1);//显示标识
         }
     }
 
+    /**
+     *
+     * @param time
+     * @param frame  输出数据的图像
+     * @param scaleX  输出图像位置，与处理的图像的位置比例。  可以允许输出的图像比处理的图像不一致
+     * @param scaleY   输出图像位置，与处理的图像的位置比例。
+     */
     public void drawCarsSpeed(double time,Mat frame,double scaleX,double scaleY){
 
         SpeedCalculator speedCalculator = new SpeedCalculator(iot, trackers.getTrackers());

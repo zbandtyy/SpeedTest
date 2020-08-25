@@ -4,6 +4,8 @@
 
 对多辆车进行跟踪，根据车辆的中心运动位置，对车辆的速度进行估计。
 
+**速度为通过该区域的平均速度**
+
 ## 实现过程
 
 ###  跟踪阶段
@@ -35,13 +37,15 @@
 4. 清理丢失的目标`cleanLost(DEFAULT_LOST_TIME);`
 5. 对所有保存的trackerlist修改状态为`saveDetectorStat();`
 
-### 速度计算
+### 速度计算 `SpeedCalculator`
 
 1.获取速度值等
 
 ```java
 //获取位置，速度  车辆长度
-ArrayList<Tuple3<Rect2d, Double,Double>> speedandpos = trackers.getSpeed(time, iot);
+ SpeedCalculator speedCalculator = new SpeedCalculator(iot, trackers.getTrackers());
+        //获取位置，速度  车辆长度
+        ArrayList<Tuple3<Rect2d, Double,Double>> speedandpos = speedCalculator.calulateSpeed(time);
 ```
 
 2.位置的保存
@@ -52,7 +56,7 @@ ArrayList<Tuple3<Rect2d, Double,Double>> speedandpos = trackers.getSpeed(time, i
 
 ```java
 //检测阶段，更新tracker时应该更新nextpos，最终会更新
- saveDetectorStat();
+saveDetectorStat();
 for (int i = 0; i < trackers.size(); i++) {
             CarDes car = trackers.get(i);
             car.setPhase(PHASE.DETECTOR);
@@ -69,7 +73,27 @@ for (int i = 0; i < trackers.size(); i++) {
 
 ​		 [3] 在跟踪阶段时，会更新pos的位置
 
-​	
+3. 速度计算
+
+   ​	（1）带配置文件
+
+   ​					1.根据配置文件对场景的固定区域进行透视变换
+
+   ​							<img src="ReadMe.assets/image-20200825152758385.png" alt="image-20200825152758385" style="zoom:50%;" />
+
+   ​					2.透视变化的距离短
+
+   ​							<img src="ReadMe.assets/image-20200825152814359.png" alt="image-20200825152814359" style="zoom:50%;" />
+
+   ​		  3.对透视变换的距范围硬编码指定距离 ，估计比例尺，计算距离
+
+   ​							`IOTTransform` 实现距离计算
+
+   ​	（2）不带配置文件 `NULLTransform`
+
+   ​			1.根据车辆的宽度 和高度估计x 和y方向上的 比例
+
+   ​			2.根据比例计算距离
 
 ### 图片输入
 
@@ -77,4 +101,8 @@ for (int i = 0; i < trackers.size(); i++) {
 
 处理：根据配置文件进行定制
 
-输出：自己指定 （输出不清）
+输出：自己指定 
+
+#  输出效果
+
+![image-20200825151703095](ReadMe.assets/image-20200825151703095.png)
